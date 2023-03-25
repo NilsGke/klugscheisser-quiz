@@ -1,0 +1,98 @@
+#header {
+    $imgSize: 50px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: end;
+    flex-direction: column;
+    border-radius: 20px;
+
+    max-height: 300px;
+    max-width: 400px;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+
+    .account {
+        .loginButtons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            a {
+                text-decoration: none;
+                .content {
+                    background: var(--accent);
+                    color: var(--dark);
+                    font-weight: 500;
+                    white-space: nowrap;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px;
+                    border-radius: 7px;
+                }
+                &:first-child .content {
+                    background-color: transparent;
+                    border: 1px solid var(--accent);
+                    color: var(--white);
+                }
+            }
+        }
+        .profilePic {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: end;
+            gap: 10px;
+            img {
+                height: $imgSize;
+                width: $imgSize;
+                border-radius: 100%;
+                cursor: pointer;
+            }
+            .name {
+                white-space: nowrap;
+                color: var(--dark);
+                font-size: large;
+                font-weight: 600;
+            }
+        }
+    }
+    #headerMenu {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+
+        button.item {
+            font-size: medium;
+            background-color: transparent;
+            border: none;
+            height: 40px;
+            cursor: pointer;
+            transition: background 0.2s ease-out;
+            white-space: nowrap;
+            &:hover {
+                background: var(--light2);
+                border-radius: 10px;
+            }
+            a {
+                color: unset;
+                text-decoration: none;
+            }
+        }
+    }
+
+    &.expand {
+        background: var(--white);
+    }
+    &.small.loggedIn {
+        max-height: $imgSize;
+        max-width: $imgSize;
+        padding: 0;
+    }
+}

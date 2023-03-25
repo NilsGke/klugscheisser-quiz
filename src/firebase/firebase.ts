@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
 
-// TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
     apiKey: "AIzaSyDuHvssabAB5X4fBMcXElXNZ2fb2bkGpiE",
     authDomain: "quiz-game-952ec.firebaseapp.com",
@@ -11,4 +10,3 @@ const firebaseConfig = {
 };
 
 export const app = initializeApp(firebaseConfig);
-
