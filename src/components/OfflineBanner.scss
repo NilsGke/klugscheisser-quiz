@@ -1,0 +1,11 @@
+div#offlineBanner {
+    position: fixed;
+    background-color: var(--lighterDark);
+    color: var(--accent);
+    width: 100svw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    padding: 4px 0;
+}

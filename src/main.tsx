@@ -13,11 +13,21 @@ import {
 import Login from "./routes/login/Login.page";
 import Account from "./routes/account/Account.page";
 import Spinner from "./components/Spinner";
+import OfflineBanner from "./components/OfflineBanner";
+
+enum NetworkStatus {
+    ONLINE = "online",
+    OFFLINE = "offline",
+}
 
 const App = () => {
     const [loaded, setLoaded] = useState(false);
     const [authUser, setAuthUser] = useState<User | null>(auth.currentUser);
     const [userData, setUserData] = useState<UserData | null>(null);
+
+    const [network, setNetwork] = useState<NetworkStatus>(
+        navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE
+    );
 
     // auth changes
     useEffect(() => {
@@ -38,6 +48,25 @@ const App = () => {
             return subscribeToOwnAccount(authUser.uid, setUserData);
     }, [authUser]);
 
+    // offline detection
+    useEffect(() => {
+        const online = () => {
+            console.log("%cclient online", "color:blue;");
+            setNetwork(NetworkStatus.ONLINE);
+        };
+        const offline = () => {
+            console.log("%cclient offline", "color:blue;");
+            setNetwork(NetworkStatus.OFFLINE);
+        };
+        window.addEventListener("online", online);
+        window.addEventListener("offline", offline);
+
+        return () => {
+            window.removeEventListener("online", online);
+            window.removeEventListener("offline", offline);
+        };
+    }, []);
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -56,7 +85,12 @@ const App = () => {
     // show loading div to prevent flash of logged out user
     if (!loaded || (authUser !== null && userData === null)) return <Spinner />; //TODO enhance this
 
-    return <RouterProvider router={router} />;
+    return (
+        <>
+            {network === NetworkStatus.OFFLINE ? <OfflineBanner /> : null}
+            <RouterProvider router={router} />
+        </>
+    );
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
