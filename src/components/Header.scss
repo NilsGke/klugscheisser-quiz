@@ -1,9 +1,9 @@
 #header {
-    $imgSize: 50px;
+    $imgSize: 70px;
     position: fixed;
     top: 0;
     right: 0;
-    margin: 10px;
+    margin: 20px;
     padding: 10px;
     display: flex;
     align-items: end;
@@ -49,10 +49,13 @@
             justify-content: end;
             gap: 10px;
             img {
+                transition: border 0.2s ease-in-out;
+
                 height: $imgSize;
                 width: $imgSize;
                 border-radius: 100%;
                 cursor: pointer;
+                border: 6px solid var(--lighterDark);
             }
             .name {
                 white-space: nowrap;
@@ -83,12 +86,16 @@
             a {
                 color: unset;
                 text-decoration: none;
+                padding: 10px;
             }
         }
     }
 
     &.expand {
         background: var(--white);
+        div > div.profilePic > img {
+            border-color: var(--white);
+        }
     }
     &.small.loggedIn {
         max-height: $imgSize;
