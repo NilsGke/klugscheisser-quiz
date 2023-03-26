@@ -12,7 +12,7 @@ type props = {
 
 const PassForm: FC<props> = ({ auth, userData, openModal }) => {
     return (
-        <>
+        <div className="provider email">
             <div className="info email">
                 <small>Email:</small>
                 <div className="value">
@@ -49,7 +49,7 @@ const PassForm: FC<props> = ({ auth, userData, openModal }) => {
                     </button>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

@@ -9,10 +9,12 @@ type props = {
 const GoogleForm: FC<props> = ({ auth }) => {
     return (
         <>
-            <div className="info google">
-                <img src={google} alt="" className="logo" />
-                <div className="value">
-                    {auth.currentUser?.email || "[no auth user]"}
+            <div className="provider google">
+                <img src={google} alt="google logo" className="logo" />
+                <div className="info google">
+                    <div className="value">
+                        {auth.currentUser?.email || "[no auth user]"}
+                    </div>
                 </div>
             </div>
         </>
