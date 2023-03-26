@@ -14,6 +14,7 @@ import Login from "./routes/login/Login.page";
 import Account from "./routes/account/Account.page";
 import Spinner from "./components/Spinner";
 import OfflineBanner from "./components/OfflineBanner";
+import Help from "./routes/help/Help.page";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -79,6 +80,10 @@ const App = () => {
         {
             path: "/account",
             element: <Account userData={userData} />,
+        },
+        {
+            path: "/help",
+            element: <Help />,
         },
     ]);
 

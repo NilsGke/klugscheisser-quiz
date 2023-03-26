@@ -1,0 +1,14 @@
+#helpPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100swh;
+    margin: 30px 10vw;
+    padding-top: 40px;
+    h1,
+    h2,
+    h3 {
+        margin: 10px 0;
+    }
+}
