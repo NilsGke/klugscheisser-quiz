@@ -13,6 +13,7 @@ import ImageUploader from "../../components/FileUploader";
 import changeProfilePicture from "../../firebase/storage/profilePicture";
 import { updateAvatarUrl } from "../../firebase/firestore/avatar";
 import homeIcon from "../../assets/home.svg";
+import HomeButton from "../../components/HomeButton";
 
 type props = {
     userData: UserData | null;
@@ -243,9 +244,7 @@ const Account: FC<props> = ({ userData }) => {
 
     return (
         <div id="accountPage">
-            <Link to={"/"} className="home">
-                <img src={homeIcon} alt="home icon" />
-            </Link>
+            <HomeButton />
             <div className="container">
                 <div className="top">
                     <h1>{userData.username}</h1>

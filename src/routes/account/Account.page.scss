@@ -17,25 +17,6 @@
     align-items: center;
     justify-content: center;
 
-    a.home {
-        $marg: 30px;
-        position: absolute;
-        top: $marg;
-        left: $marg;
-        height: 60px;
-        aspect-ratio: 1;
-        background: var(--lighterDark);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 100%;
-        padding: 10px;
-        img {
-            height: 70%;
-            width: 70%;
-        }
-    }
-
     .container {
         height: 100%;
         width: 100%;
