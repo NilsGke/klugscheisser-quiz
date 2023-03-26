@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { UserData, changeUsername } from "../../firebase/firestore/user";
 import { Link } from "react-router-dom";
 import edit from "../../assets/edit.svg";
@@ -10,10 +10,9 @@ import Spinner from "../../components/Spinner";
 import PassForm from "./providers/Form.Pass";
 import GoogleForm from "./providers/Form.Google";
 import ImageUploader from "../../components/FileUploader";
-import { ref, uploadBytesResumable } from "firebase/storage";
-import storage from "../../firebase/storage/storage";
 import changeProfilePicture from "../../firebase/storage/profilePicture";
 import { updateAvatarUrl } from "../../firebase/firestore/avatar";
+import homeIcon from "../../assets/home.svg";
 
 type props = {
     userData: UserData | null;
@@ -49,6 +48,8 @@ const Account: FC<props> = ({ userData }) => {
     const [modalAction, setModalAction] = useState<Action>(Action.nothing);
 
     const [loadingChange, setLoadingChange] = useState<boolean>(false);
+
+    const [dangerExpanded, setDangerExpanded] = useState(false);
 
     const [formData, setFormData] = useState<FormData>({
         oldEmail: "",
@@ -242,6 +243,9 @@ const Account: FC<props> = ({ userData }) => {
 
     return (
         <div id="accountPage">
+            <Link to={"/"} className="home">
+                <img src={homeIcon} alt="home icon" />
+            </Link>
             <div className="container">
                 <div className="top">
                     <h1>{userData.username}</h1>
@@ -260,9 +264,24 @@ const Account: FC<props> = ({ userData }) => {
                     </button>
                 </div>
                 {authFields}
-                <button className="deleteAccount" onClick={() => {}}>
-                    Delete your account 😲
-                </button>
+                <div className="danger">
+                    <button
+                        className="dangerToggle"
+                        onClick={() => setDangerExpanded((prev) => !prev)}
+                    >
+                        Danger Zone
+                    </button>
+                    {dangerExpanded ? (
+                        <>
+                            <button
+                                className="deleteAccount"
+                                onClick={() => {}}
+                            >
+                                Delete your account 😲
+                            </button>
+                        </>
+                    ) : null}
+                </div>
             </div>
             <div
                 id="modal"

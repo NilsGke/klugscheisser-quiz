@@ -17,6 +17,25 @@
     align-items: center;
     justify-content: center;
 
+    a.home {
+        $marg: 30px;
+        position: absolute;
+        top: $marg;
+        left: $marg;
+        height: 60px;
+        aspect-ratio: 1;
+        background: var(--lighterDark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+        padding: 10px;
+        img {
+            height: 70%;
+            width: 70%;
+        }
+    }
+
     .container {
         height: 100%;
         width: 100%;
@@ -73,47 +92,81 @@
             }
         }
 
-        .info {
-            min-width: 300px;
-            max-width: 500px;
-            position: relative;
-
-            small {
-                font-size: 15px;
+        .provider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            background: var(--lighterDark);
+            padding: 20px;
+            border-radius: 20px;
+            .logo {
+                height: 40px;
+                aspect-ratio: 1;
             }
-            .value {
-                font-size: 20px;
-                .edit {
-                    background-color: transparent;
-                    border: none;
-                    height: 20px;
-                    aspect-ratio: 1;
-                    cursor: pointer;
-                    position: absolute;
-                    right: 0;
-                    img {
-                        height: 100%;
-                        width: 100%;
-                        filter: invert(1);
+
+            .info {
+                min-width: 300px;
+                max-width: 500px;
+                position: relative;
+
+                small {
+                    font-size: 15px;
+                }
+                .value {
+                    font-size: 20px;
+                    .edit {
+                        background-color: transparent;
+                        border: none;
+                        height: 20px;
+                        aspect-ratio: 1;
+                        cursor: pointer;
+                        position: absolute;
+                        right: 0;
+                        img {
+                            height: 100%;
+                            width: 100%;
+                            filter: invert(1);
+                        }
                     }
                 }
             }
         }
 
-        button.deleteAccount {
-            background: transparent;
-            border: 1px solid var(--light1);
-            border-radius: 10px;
-            color: var(--red);
-            padding: 15px;
+        .danger {
+            margin-top: 40px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            &:hover {
-                background-color: var(--red);
-                color: var(--dark);
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+            button {
+                margin: auto;
+                padding: 15px;
+
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                background: transparent;
+            }
+            button.dangerToggle {
+                height: 30px;
+                width: 150px;
+                border: none;
+                color: var(--white);
+            }
+            button.deleteAccount {
+                border: 1px solid var(--light1);
+                border-radius: 10px;
+                color: var(--red);
+                transition: all 0.2s ease-in-out;
+                &:hover {
+                    background-color: var(--red);
+                    color: var(--dark);
+                }
             }
         }
     }
