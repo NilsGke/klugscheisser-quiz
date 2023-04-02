@@ -128,12 +128,15 @@
                             }
                         }
 
-                        .image {
+                        > div:not(.text) {
                             height: calc(100% - $mediaPadding);
                             max-height: 100%;
                             max-width: 100%;
+                            width: 100%;
 
-                            img {
+                            img,
+                            video,
+                            audio {
                                 max-height: 100%;
                                 border-radius: 5px;
                             }

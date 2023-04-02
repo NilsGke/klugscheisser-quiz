@@ -12,7 +12,24 @@
     max-height: 97%;
 
     .header {
-        display: none;
+        .toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+
+            button {
+                background-color: transparent;
+                border: 1px solid var(--lighterDark);
+                border-radius: 5px;
+                color: var(--white);
+                padding: 5px;
+                cursor: pointer;
+                &.selected {
+                    background-color: var(--lighterDark);
+                }
+            }
+        }
     }
 
     h2 {
@@ -154,7 +171,9 @@
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
-                img {
+                img,
+                video,
+                audio {
                     border-radius: 5px;
                     margin-top: 20px;
                     max-height: 60vh;

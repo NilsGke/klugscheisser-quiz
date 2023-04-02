@@ -17,6 +17,7 @@ import {
 import "./Category.scss";
 import { getStoredFile } from "../../../helpers/indexeddb";
 import removeIcon from "../../../assets/close.svg";
+import AudioPlayer from "../../../components/AudioPlayer";
 
 type props = {
     category: PartialCategory;
@@ -278,10 +279,11 @@ const MediaElement = ({
     if (ressource.type === "audio")
         content = (
             <div className="audio">
-                <audio controls>
+                {/* <audio controls>
                     <source src={url} />
                     Your browser does not support the audio element.
-                </audio>
+                </audio> */}
+                <AudioPlayer file={ressource.content} />
                 <button
                     className="remove"
                     onClick={() => {

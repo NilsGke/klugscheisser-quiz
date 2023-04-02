@@ -17,11 +17,11 @@ import videoIcon from "../../../assets/videoCam.svg";
 import trashIcon from "../../../assets/delete.svg";
 import { confirmAlert } from "react-confirm-alert";
 import autoAnimate from "@formkit/auto-animate";
+import AudioPlayer from "../../../components/AudioPlayer";
 
 const MediaPool = () => {
-    const [mediaType, setMediaType] = useState<MediaType>("image");
+    const [mediaType, setMediaType] = useState<MediaType>("video");
 
-    const [dataSource, setDataSource] = useState<"local" | "external">("local");
     const [files, setFiles] = useState<IndexedFile[]>([]);
 
     const [length, setLength] = useState<number>(Infinity);
@@ -30,7 +30,7 @@ const MediaPool = () => {
     // retrieve length on first render
     useEffect(() => {
         getStoredFilesLength(mediaType).then(setLength);
-    }, [files]);
+    }, [files, mediaType]);
 
     const [loadMore, setLoadMore] = useState(false);
     useEffect(() => {
@@ -48,7 +48,7 @@ const MediaPool = () => {
     useEffect(() => {
         if (length === files.length) setGotAllFiles(true);
         else checkScroll();
-    }, [files]);
+    }, [files, mediaType]);
 
     const bottomRef = useRef<HTMLDivElement>(null);
     const listRef = useRef<HTMLDivElement>(null);
@@ -91,26 +91,35 @@ const MediaPool = () => {
         event.dataTransfer.dropEffect = "copy";
     };
 
+    const changeMediaType = (mediaType: MediaType) => {
+        setFiles([]);
+        setGotAllFiles(false);
+        setLength(Infinity);
+        setMediaType(mediaType);
+    };
+
     return (
         <div className="mediaPool" ref={listRef}>
             <h2>Media</h2>
             <div className="header">
                 <div className="toggle">
                     <button
-                        className={
-                            "local" +
-                            (dataSource === "local" ? " selected" : "")
-                        }
+                        className={mediaType === "image" ? " selected" : ""}
+                        onClick={() => changeMediaType("image")}
                     >
-                        Local files
+                        Images
                     </button>
                     <button
-                        className={
-                            "external" +
-                            (dataSource === "external" ? " selected" : "")
-                        }
+                        className={mediaType === "video" ? " selected" : ""}
+                        onClick={() => changeMediaType("video")}
                     >
-                        External
+                        Video
+                    </button>
+                    <button
+                        className={mediaType === "audio" ? " selected" : ""}
+                        onClick={() => changeMediaType("audio")}
+                    >
+                        Audio
                     </button>
                 </div>
             </div>
@@ -162,7 +171,7 @@ const MediaPool = () => {
                                                 ...prev,
                                             ]);
                                             setLength((prev) => prev + 1);
-                                            toast("image added");
+                                            toast(`added ${mediaType}`);
                                         });
                                     }
                             }}
@@ -198,6 +207,143 @@ const MediaPool = () => {
                                                     src={mediaURL}
                                                     alt="image, you want to delete"
                                                 />
+                                            ),
+                                            buttons: [
+                                                {
+                                                    label: "Delete",
+                                                    onClick: () =>
+                                                        deleteStoredFile(
+                                                            mediaType,
+                                                            file.dbIndex
+                                                        ).then(() => {
+                                                            setFiles((prev) =>
+                                                                prev.filter(
+                                                                    (f) =>
+                                                                        f.dbIndex !==
+                                                                        file.dbIndex
+                                                                )
+                                                            );
+                                                            setLength(
+                                                                (prev) =>
+                                                                    prev - 1
+                                                            );
+                                                            checkScroll();
+                                                        }),
+                                                },
+                                                {
+                                                    label: "Cancel",
+                                                },
+                                            ],
+                                            overlayClassName: "popupOverlay",
+                                            closeOnEscape: true,
+                                            closeOnClickOutside: true,
+                                        })
+                                    }
+                                >
+                                    <img
+                                        src={trashIcon}
+                                        alt="delete icon"
+                                        draggable="false"
+                                    />
+                                </button>
+                            </div>
+                        );
+                    else if (mediaType === "video")
+                        return (
+                            <div
+                                className="file"
+                                key={file.name + file.size}
+                                id={mediaType + "_" + file.dbIndex}
+                                onDragStart={(e) => dragStart(e, mediaURL)}
+                                draggable
+                            >
+                                <video controls autoPlay={false} muted={true}>
+                                    <source type="video/mp4" src={mediaURL} />
+                                </video>
+                                <button
+                                    className="delete"
+                                    onClick={() =>
+                                        confirmAlert({
+                                            title: "Delete Image from Cache?",
+                                            message: "This cannot be undone",
+                                            childrenElement: () => (
+                                                <video
+                                                    controls
+                                                    autoPlay={false}
+                                                    muted={true}
+                                                >
+                                                    <source
+                                                        type="video/mp4"
+                                                        src={mediaURL}
+                                                    />
+                                                </video>
+                                            ),
+                                            buttons: [
+                                                {
+                                                    label: "Delete",
+                                                    onClick: () =>
+                                                        deleteStoredFile(
+                                                            mediaType,
+                                                            file.dbIndex
+                                                        ).then(() => {
+                                                            setFiles((prev) =>
+                                                                prev.filter(
+                                                                    (f) =>
+                                                                        f.dbIndex !==
+                                                                        file.dbIndex
+                                                                )
+                                                            );
+                                                            setLength(
+                                                                (prev) =>
+                                                                    prev - 1
+                                                            );
+                                                            checkScroll();
+                                                        }),
+                                                },
+                                                {
+                                                    label: "Cancel",
+                                                },
+                                            ],
+                                            overlayClassName: "popupOverlay",
+                                            closeOnEscape: true,
+                                            closeOnClickOutside: true,
+                                        })
+                                    }
+                                >
+                                    <img
+                                        src={trashIcon}
+                                        alt="delete icon"
+                                        draggable="false"
+                                    />
+                                </button>
+                            </div>
+                        );
+                    else if (mediaType === "audio")
+                        return (
+                            <div
+                                className="file"
+                                key={file.name + file.size}
+                                id={mediaType + "_" + file.dbIndex}
+                                onDragStart={(e) => dragStart(e, mediaURL)}
+                                draggable
+                            >
+                                <AudioPlayer file={file} />
+                                <button
+                                    className="delete"
+                                    onClick={() =>
+                                        confirmAlert({
+                                            title: "Delete Image from Cache?",
+                                            message: "This cannot be undone",
+                                            childrenElement: () => (
+                                                <audio
+                                                    controls
+                                                    autoPlay={false}
+                                                >
+                                                    <source
+                                                        type="audio/mp3"
+                                                        src={mediaURL}
+                                                    />
+                                                </audio>
                                             ),
                                             buttons: [
                                                 {
