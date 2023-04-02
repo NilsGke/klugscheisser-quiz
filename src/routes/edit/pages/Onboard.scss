@@ -1,0 +1,192 @@
+#onboard {
+    .decide {
+        height: 70vh;
+        width: 70vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        gap: 1vw;
+        button {
+            height: 50vh;
+            width: 35vw;
+            background-color: transparent;
+            border: 3px solid var(--lighterDark);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+            padding: 30px;
+            cursor: pointer;
+            transition: transform 0.1s ease-out;
+            &:hover {
+                transform: scale(1.02);
+            }
+            img {
+                height: 60%;
+                filter: invert(0.2) sepia(100) saturate(6) hue-rotate(194deg)
+                    brightness(0.8);
+            }
+            p {
+                margin-bottom: 10%;
+                font-size: 30px;
+                color: var(--light1);
+            }
+        }
+    }
+
+    #popupContainer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100svh;
+        width: 100svw;
+        backdrop-filter: blur(10px) brightness(0.5);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        transition: opacity 0.2s ease-out;
+        &.hidden {
+            z-index: -2;
+            opacity: 0;
+        }
+        &.visible {
+            z-index: 1;
+            opacity: 1;
+        }
+        #popup {
+            background-color: var(--dark);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 3px solid transparent;
+            transition: border 0.2s ease-out, color 0.2s ease-out;
+            &.drag {
+                border-color: var(--lighterDark);
+                color: var(--dark);
+            }
+
+            button.close {
+                cursor: pointer;
+                position: absolute;
+                border: none;
+                height: 40px;
+                width: 40px;
+                top: 20px;
+                right: 20px;
+                background-color: transparent;
+                z-index: 3;
+                img {
+                    height: 50%;
+                    width: 50%;
+                }
+            }
+
+            label#fileInputLabel {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 30vh;
+                width: 30vw;
+                background-color: transparent;
+
+                input {
+                    height: 100%;
+                    width: 100%;
+                    position: absolute;
+                    opacity: 0;
+                    cursor: pointer;
+                }
+            }
+            #textContainer {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                h2 {
+                    font-size: 25px;
+                    margin-bottom: 20px;
+                }
+                .input {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    gap: 20px;
+                    input {
+                        height: 30px;
+                        width: 80%;
+                        background-color: transparent;
+                        border: 2px solid var(--lighterDark);
+                        color: var(--white);
+                        border-radius: 10px;
+                        padding: 20px;
+                        font-size: 20px;
+                        height: 40px;
+                    }
+                    sub {
+                        font-size: x-small;
+                        margin-top: -14px;
+                    }
+                    .select {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 0.3vw;
+
+                        label {
+                            border: 2px solid var(--lighterDark);
+                            border-radius: 5px;
+                            // height: 50px;
+                            padding: 10px;
+                            width: 100px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            cursor: pointer;
+                            transition: border 0.2s ease-out;
+                            input {
+                                display: none;
+                            }
+                            &:has(input:checked) {
+                                border-color: var(--light1);
+                            }
+                            div.info {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-direction: column;
+                                img {
+                                    filter: invert(1);
+                                    opacity: 0.8;
+                                    height: 30px;
+                                }
+                                p {
+                                }
+                            }
+                        }
+                    }
+                    button {
+                        font-size: 20px;
+                        background-color: transparent;
+                        border: 2px solid var(--lighterDark);
+                        color: var(--white);
+                        border-radius: 10px;
+                        padding: 10px;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}

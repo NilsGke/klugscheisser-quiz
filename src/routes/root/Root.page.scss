@@ -25,6 +25,7 @@
             &:nth-child(1) {
                 background-color: var(--accent);
                 width: 30%;
+                white-space: pre-wrap;
             }
             &:nth-child(2) {
                 background: var(--light2);
@@ -46,6 +47,7 @@
             color: var(--dark);
             text-decoration: none;
             transition: scale 0.3s ease-in;
+            white-space: nowrap;
 
             &:hover {
                 scale: 1.05;
@@ -61,6 +63,19 @@
                 filter: invert(0.2) sepia(100) saturate(18) hue-rotate(206deg)
                     brightness(0.39);
             }
+        }
+    }
+    .helpIcon {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        height: 70px;
+        width: 70px;
+        display: flex;
+        border-radius: 100%;
+        img {
+            filter: invert(0.2) sepia(100) saturate(10) hue-rotate(196deg)
+                brightness(0.89);
         }
     }
 }

@@ -1,0 +1,90 @@
+#categoriesPage {
+    padding: 50px 10vw;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    h1 {
+        font-size: 40px;
+    }
+
+    .browser {
+        margin-top: 30px;
+        .searchForm {
+            width: 60svw;
+            background: var(--lighterDark);
+            padding: 20px;
+            border-radius: 20px;
+
+            form {
+                .textInput {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: nowrap;
+                    justify-content: space-between;
+                    gap: 20px;
+                    $inputWidth: 83%;
+
+                    input,
+                    button {
+                        height: 40px;
+                        color: var(--white);
+                        font-size: 18px;
+                        padding: 5px;
+                        background-color: transparent;
+                        border-radius: 15px;
+                        border: 1px solid var(--light1);
+                    }
+                    input {
+                        width: $inputWidth;
+                        padding-left: 10px;
+                    }
+                    button {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: calc(100% - $inputWidth);
+                        cursor: pointer;
+                        padding: 0;
+
+                        transition: background 0.2s ease-out;
+                        &:hover {
+                            background: var(--light1);
+                        }
+                    }
+                }
+            }
+        }
+
+        .resultsContainer {
+            padding: 20px;
+            border-radius: 30px;
+            margin-top: 30px;
+            max-height: 70vh;
+            overflow-y: scroll;
+
+            .results {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 20px;
+
+                .category {
+                    height: 150px;
+                    width: 40vw;
+                    background: var(--lighterDark);
+                    padding: 20px;
+                    border-radius: 20px;
+                }
+                small {
+                    span {
+                        height: 8px;
+                        width: 8px;
+                    }
+                }
+            }
+        }
+    }
+}

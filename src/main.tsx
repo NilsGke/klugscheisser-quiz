@@ -15,6 +15,10 @@ import Account from "./routes/account/Account.page";
 import Spinner from "./components/Spinner";
 import OfflineBanner from "./components/OfflineBanner";
 import Help from "./routes/help/Help.page";
+import Categories, {
+    CategoriesPagePurpose,
+} from "./routes/categories/Categories.page";
+import Editor from "./routes/edit/Editor.page";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -84,6 +88,19 @@ const App = () => {
         {
             path: "/help",
             element: <Help />,
+        },
+        {
+            path: "/editor",
+            element: <Editor />,
+        },
+        {
+            path: "/categories",
+            element: (
+                <Categories
+                    userData={userData}
+                    defaultPurpose={CategoriesPagePurpose.VIEW_CATEGORIES}
+                />
+            ),
         },
     ]);
 

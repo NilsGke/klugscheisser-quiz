@@ -11,11 +11,11 @@ const HeaderMenu: FC<props> = ({ visible }) => {
     return (
         <div id="headerMenu" className={visible ? "visible" : "hidden"}>
             <button className="item">
-                <Link to={"myCategories"}>my Categories</Link>
+                <Link to={"/myCategories"}>my Categories</Link>
             </button>
             <button className="item">Lorem ipsum</button>
             <button className="item">
-                <Link to={"account"}>Account Settings</Link>
+                <Link to={"/account"}>Account Settings</Link>
             </button>
             <button
                 className="item"

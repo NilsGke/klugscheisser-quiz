@@ -1,0 +1,31 @@
+.dotSpinner {
+    $size: 7px;
+    $distance: 7px;
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    display: block;
+    margin: 15px auto;
+    position: relative;
+    background: transparent;
+    animation: animloader 1s linear infinite alternate;
+    @keyframes animloader {
+        0% {
+            box-shadow: calc($distance * -3) calc(-1 * $size),
+                calc($distance * -1) 0, $distance 0, calc($distance * 3) 0;
+        }
+        33% {
+            box-shadow: calc($distance * -3) 0px,
+                calc($distance * -1) calc(-1 * $size), $distance 0,
+                calc($distance * 3) 0;
+        }
+        66% {
+            box-shadow: calc($distance * -3) 0px, calc($distance * -1) 0,
+                $distance calc(-1 * $size), calc($distance * 3) 0;
+        }
+        100% {
+            box-shadow: calc($distance * -3) 0, calc($distance * -1) 0,
+                $distance 0, calc($distance * 3) calc(-1 * $size);
+        }
+    }
+}

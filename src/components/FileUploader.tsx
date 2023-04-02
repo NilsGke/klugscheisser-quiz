@@ -18,7 +18,7 @@ import toWebp from "../helpers/toWebp";
 
 type props = {
     visible: boolean;
-    callback: (file: File) => UploadTask;
+    callback: (file: File) => UploadTask | void;
     finished?: (fullPath: string) => void;
     closeFun: () => void;
     title?: string;
@@ -63,26 +63,27 @@ const ImageUploader: FC<props> = ({
 
         setUploading(true);
 
-        uploadTask.on(
-            "state_changed",
-            (snapshot) => {
-                const currentProgress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                setProgress(Math.floor(currentProgress));
-            },
-            (err) => {
-                console.error(err);
-                toast(err.message);
-            },
-            async () => {
-                finished
-                    ? finished(uploadTask.snapshot.metadata.fullPath)
-                    : null;
+        if (uploadTask)
+            uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                    const currentProgress =
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    setProgress(Math.floor(currentProgress));
+                },
+                (err) => {
+                    console.error(err);
+                    toast(err.message);
+                },
+                async () => {
+                    finished
+                        ? finished(uploadTask.snapshot.metadata.fullPath)
+                        : null;
 
-                setDone(true);
-                setTimeout(closeFun, 300);
-            }
-        );
+                    setDone(true);
+                    setTimeout(closeFun, 300);
+                }
+            );
     }, [file, callback]);
 
     const cancel = () => {

@@ -1,5 +1,5 @@
 {
-  "name": "quiz-game",
+  "name": "klugscheisser-quiz",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,7 +11,9 @@
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.6",
     "firebase": "^9.17.2",
+    "jszip": "^3.10.1",
     "react": "^18.2.0",
+    "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.9.0",
     "react-simple-toasts": "^3.2.5"

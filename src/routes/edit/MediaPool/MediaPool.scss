@@ -1,0 +1,193 @@
+.mediaPool {
+    $hSize: 50px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: column;
+    border-radius: 20px;
+    border: 2px solid var(--lighterDark);
+    overflow-y: scroll;
+    max-height: 97%;
+
+    .header {
+        display: none;
+    }
+
+    h2 {
+        $fontSize: 24px;
+        font-size: $fontSize;
+        padding: calc(($hSize - $fontSize) / 2) 0;
+    }
+
+    $fileSize: 150px;
+    .media {
+        display: grid;
+        place-items: center;
+        gap: 10px;
+        padding: 10px;
+
+        grid-template-columns: $fileSize;
+        @media only screen and (min-width: 1200px) {
+            grid-template-columns: $fileSize $fileSize;
+        }
+        @media only screen and (min-width: 1660px) {
+            grid-template-columns: $fileSize $fileSize $fileSize;
+        }
+        @media only screen and (min-width: 2140px) {
+            grid-template-columns: $fileSize $fileSize $fileSize $fileSize;
+        }
+        // @media only screen and (min-width: 2340px) {
+        //     grid-template-columns: $fileSize $fileSize $fileSize $fileSize $fileSize;
+        // }
+
+        .file {
+            background-color: var(--lighterDark);
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+
+            height: $fileSize;
+            width: $fileSize;
+
+            aspect-ratio: 1;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            cursor: grab;
+
+            img,
+            video,
+            audio {
+                border-radius: 5px;
+                max-width: 100%;
+                max-height: 100%;
+            }
+            &.addMedia {
+                padding: 0;
+                outline: 1px solid transparent;
+                transition: border-color 0.2s ease-in-out;
+                background-color: transparent;
+                border: 3px solid var(--lighterDark);
+                &:hover {
+                    border-color: var(--light1);
+                }
+                img {
+                    filter: invert(0.2) sepia(100) saturate(6)
+                        hue-rotate(194deg) brightness(0.8);
+                    width: 100%;
+                }
+                label {
+                    cursor: pointer;
+                    height: $fileSize;
+                    width: $fileSize;
+                    padding: 30px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                    font-size: 20px;
+
+                    input {
+                        position: absolute;
+                        height: 100%;
+                        width: 100%;
+                        opacity: 0;
+                        cursor: pointer;
+                    }
+                    sub {
+                        white-space: nowrap;
+                        font-size: 15px;
+                    }
+                }
+            }
+            button.delete {
+                background-color: transparent;
+                border: none;
+                position: absolute;
+                top: 0;
+                right: 0;
+                height: 30px;
+                width: 27px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                img {
+                    height: 70%;
+                    width: 70%;
+                }
+            }
+        }
+        .bottom {
+            justify-self: end;
+            flex-direction: column;
+        }
+    }
+}
+
+#react-confirm-alert-firm-svg {
+    display: none;
+}
+
+#react-confirm-alert {
+    .react-confirm-alert-overlay.popupOverlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100svh;
+        width: 100svw;
+        backdrop-filter: blur(10px) brightness(0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .react-confirm-alert {
+            background-color: var(--dark);
+            border-radius: 30px;
+            padding: 30px;
+            .react-confirm-alert-body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                img {
+                    border-radius: 5px;
+                    margin-top: 20px;
+                    max-height: 60vh;
+                    max-width: 60vw;
+                }
+                .react-confirm-alert-button-group {
+                    margin-top: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    button {
+                        border: 1px solid var(--lighterDark);
+                        font-size: 20px;
+                        cursor: pointer;
+                        background: transparent;
+                        color: var(--whtie);
+                        padding: 10px;
+                        border-radius: 10px;
+                        &:first-child {
+                            color: var(--accent);
+                        }
+                        &:last-child {
+                            background-color: var(--lighterDark);
+                        }
+                        transition: transform 0.2s ease-in;
+                        &:hover {
+                            transform: scale(1.03);
+                        }
+                    }
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+}

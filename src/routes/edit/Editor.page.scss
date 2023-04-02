@@ -1,0 +1,16 @@
+#editorPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100svh;
+    width: 100svw;
+
+    // temporary
+    overflow: hidden;
+
+    h1 {
+        font-size: 40px;
+        margin-top: 40px;
+    }
+}

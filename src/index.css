@@ -1,9 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Golos+Text&display=swap");
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 * {
     margin: 0;
     padding: 0;
@@ -14,7 +10,7 @@
 :root {
     --primary: ;
     --dark: #022249;
-    --lighterDark: #093162;
+    --lighterDark: #0d3b74;
     --accent: #f07c41;
     --light1: #55bdca;
     --light2: #95ffff;
@@ -25,4 +21,27 @@
 body {
     background: var(--dark);
     color: var(--white);
+}
+
+/* scrollbars */
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #093162 #022249;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--lighterDark);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: hsl(213, 83%, 30%);
+    border-radius: 10px;
+    border: 0px solid #ffffff;
 }

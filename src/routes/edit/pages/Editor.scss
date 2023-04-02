@@ -1,0 +1,72 @@
+#editorPage #edit {
+    height: 100svh;
+    width: 100svw;
+
+    max-width: 1600px;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 9svh 91svh;
+    column-gap: 30px;
+    row-gap: 0px;
+
+    #topRow {
+        grid-area: 1 / 1 / 2 / 4;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        input,
+        button {
+            background-color: transparent;
+            border: 1px solid var(--lighterDark);
+            font-size: 20px;
+            color: var(--white);
+        }
+        button {
+            cursor: pointer;
+            transition: background-color 0.2s ease-out;
+            border-radius: 20px;
+            padding: 15px;
+
+            &:hover {
+                background-color: var(--lighterDark);
+            }
+        }
+        input {
+            border: none;
+            padding: 5px 0;
+            border-bottom: 2px solid var(--lighterDark);
+            width: 80%;
+            &::placeholder {
+                color: var(--lighterDark);
+            }
+        }
+    }
+
+    .page {
+    }
+
+    .mediaPoolWrapper {
+        grid-area: 2 / 1 / 3 / 2;
+        margin: 20px;
+    }
+    #categoryWrapper {
+        grid-area: 2 / 2 / 3 / 4;
+        margin: 20px;
+        max-width: 1000px;
+    }
+
+    .exportPopupContainer {
+        &.hidden {
+            opacity: 0;
+            z-index: -2;
+            backdrop-filter: blur(0px) brightness(1);
+        }
+        &.visible {
+            opacity: 1;
+            z-index: 2;
+            backdrop-filter: blur(10px) brightness(0.7);
+        }
+    }
+}
