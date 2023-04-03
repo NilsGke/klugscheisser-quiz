@@ -19,17 +19,14 @@ type props = {
 const CategoryEditor: FC<props> = ({ category, setCategory }) => {
     return (
         <div className="category">
-            <h2>Category</h2>
-            <div className="fieldsContainer">
-                {category.fields.map((field, fieldIndex) => (
-                    <Field
-                        key={fieldIndex}
-                        fieldIndex={fieldIndex}
-                        category={category}
-                        setCategory={setCategory}
-                    />
-                ))}
-            </div>
+            {category.fields.map((field, fieldIndex) => (
+                <Field
+                    key={fieldIndex}
+                    fieldIndex={fieldIndex}
+                    category={category}
+                    setCategory={setCategory}
+                />
+            ))}
         </div>
     );
 };

@@ -1,5 +1,4 @@
 .category {
-    $hSize: 50px;
     height: 100%;
     width: 100%;
     display: flex;
@@ -8,139 +7,129 @@
     flex-direction: column;
     border-radius: 20px;
     border: 2px solid var(--lighterDark);
-    max-height: 97%;
+    max-height: 99%;
+    padding: 10px;
 
-    h2 {
-        $fontSize: 24px;
-        font-size: $fontSize;
-        line-height: $fontSize;
-        padding: calc(($hSize - $fontSize) / 2) 0;
-    }
-    .fieldsContainer {
+    $hSize: 40px;
+
+    $gap: 10px;
+    height: calc(100% - $hSize - $gap);
+    width: calc(100% - 20px);
+
+    .field {
+        $gap: 5px;
         display: flex;
-        flex-direction: column;
         align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border-radius: 10px;
+        height: calc(100% / 5 - $gap);
+        width: 100%;
 
-        $gap: 10px;
-        height: calc(100% - $hSize - $gap);
-        width: calc(100% - 20px);
+        &:not(:last-child) {
+            height: calc(100% / 5 - $gap);
+            margin-bottom: $gap;
+        }
 
-        .field {
-            $gap: 5px;
+        h3 {
+            rotate: -90deg;
+        }
+
+        .content {
+            height: 100%;
+            width: 100%;
+            gap: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 7px;
-            border-radius: 10px;
-            padding: 7px;
-
-            // border: 1px solid var(--lighterDark);
-
-            height: calc(100% / 5 - $gap);
-            width: calc(100% - 20px);
-            &:not(:last-child) {
-                height: calc(100% / 5 - $gap);
-                margin-bottom: $gap;
-            }
-
-            h3 {
-            }
-            .content {
+            .question,
+            .answer {
+                $mediaPadding: 5px;
+                width: 50%;
                 height: 100%;
-                width: 100%;
-                gap: 7px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                .question,
-                .answer {
-                    $mediaPadding: 5px;
-                    width: 50%;
-                    height: 100%;
-                    display: inline-block;
-                    background: var(--lighterDark);
-                    border-radius: 10px;
-                    padding: $mediaPadding;
-                    position: relative;
+                display: inline-block;
+                background: var(--lighterDark);
+                border-radius: 10px;
+                padding: $mediaPadding;
+                position: relative;
 
-                    .mediaElement {
+                .mediaElement {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    height: 100%;
+
+                    > button.addMedia {
+                        border: none;
+                        height: 100%;
+                        width: 100%;
+                        background: none;
+                        color: var(--white);
+                        cursor: pointer;
+                        opacity: 0.3;
+                    }
+
+                    > div {
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        position: relative;
 
-                        height: 100%;
-
-                        > button.addMedia {
+                        button.remove {
+                            height: 25px;
+                            aspect-ratio: 1;
+                            position: absolute;
+                            top: 2px;
+                            right: 2px;
+                            background-color: transparent;
                             border: none;
-                            height: 100%;
-                            width: 100%;
-                            background: none;
-                            color: var(--white);
                             cursor: pointer;
-                            opacity: 0.3;
-                        }
-
-                        > div {
+                            border-radius: 100%;
+                            backdrop-filter: blur(14px) brightness(75%);
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            position: relative;
 
-                            button.remove {
-                                height: 25px;
+                            img {
+                                height: 50%;
                                 aspect-ratio: 1;
-                                position: absolute;
-                                top: 2px;
-                                right: 2px;
-                                background-color: transparent;
-                                border: none;
-                                cursor: pointer;
-                                border-radius: 100%;
-                                backdrop-filter: blur(14px) brightness(75%);
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-
-                                img {
-                                    height: 50%;
-                                    aspect-ratio: 1;
-                                }
                             }
                         }
+                    }
 
-                        .text {
-                            width: 95%;
+                    .text {
+                        width: 95%;
 
-                            textarea {
-                                resize: none;
-                                width: 100%;
-                                background-color: transparent;
-                                border: 1px solid #114d96;
-                                border-radius: 10px;
-                                color: var(--white);
-                                height: 100px;
-                                padding: 10px;
+                        textarea {
+                            resize: none;
+                            width: 100%;
+                            background-color: transparent;
+                            border: 1px solid #114d96;
+                            border-radius: 10px;
+                            color: var(--white);
+                            height: 100px;
+                            padding: 10px;
 
-                                white-space: normal;
-                                text-align: justify;
-                                -moz-text-align-last: center; /* Firefox 12+ */
-                                text-align-last: center;
-                            }
+                            white-space: normal;
+                            text-align: justify;
+                            -moz-text-align-last: center; /* Firefox 12+ */
+                            text-align-last: center;
                         }
+                    }
 
-                        > div:not(.text) {
-                            height: calc(100% - $mediaPadding);
+                    > div:not(.text) {
+                        height: calc(100% - $mediaPadding);
+                        max-height: 100%;
+                        max-width: 100%;
+                        width: 100%;
+
+                        img,
+                        video,
+                        audio {
                             max-height: 100%;
                             max-width: 100%;
-                            width: 100%;
-
-                            img,
-                            video,
-                            audio {
-                                max-height: 100%;
-                                max-width: 100%;
-                                border-radius: 5px;
-                            }
+                            border-radius: 5px;
                         }
                     }
                 }
