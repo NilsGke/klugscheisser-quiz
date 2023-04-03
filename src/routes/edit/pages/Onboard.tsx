@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import toast from "react-simple-toasts";
-import { PartialCategory, emptyCategory } from "../../../helpers/categoryTypes";
+import { PartialCategory, emptyCategory } from "../../../types/categoryTypes";
 import { importCategoryFromZip } from "../../../helpers/zip";
 // components
 import HomeButton from "../../../components/HomeButton";

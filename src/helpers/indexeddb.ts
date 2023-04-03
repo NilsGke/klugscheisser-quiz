@@ -1,4 +1,4 @@
-import { IndexedFile, MediaType, MediaTypes } from "./categoryTypes";
+import { IndexedFile, MediaType, MediaTypes } from "../types/categoryTypes";
 
 const request = window.indexedDB.open("LocalFileDatabase", 3);
 

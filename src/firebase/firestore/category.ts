@@ -10,7 +10,7 @@ import {
     where,
 } from "firebase/firestore";
 import db from "./firestore";
-import { Category } from "../../helpers/categoryTypes";
+import { Category } from "../../types/categoryTypes";
 
 export const searchCategories = async (
     searchTerm: string,

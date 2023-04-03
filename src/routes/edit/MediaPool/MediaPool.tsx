@@ -1,5 +1,5 @@
 import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
-import { IndexedFile, MediaType } from "../../../helpers/categoryTypes";
+import { IndexedFile, MediaType } from "../../../types/categoryTypes";
 import "./MediaPool.scss";
 import {
     deleteStoredFile,

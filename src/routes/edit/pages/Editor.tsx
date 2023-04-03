@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Category, PartialCategory } from "../../../helpers/categoryTypes";
+import { Category, PartialCategory } from "../../../types/categoryTypes";
 import "./Editor.scss";
 import MediaPool from "../MediaPool/MediaPool";
 import CategoryEditor from "../CategoryEditor/CategoryEditor";

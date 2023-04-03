@@ -8,7 +8,7 @@ import {
     PartialCategory,
     TextRessource,
     Video,
-} from "./categoryTypes";
+} from "../types/categoryTypes";
 
 type CategoryConfig = {
     name: string;

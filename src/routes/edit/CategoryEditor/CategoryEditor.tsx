@@ -1,15 +1,10 @@
-import {
-    FC,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import {
     AnyIndexedMedia,
     MediaType,
     MediaTypes,
     PartialCategory,
-} from "../../../helpers/categoryTypes";
+} from "../../../types/categoryTypes";
 import "./Category.scss";
 import { getStoredFile } from "../../../helpers/indexeddb";
 import removeIcon from "../../../assets/close.svg";

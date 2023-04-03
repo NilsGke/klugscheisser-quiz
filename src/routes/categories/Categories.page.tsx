@@ -6,7 +6,7 @@ import { searchCategories } from "../../firebase/firestore/category";
 import "./Categories.page.scss";
 import { QueryDocumentSnapshot } from "firebase/firestore";
 import DotSpinner from "../../components/DotSpinner";
-import { Category } from "../../helpers/categoryTypes";
+import { Category } from "../../types/categoryTypes";
 
 export enum CategoriesPagePurpose {
     VIEW_CATEGORIES,

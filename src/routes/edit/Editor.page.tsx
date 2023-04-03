@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Onboard from "./pages/Onboard";
 import Edit from "./pages/Editor";
-import { PartialCategory } from "../../helpers/categoryTypes";
+import { PartialCategory } from "../../types/categoryTypes";
 import "./Editor.page.scss";
 
 const Editor = () => {
