@@ -16,6 +16,9 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     useEffect(() => {
         console.log("category changed", category);
     }, [category]);
+    useEffect(() => {
+        console.log("name changed", name);
+    }, [name]);
 
     const [exporting, setExporting] = useState<boolean>(false);
     const [exportData, setExportData] = useState<JSZip.JSZipMetadata | null>(
@@ -52,7 +55,9 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                 setExporting(false);
             }
         );
-    }, [category]);
+    }, [category, name]);
+
+    console.log(name);
 
     return (
         <div id="edit">
@@ -93,7 +98,9 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                                 <div
                                     className="progress"
                                     style={{
-                                        width: Math.round(exportData.percent),
+                                        width: `${Math.round(
+                                            exportData.percent
+                                        )}%`,
                                     }}
                                 ></div>
                             </div>

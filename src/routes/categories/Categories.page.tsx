@@ -2,11 +2,11 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { UserData } from "../../firebase/firestore/user";
 import Header from "../../components/Header";
 import HomeButton from "../../components/HomeButton";
-import { Category, searchCategories } from "../../firebase/firestore/category";
+import { searchCategories } from "../../firebase/firestore/category";
 import "./Categories.page.scss";
-import { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
-import Spinner from "../../components/Spinner";
+import { QueryDocumentSnapshot } from "firebase/firestore";
 import DotSpinner from "../../components/DotSpinner";
+import { Category } from "../../helpers/categoryTypes";
 
 export enum CategoriesPagePurpose {
     VIEW_CATEGORIES,
@@ -124,7 +124,7 @@ const Categories: FC<props> = ({ userData, defaultPurpose }) => {
                             <>
                                 {results.map((category) => (
                                     <Category
-                                        key={category.id}
+                                        key={category.name}
                                         data={category}
                                     />
                                 ))}

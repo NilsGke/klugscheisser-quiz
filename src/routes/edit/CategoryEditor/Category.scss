@@ -54,7 +54,7 @@
                 justify-content: center;
                 .question,
                 .answer {
-                    $mediaPadding: 10px;
+                    $mediaPadding: 5px;
                     width: 50%;
                     height: 100%;
                     display: inline-block;
@@ -138,6 +138,7 @@
                             video,
                             audio {
                                 max-height: 100%;
+                                max-width: 100%;
                                 border-radius: 5px;
                             }
                         }

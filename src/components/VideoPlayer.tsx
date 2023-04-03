@@ -1,6 +1,9 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import ReactSlider from "react-slider";
 import getTimeFromSeconds from "../helpers/timeFromSeconds";
+
+// styles
+import "./VideoPlayer.scss";
 // assets
 import playIcon from "../assets/play.svg";
 import pauseIcon from "../assets/pause.svg";
@@ -8,38 +11,33 @@ import volume0 from "../assets/volume0.svg";
 import volume1 from "../assets/volume1.svg";
 import volume2 from "../assets/volume2.svg";
 import volume3 from "../assets/volume3.svg";
-// styles
-import "./AudioPlayer.scss";
 
 type props = {
     file: File;
-    fileName?: string;
+    small?: boolean;
 };
 
-// TODO add album art
-
-const AudioPlayer: FC<props> = ({ file }) => {
-    const audioUrl = useMemo(() => URL.createObjectURL(file), [file]);
-
-    const audioElementRef = useRef<HTMLAudioElement>(null);
-
+const VideoPlayer: FC<props> = ({ file, small = false }) => {
+    const videoUrl = useMemo(() => URL.createObjectURL(file), [file]);
     const [playing, setPlaying] = useState(false);
     const [volume, setVolume] = useState(40);
-    const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+
+    const videoElementRef = useRef<HTMLVideoElement>(null);
 
     useEffect(() => {
-        if (audioElementRef.current === null) return;
+        if (videoElementRef.current === null) return;
         // metadata
         const handleMetadata = () => {
-            if (audioElementRef.current === null) return;
-            setDuration(audioElementRef.current.duration);
+            if (videoElementRef.current === null) return;
+            setDuration(videoElementRef.current.duration);
         };
-        if (audioElementRef.current.readyState > 0) {
+        if (videoElementRef.current.readyState > 0) {
             // element is ready
             handleMetadata();
         } else {
-            audioElementRef.current.addEventListener(
+            videoElementRef.current.addEventListener(
                 "loadedmetadata",
                 handleMetadata
             );
@@ -47,21 +45,21 @@ const AudioPlayer: FC<props> = ({ file }) => {
 
         // time update
         const timeUpdate = () =>
-            setCurrentTime(audioElementRef.current?.currentTime || 0);
+            setCurrentTime(videoElementRef.current?.currentTime || 0);
 
-        audioElementRef.current.addEventListener("timeupdate", timeUpdate);
+        videoElementRef.current.addEventListener("timeupdate", timeUpdate);
 
         return () => {
-            audioElementRef.current?.removeEventListener(
+            videoElementRef.current?.removeEventListener(
                 "loadedmetadata",
                 handleMetadata
             );
-            audioElementRef.current?.removeEventListener(
+            videoElementRef.current?.removeEventListener(
                 "timeupdate",
                 timeUpdate
             );
         };
-    }, [audioElementRef]);
+    }, [videoElementRef]);
 
     const seekSliderRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
@@ -76,74 +74,47 @@ const AudioPlayer: FC<props> = ({ file }) => {
     }, []);
 
     useEffect(() => {
-        if (audioElementRef.current)
-            audioElementRef.current.volume = volume / 100;
+        if (videoElementRef.current)
+            videoElementRef.current.volume = volume / 100;
     }, [volume]);
 
     const play = (play: boolean) => {
-        if (audioElementRef.current === null)
-            throw new Error("audio element ref is null -> could not play");
+        if (videoElementRef.current === null)
+            throw new Error("video element ref is null -> could not play");
 
-        if (play) audioElementRef.current.play();
-        else audioElementRef.current.pause();
+        if (play) videoElementRef.current.play();
+        else videoElementRef.current.pause();
 
         setPlaying((prev) => !prev);
     };
 
     const changeTime = (currentTime: number) => {
-        if (audioElementRef.current === null)
+        if (videoElementRef.current === null)
             throw new Error(
                 "audio element ref is null -> could not change time"
             );
 
-        audioElementRef.current.currentTime = currentTime;
+        videoElementRef.current.currentTime = currentTime;
     };
 
-    const name =
-        file.name.length > 30 ? `${file.name.substring(0, 30)}...` : file.name;
-
     return (
-        <div className={"audioPlayer" + (playing ? " playing" : "")}>
-            <audio
-                src={audioUrl}
-                preload="metadata"
-                loop
-                ref={audioElementRef}
-            ></audio>
-            <div className="top">
-                <button className="playPause" onClick={() => play(!playing)}>
-                    <img src={playing ? pauseIcon : playIcon} alt="" />
-                </button>
-                <div className="title">{name}</div>
-            </div>
-
-            <div className="time">
-                <span id="current-time" className="time">
-                    {getTimeFromSeconds(currentTime)}
-                </span>
-
-                <ReactSlider
-                    className="seek-slider"
-                    value={currentTime}
-                    min={0}
-                    max={Math.floor(duration)}
-                    onChange={(value) => changeTime(value)}
-                />
-                <span id="duration" className="time">
-                    {getTimeFromSeconds(duration)}
-                </span>
-            </div>
-
+        <div
+            className={
+                "videoPlayer" +
+                (playing ? " playing " : " paused ") +
+                (small ? " small " : "")
+            }
+        >
             <div className="volume">
-                <span className="volume">{volume}%</span>
                 <ReactSlider
-                    className="volume-slider"
+                    className={"volume-slider"}
                     thumbClassName="thumb"
                     trackClassName="track"
-                    value={volume}
+                    value={small ? volume : 100 - volume}
                     min={0}
                     max={100}
-                    onChange={(value) => setVolume(value)}
+                    onChange={(value) => setVolume(small ? value : 100 - value)}
+                    orientation={small ? "horizontal" : "vertical"}
                 />
                 <button
                     className="mute"
@@ -163,8 +134,36 @@ const AudioPlayer: FC<props> = ({ file }) => {
                     )}
                 </button>
             </div>
+            <div className="videoContainer">
+                <video src={videoUrl} ref={videoElementRef}>
+                    asdf
+                </video>
+                <button className="playPause" onClick={() => play(!playing)}>
+                    <img
+                        src={playing ? pauseIcon : playIcon}
+                        draggable="false"
+                        alt=""
+                    />
+                </button>
+                <div className="time">
+                    <span id="current-time" className="time">
+                        {getTimeFromSeconds(currentTime)}
+                    </span>
+
+                    <ReactSlider
+                        className="seek-slider"
+                        value={currentTime}
+                        min={0}
+                        max={Math.floor(duration)}
+                        onChange={(value) => changeTime(value)}
+                    />
+                    <span id="duration" className="time">
+                        {getTimeFromSeconds(duration)}
+                    </span>
+                </div>
+            </div>
         </div>
     );
 };
 
-export default AudioPlayer;
+export default VideoPlayer;

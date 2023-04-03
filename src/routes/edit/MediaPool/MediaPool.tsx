@@ -18,9 +18,10 @@ import trashIcon from "../../../assets/delete.svg";
 import { confirmAlert } from "react-confirm-alert";
 import autoAnimate from "@formkit/auto-animate";
 import AudioPlayer from "../../../components/AudioPlayer";
+import VideoPlayer from "../../../components/VideoPlayer";
 
 const MediaPool = () => {
-    const [mediaType, setMediaType] = useState<MediaType>("video");
+    const [mediaType, setMediaType] = useState<MediaType>("image");
 
     const [files, setFiles] = useState<IndexedFile[]>([]);
 
@@ -127,6 +128,7 @@ const MediaPool = () => {
                 <div className="file addMedia" key="addMore">
                     <label htmlFor="fileInput">
                         <img
+                            draggable="false"
                             src={
                                 mediaType === "audio"
                                     ? audioIcon
@@ -206,6 +208,7 @@ const MediaPool = () => {
                                                 <img
                                                     src={mediaURL}
                                                     alt="image, you want to delete"
+                                                    draggable="false"
                                                 />
                                             ),
                                             buttons: [
@@ -257,9 +260,7 @@ const MediaPool = () => {
                                 onDragStart={(e) => dragStart(e, mediaURL)}
                                 draggable
                             >
-                                <video controls autoPlay={false} muted={true}>
-                                    <source type="video/mp4" src={mediaURL} />
-                                </video>
+                                <VideoPlayer file={file} small={true} />
                                 <button
                                     className="delete"
                                     onClick={() =>

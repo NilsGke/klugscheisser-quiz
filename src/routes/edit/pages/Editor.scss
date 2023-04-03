@@ -58,6 +58,28 @@
     }
 
     .exportPopupContainer {
+        position: absolute;
+        height: 100svh;
+        width: 100svw;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .progressBar {
+            width: 30vw;
+            background-color: var(--lighterDark);
+            height: 4px;
+            margin: 10px 0;
+            border-radius: 30px;
+            overflow: hidden;
+            .progress {
+                height: 4px;
+                background-color: var(--white);
+            }
+        }
+
         &.hidden {
             opacity: 0;
             z-index: -2;

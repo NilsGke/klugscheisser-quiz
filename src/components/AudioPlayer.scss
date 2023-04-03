@@ -70,7 +70,8 @@
         .volume-slider {
             $tracksize: 4px;
             height: $tracksize;
-            backdrop-filter: brightness(140%);
+            background-color: #1253a2;
+            border-radius: 10px;
             width: 80%;
 
             .track {

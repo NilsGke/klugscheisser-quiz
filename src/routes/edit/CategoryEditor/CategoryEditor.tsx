@@ -1,15 +1,11 @@
 import {
-    Dispatch,
     FC,
-    SetStateAction,
-    useCallback,
     useEffect,
     useRef,
     useState,
 } from "react";
 import {
     AnyIndexedMedia,
-    AnyMedia,
     MediaType,
     MediaTypes,
     PartialCategory,
@@ -18,6 +14,7 @@ import "./Category.scss";
 import { getStoredFile } from "../../../helpers/indexeddb";
 import removeIcon from "../../../assets/close.svg";
 import AudioPlayer from "../../../components/AudioPlayer";
+import VideoPlayer from "../../../components/VideoPlayer";
 
 type props = {
     category: PartialCategory;
@@ -125,7 +122,6 @@ const MediaElement = ({
 
     const blurHandler = () => {
         const newCategory = category;
-        console.log("blur", text);
 
         newCategory.fields[fieldIndex][type] = {
             type: "text",
@@ -239,11 +235,7 @@ const MediaElement = ({
             <div className="text">
                 <textarea
                     ref={textAreaRef}
-                    onChange={(e) => {
-                        console.log(e.target.value);
-
-                        setText(e.target.value);
-                    }}
+                    onChange={(e) => setText(e.target.value)}
                     value={text}
                 />
                 <button
@@ -279,10 +271,6 @@ const MediaElement = ({
     if (ressource.type === "audio")
         content = (
             <div className="audio">
-                {/* <audio controls>
-                    <source src={url} />
-                    Your browser does not support the audio element.
-                </audio> */}
                 <AudioPlayer file={ressource.content} />
                 <button
                     className="remove"
@@ -299,8 +287,8 @@ const MediaElement = ({
 
     if (ressource.type === "video")
         content = (
-            <div className="audio">
-                <video controls src={url} />
+            <div className="video">
+                <VideoPlayer file={ressource.content} />
                 <button
                     className="remove"
                     onClick={() => {
