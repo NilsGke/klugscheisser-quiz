@@ -14,8 +14,6 @@ A game platform inspired by the american game show [jeopardy!](https://www.jeopa
 
 ![Diagram of the ecosystem (server and client)](ecosystem.excalidraw.png)
 
-Files could have a custom file extension like `.ksq` (**K**lug**s**cheißer-**Q**uiz)
-
 ## Future Ideas
 
 * add multiple languages
