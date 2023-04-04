@@ -147,7 +147,7 @@ export const MediaTypes = [
     "imageCollection",
     "video",
     "audio",
-];
+] as const;
 
 export interface IndexedFile extends File {
     dbIndex: number;

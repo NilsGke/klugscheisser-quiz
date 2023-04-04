@@ -27,7 +27,7 @@ const Root: FC<props> = ({ userData }) => {
                     <h2 className="desc">Spielen</h2>
                     <img src={playIcon} alt="" />
                 </Link>
-                <Link to={"editor"}>
+                <Link to={"/editor"}>
                     <h2 className="desc">Kategorie Editor</h2>
                     <img src={editIcon} alt="question mark icon" />
                 </Link>
