@@ -19,7 +19,7 @@ import Categories, {
     CategoriesPagePurpose,
 } from "./routes/categories/Categories.page";
 import Editor from "./routes/edit/Editor.page";
-import Game from "./routes/game/Game";
+import Game from "./routes/game/Game.page";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -102,10 +102,6 @@ const App = () => {
                     defaultPurpose={CategoriesPagePurpose.VIEW_CATEGORIES}
                 />
             ),
-        },
-        {
-            path: "/setup",
-            element: <Setup />,
         },
         {
             path: "/game",
