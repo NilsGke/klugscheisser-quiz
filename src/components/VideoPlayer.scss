@@ -23,7 +23,7 @@
 
     .videoContainer {
         height: 100%;
-        width: 100%;
+        width: fit-content;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -48,18 +48,51 @@
                 aspect-ratio: 1;
             }
         }
+
+        button.fullScreen {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            background-color: transparent;
+            border: none;
+            height: 30px;
+            aspect-ratio: 1;
+            border-radius: 0px 0px 0px 25px;
+            backdrop-filter: blur(5px) brightness(0.4);
+            display: flex;
+            align-items: start;
+            justify-content: flex-end;
+            cursor: pointer;
+            > img {
+                filter: invert(1);
+                height: 80%;
+            }
+        }
+
         > .time {
+            backdrop-filter: brightness(0.3) blur(5px);
             position: absolute;
             bottom: 0%;
         }
     }
 
     &.playing {
-        .videoContainer button.playPause {
-            opacity: 0;
-            transition: opacity 0.2s ease-in;
+        .videoContainer {
+            button.playPause {
+                opacity: 0;
+                transition: opacity 0.2s ease-in;
+            }
+            > .time {
+                opacity: 0;
+                transition: opacity 0.2s ease-in;
+            }
             &:hover {
-                opacity: 1;
+                > .time {
+                    opacity: 1;
+                }
+                button.playPause {
+                    opacity: 1;
+                }
             }
         }
     }

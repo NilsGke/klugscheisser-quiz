@@ -11,6 +11,7 @@ import volume0 from "../assets/volume0.svg";
 import volume1 from "../assets/volume1.svg";
 import volume2 from "../assets/volume2.svg";
 import volume3 from "../assets/volume3.svg";
+import fullScreenIcon from "../assets/fullscreen.svg";
 
 type props = {
     file: File;
@@ -144,6 +145,12 @@ const VideoPlayer: FC<props> = ({ file, small = false }) => {
                         draggable="false"
                         alt=""
                     />
+                </button>
+                <button
+                    className="fullScreen"
+                    onClick={() => videoElementRef.current?.requestFullscreen()}
+                >
+                    <img src={fullScreenIcon} alt="" />
                 </button>
                 <div className="time">
                     <span id="current-time" className="time">
