@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 #editorPage #edit {
     height: 100svh;
     width: 100svw;
@@ -19,27 +21,30 @@
         input,
         button {
             background-color: transparent;
-            border: 1px solid var(--lighterDark);
+            border: 1px solid $white;
             font-size: 20px;
-            color: var(--white);
+            color: $white;
         }
         button {
             cursor: pointer;
-            transition: background-color 0.2s ease-out;
             border-radius: 20px;
             padding: 15px;
+            box-shadow: 0 0 20px shade($white, 50%);
 
+            transition: all 0.2s ease-out;
             &:hover {
-                background-color: var(--lighterDark);
+                background-color: $white;
+                color: $dark;
+                box-shadow: 0 0 30px shade($white, 0%);
             }
         }
         input {
             border: none;
             padding: 5px 0;
-            border-bottom: 2px solid var(--lighterDark);
+            border-bottom: 1px solid $white;
             width: 80%;
             &::placeholder {
-                color: var(--lighterDark);
+                color: $grey;
             }
         }
     }
@@ -69,15 +74,19 @@
 
         .progressBar {
             width: 30vw;
-            background-color: var(--lighterDark);
+            background-color: $lighterDark;
             height: 4px;
             margin: 10px 0;
             border-radius: 30px;
             overflow: hidden;
             .progress {
                 height: 4px;
-                background-color: var(--white);
+                background-color: $white;
             }
+        }
+
+        .currentFile {
+            color: $white;
         }
 
         &.hidden {

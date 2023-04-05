@@ -1,3 +1,5 @@
+@import "../../colors.scss";
+
 #loginPage {
     height: 100svh;
     width: 100svw;
@@ -29,8 +31,8 @@
                     width: 100%;
 
                     background-color: transparent;
-                    color: var(--white);
-                    border: 1px solid var(--light1);
+                    color: $white;
+                    border: 1px solid $white;
                     border-radius: 6px;
                     padding: 8px;
                     font-size: large;
@@ -40,8 +42,8 @@
         button {
             width: 100%;
             background-color: transparent;
-            color: var(--white);
-            border: 1px solid var(--light1);
+            color: $white;
+            border: 1px solid $white;
             border-radius: 6px;
             padding: 8px;
             font-size: large;
@@ -51,8 +53,8 @@
             &.submit {
                 margin-bottom: 20px;
                 &:hover {
-                    background-color: var(--light1);
-                    color: var(--dark);
+                    background-color: $white;
+                    color: $dark;
                 }
             }
             &.switchMode {

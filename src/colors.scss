@@ -1,0 +1,15 @@
+$dark: #262626;
+$lighterDark: #444444;
+$grey: #4c4c4c;
+$orange: #ff9674;
+$darkBlue: #5a41ff;
+$lightBlue: #7cfdff;
+$green: #7bff9c;
+$yellow: #fedc5c;
+$white: #fefbf5;
+$pink: #ff90e1;
+$red: #ff6464;
+
+@function shade($color, $percentage) {
+    @return mix(black, $color, $percentage);
+}

@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 .mediaPool {
     $hSize: 50px;
     height: 100%;
@@ -7,7 +9,7 @@
     justify-content: start;
     flex-direction: column;
     border-radius: 20px;
-    border: 2px solid var(--lighterDark);
+    border: 1px solid $white;
     overflow-y: scroll;
     max-height: 99%;
 
@@ -20,13 +22,14 @@
 
             button {
                 background-color: transparent;
-                border: 1px solid var(--lighterDark);
+                border: 1px solid $white;
                 border-radius: 5px;
-                color: var(--white);
+                color: $white;
                 padding: 5px;
                 cursor: pointer;
                 &.selected {
-                    background-color: var(--lighterDark);
+                    background-color: $white;
+                    color: $dark;
                 }
             }
         }
@@ -60,13 +63,15 @@
         // }
 
         .file {
-            background-color: var(--lighterDark);
+            background-color: $dark;
             padding: 5px;
             border-radius: 10px;
             position: relative;
 
             height: $fileSize;
             width: $fileSize;
+
+            border: 1px solid $grey;
 
             aspect-ratio: 1;
 
@@ -75,6 +80,12 @@
             justify-content: center;
 
             cursor: grab;
+
+            box-shadow: 0 0 0px transparent;
+            transition: box-shadow 0.2s ease-out;
+            &:hover {
+                box-shadow: 0 0 50px shade($white, 70%);
+            }
 
             img,
             video,
@@ -88,9 +99,9 @@
                 outline: 1px solid transparent;
                 transition: border-color 0.2s ease-in-out;
                 background-color: transparent;
-                border: 3px solid var(--lighterDark);
+                border: 3px solid $grey;
                 &:hover {
-                    border-color: var(--light1);
+                    border-color: $white;
                 }
                 img {
                     filter: invert(0.2) sepia(100) saturate(6)
@@ -163,7 +174,7 @@
         justify-content: center;
 
         .react-confirm-alert {
-            background-color: var(--dark);
+            background-color: $dark;
             border-radius: 30px;
             padding: 30px;
             .react-confirm-alert-body {
@@ -186,18 +197,21 @@
                     justify-content: center;
                     gap: 10px;
                     button {
-                        border: 1px solid var(--lighterDark);
                         font-size: 20px;
                         cursor: pointer;
                         background: transparent;
-                        color: var(--whtie);
+                        color: $white;
                         padding: 10px;
                         border-radius: 10px;
+                        border: none;
                         &:first-child {
-                            color: var(--accent);
+                            color: $white;
+                            background: $red;
+                            box-shadow: 0 0 30px -5px $red;
                         }
                         &:last-child {
-                            background-color: var(--lighterDark);
+                            background-color: $lighterDark;
+                            border: 1px solid $grey;
                         }
                         transition: transform 0.2s ease-in;
                         &:hover {

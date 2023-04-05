@@ -1,3 +1,5 @@
+@import "../../colors.scss";
+
 #categoriesPage {
     padding: 50px 10vw;
     padding-bottom: 10px;
@@ -13,7 +15,7 @@
         margin-top: 30px;
         .searchForm {
             width: 60svw;
-            background: var(--lighterDark);
+            background: $lighterDark;
             padding: 20px;
             border-radius: 20px;
 
@@ -29,12 +31,12 @@
                     input,
                     button {
                         height: 40px;
-                        color: var(--white);
+                        color: $white;
                         font-size: 18px;
                         padding: 5px;
                         background-color: transparent;
                         border-radius: 15px;
-                        border: 1px solid var(--light1);
+                        border: 1px solid $white;
                     }
                     input {
                         width: $inputWidth;
@@ -50,7 +52,7 @@
 
                         transition: background 0.2s ease-out;
                         &:hover {
-                            background: var(--light1);
+                            background: $white;
                         }
                     }
                 }
@@ -74,7 +76,7 @@
                 .category {
                     height: 150px;
                     width: 40vw;
-                    background: var(--lighterDark);
+                    background: $lighterDark;
                     padding: 20px;
                     border-radius: 20px;
                 }

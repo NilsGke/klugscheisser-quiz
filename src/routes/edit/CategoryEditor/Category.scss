@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 .category {
     height: 100%;
     width: 100%;
@@ -6,14 +8,13 @@
     justify-content: space-between;
     flex-direction: column;
     border-radius: 20px;
-    border: 2px solid var(--lighterDark);
+    border: 1px solid $white;
     max-height: 99%;
     padding: 10px;
 
     $hSize: 40px;
 
     $gap: 10px;
-    height: calc(100% - $hSize - $gap);
     width: calc(100% - 20px);
 
     .field {
@@ -48,10 +49,14 @@
                 width: 50%;
                 height: 100%;
                 display: inline-block;
-                background: var(--lighterDark);
+                border: 1px solid $lighterDark;
                 border-radius: 10px;
                 padding: $mediaPadding;
                 position: relative;
+
+                &:not(:has(.addMedia)) {
+                    background: $dark;
+                }
 
                 .mediaElement {
                     display: flex;
@@ -65,7 +70,7 @@
                         height: 100%;
                         width: 100%;
                         background: none;
-                        color: var(--white);
+                        color: $white;
                         cursor: pointer;
                         opacity: 0.3;
                     }
@@ -100,16 +105,18 @@
 
                     .text {
                         width: 95%;
+                        height: 95%;
 
                         textarea {
                             resize: none;
                             width: 100%;
+                            height: 100%;
                             background-color: transparent;
-                            border: 1px solid #114d96;
+                            border: 1px solid $white;
                             border-radius: 10px;
-                            color: var(--white);
-                            height: 100px;
+                            color: $white;
                             padding: 10px;
+                            border: none;
 
                             white-space: normal;
                             text-align: justify;

@@ -1,3 +1,5 @@
+@import "../colors.scss";
+
 .videoPlayer {
     width: 100%;
     height: 100%;
@@ -14,10 +16,10 @@
 
     @keyframes playing {
         from {
-            outline-color: var(--white);
+            outline-color: $white;
         }
         to {
-            outline-color: var(--lighterDark);
+            outline-color: transparent;
         }
     }
 
@@ -124,7 +126,7 @@
         .seek-slider,
         .volume-slider {
             height: $tracksize;
-            background-color: #1253a2;
+            background-color: $lighterDark;
             border-radius: 10px;
             width: 80%;
 
@@ -136,7 +138,7 @@
                 $size: 10px;
                 height: $size;
                 width: $size;
-                background-color: var(--white);
+                background-color: $white;
                 border-radius: 100%;
                 top: calc($tracksize / 2 - $size / 2);
                 cursor: pointer;
@@ -159,7 +161,7 @@
                 $size: 10px;
                 height: $size;
                 width: $size;
-                background-color: var(--white);
+                background-color: $white;
                 border-radius: 100%;
                 left: calc($tracksize / 2 - $size / 2);
                 top: unset;
@@ -179,7 +181,7 @@
                 height: 4px;
                 .thumb {
                     $size: 10px;
-                    background-color: var(--white);
+                    background-color: $white;
                     border-radius: 100%;
                     top: calc($tracksize / 2 - $size / 2);
                 }

@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 #onboard {
     .decide {
         height: 70vh;
@@ -11,7 +13,7 @@
             height: 50vh;
             width: 35vw;
             background-color: transparent;
-            border: 3px solid var(--lighterDark);
+            border: 1px solid $white;
             border-radius: 30px;
             display: flex;
             align-items: center;
@@ -19,19 +21,18 @@
             flex-direction: column;
             padding: 30px;
             cursor: pointer;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.3s ease-out;
             &:hover {
                 transform: scale(1.02);
             }
             img {
                 height: 60%;
-                filter: invert(0.2) sepia(100) saturate(6) hue-rotate(194deg)
-                    brightness(0.8);
+                filter: invert(0.4);
             }
             p {
                 margin-bottom: 10%;
                 font-size: 30px;
-                color: var(--light1);
+                color: $white;
             }
         }
     }
@@ -58,7 +59,7 @@
             opacity: 1;
         }
         #popup {
-            background-color: var(--dark);
+            background-color: $dark;
             padding: 40px;
             border-radius: 20px;
             position: relative;
@@ -70,8 +71,8 @@
             border: 3px solid transparent;
             transition: border 0.2s ease-out, color 0.2s ease-out;
             &.drag {
-                border-color: var(--lighterDark);
-                color: var(--dark);
+                border-color: $lighterDark;
+                color: $dark;
             }
 
             button.close {
@@ -126,8 +127,8 @@
                         height: 30px;
                         width: 80%;
                         background-color: transparent;
-                        border: 2px solid var(--lighterDark);
-                        color: var(--white);
+                        border: 2px solid $lighterDark;
+                        color: $white;
                         border-radius: 10px;
                         padding: 20px;
                         font-size: 20px;
@@ -144,7 +145,7 @@
                         gap: 0.3vw;
 
                         label {
-                            border: 2px solid var(--lighterDark);
+                            border: 2px solid $lighterDark;
                             border-radius: 5px;
                             // height: 50px;
                             padding: 10px;
@@ -159,7 +160,7 @@
                                 display: none;
                             }
                             &:has(input:checked) {
-                                border-color: var(--light1);
+                                border-color: $white;
                             }
                             div.info {
                                 display: flex;
@@ -179,8 +180,8 @@
                     button {
                         font-size: 20px;
                         background-color: transparent;
-                        border: 2px solid var(--lighterDark);
-                        color: var(--white);
+                        border: 2px solid $lighterDark;
+                        color: $white;
                         border-radius: 10px;
                         padding: 10px;
                         cursor: pointer;

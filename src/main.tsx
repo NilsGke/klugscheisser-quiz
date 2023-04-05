@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root/Root.page";
-import "./index.css";
+import "./index.scss";
 import auth from "./firebase/auth/auth";
 import { User, onAuthStateChanged } from "firebase/auth";
 import {

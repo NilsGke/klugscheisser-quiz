@@ -1,3 +1,5 @@
+@import "../../../colors.scss";
+
 .setupPage {
     height: 100%;
     width: 100%;
@@ -20,31 +22,31 @@
             gap: 20px;
             flex-direction: row;
             .team {
-                border: 1px solid var(--lighterDark);
+                border: 1px solid $lighterDark;
                 border-radius: 10px;
                 padding: 10px;
                 input {
                     background-color: transparent;
-                    color: var(--white);
+                    color: $white;
                     border: 1px solid transparent;
-                    border-bottom-color: var(--lighterDark);
+                    border-bottom-color: $lighterDark;
                     padding: 5px 0;
                     width: 100%;
                     &::-webkit-input-placeholder {
-                        color: var(--lighterDark);
+                        color: $lighterDark;
                     }
                     &:focus {
-                        outline: 1px solid #89c6ff81;
+                        outline: 1px solid $white;
                     }
                 }
 
                 &.add {
-                    border: 1px solid var(--lighterDark);
+                    border: 1px solid $lighterDark;
                     background-color: transparent;
                     cursor: pointer;
                     transition: background 0.2s ease-out;
                     &:hover {
-                        background-color: var(--lighterDark);
+                        background-color: $lighterDark;
                     }
                     img {
                         width: 30px;
@@ -63,7 +65,7 @@
                         z-index: 2;
                         gap: 3px;
                         opacity: 1;
-                        background: var(--lighterDark);
+                        background: $lighterDark;
                         border-radius: 5px;
                         height: 0;
                         width: 0;
@@ -144,7 +146,7 @@
                         justify-content: center;
                         gap: 5px;
                         input {
-                            border-color: var(--lighterDark);
+                            border-color: $lighterDark;
                             border-radius: 5px;
                             padding: 7px;
                         }
@@ -167,7 +169,7 @@
                     }
                     .add {
                         background-color: transparent;
-                        border: 1px solid var(--lighterDark);
+                        border: 1px solid $lighterDark;
                         border-radius: 100px;
                         height: 30px;
                         display: flex;
@@ -178,7 +180,7 @@
 
                         transition: background 0.2s ease-out;
                         &:hover {
-                            background-color: var(--lighterDark);
+                            background-color: $lighterDark;
                         }
 
                         img {
@@ -243,7 +245,7 @@
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            background-color: var(--lighterDark);
+                            background-color: $lighterDark;
                             padding: 5px;
                             border-radius: 8px;
                             > img,
@@ -262,7 +264,7 @@
                     position: relative;
                     transition: background 0.2s ease-out;
                     &:hover {
-                        background-color: var(--lighterDark);
+                        background-color: $lighterDark;
                     }
                     img {
                         filter: invert(1);
@@ -289,14 +291,14 @@
         position: absolute;
         background-color: transparent;
         border-radius: 30px;
-        border: 1px solid var(--lighterDark);
-        color: var(--white);
+        border: 1px solid $lighterDark;
+        color: $white;
         padding: 10px;
         cursor: pointer;
         transition: background 0.2s ease-out;
         font-size: 20px;
         &:hover {
-            background-color: var(--lighterDark);
+            background-color: $lighterDark;
         }
 
         &.previous {

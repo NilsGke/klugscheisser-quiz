@@ -1,3 +1,5 @@
+@import "../colors.scss";
+
 #header {
     $imgSize: 70px;
     position: fixed;
@@ -8,12 +10,17 @@
     display: flex;
     align-items: end;
     flex-direction: column;
-    border-radius: 20px;
+    border-radius: 40px;
 
     max-height: 300px;
     max-width: 400px;
     overflow: hidden;
     transition: all 0.3s ease-in-out;
+
+    filter: drop-shadow(0 0 80px shade($white, 70%));
+    &:not(.expand) {
+        // box-shadow: 0 0 40px white;
+    }
 
     .account {
         .loginButtons {
@@ -23,9 +30,10 @@
             gap: 10px;
             a {
                 text-decoration: none;
+
                 .content {
-                    background: var(--accent);
-                    color: var(--dark);
+                    color: $dark;
+                    background-color: $white;
                     font-weight: 500;
                     white-space: nowrap;
                     display: flex;
@@ -36,8 +44,8 @@
                 }
                 &:first-child .content {
                     background-color: transparent;
-                    border: 1px solid var(--accent);
-                    color: var(--white);
+                    border: 1px solid $white;
+                    color: $white;
                 }
             }
         }
@@ -55,11 +63,11 @@
                 width: $imgSize;
                 border-radius: 100%;
                 cursor: pointer;
-                border: 6px solid var(--lighterDark);
+                border: 6px solid $lighterDark;
             }
             .name {
                 white-space: nowrap;
-                color: var(--dark);
+                color: $white;
                 font-size: large;
                 font-weight: 600;
             }
@@ -76,15 +84,17 @@
             background-color: transparent;
             border: none;
             height: 40px;
+            color: $white;
             cursor: pointer;
             transition: background 0.2s ease-out;
             white-space: nowrap;
+            border-radius: 10px;
+
             &:hover {
-                background: var(--light2);
-                border-radius: 10px;
+                background: $grey;
             }
             a {
-                color: unset;
+                color: $white;
                 text-decoration: none;
                 padding: 10px;
             }
@@ -92,9 +102,11 @@
     }
 
     &.expand {
-        background: var(--white);
+        border-radius: 20px;
+        background: $dark;
+        color: $white;
         div > div.profilePic > img {
-            border-color: var(--white);
+            // border-color: ;
         }
     }
     &.small.loggedIn {

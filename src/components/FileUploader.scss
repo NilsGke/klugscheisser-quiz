@@ -1,3 +1,5 @@
+@import "../colors.scss";
+
 .fileUploaderContainer {
     position: absolute;
     backdrop-filter: blur(5px) brightness(0.6);
@@ -18,7 +20,8 @@
 
     .fileUploader {
         padding: 30px;
-        background: var(--dark);
+        border: 1px solid $white;
+        background: $dark;
         position: relative;
         border-radius: 30px;
 
@@ -89,9 +92,9 @@
         button.upload {
             margin-top: 20px;
             background: transparent;
-            border: 2px solid var(--light1);
+            border: 2px solid $white;
             font-size: 18px;
-            color: var(--accent);
+            color: $green;
             padding: 5px;
             width: 100%;
             border-radius: 10px;
