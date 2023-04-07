@@ -1,20 +1,27 @@
 import { FC, useEffect, useRef, useState, useCallback } from "react";
-import "./Setup.scss";
 import { Game, GameCategory, TeamColors } from "../../../types/gameTypes";
 import autoAnimate from "@formkit/auto-animate";
 import { importCategoryFromZip } from "../../../helpers/zip";
 import { Category } from "../../../types/categoryTypes";
+import useKeyboard from "../../../hooks/keyboard";
+import toast from "react-simple-toasts";
+import useClick from "../../../hooks/useClick";
+
+// components
 import AudioPlayer from "../../../components/AudioPlayer";
 import VideoPlayer from "../../../components/VideoPlayer";
 import Spinner from "../../../components/Spinner";
-import useKeyboard from "../../../hooks/keyboard";
+import HomeButton from "../../../components/HomeButton";
+
 // assets
 import add from "../../../assets/add.svg";
 import addGroup from "../../../assets/addGroup.svg";
 import trashIcon from "../../../assets/trash.svg";
 import remove from "../../../assets/remove.svg";
 import colorPaletteIcon from "../../../assets/colorPalette.svg";
-import useClick from "../../../hooks/useClick";
+
+// styles
+import "./Setup.scss";
 
 enum Step {
     CREATE_TEAMS,
@@ -31,11 +38,19 @@ const Setup: FC<props> = ({ setGameData }) => {
     const [categories, setCategories] = useState<Game["categories"]>([]);
 
     const finish = () => {
+        if (teams.length === 0) return toast("please create at least one team");
+        if (categories.length === 0)
+            return toast("please add at least one category");
         console.log("finished building game", { teams, categories });
+        setGameData({
+            categories,
+            teams,
+        });
     };
 
     return (
         <div className="setupPage">
+            <HomeButton />
             {step === Step.CREATE_TEAMS ? (
                 <CreateTeams
                     teams={teams}
@@ -131,26 +146,26 @@ const Team = ({
         (key: string) => {
             if (memberList.current === null) return;
             if (
-                parseInt(key) === teamIndex + 1 &&
-                memberList.current.parentElement
+                parseInt(key) !== teamIndex + 1 ||
+                memberList.current.parentElement === null
             )
-                memberList.current.parentElement.animate(
-                    [
-                        {
-                            boxShadow: `
+                return;
+
+            memberList.current.parentElement.animate(
+                [
+                    {
+                        boxShadow: `
                                  inset 0 0 10px 0px ${team.color},
                                  0 0 80px 10px ${team.color}
                             `,
-                            border: `1px solid ${team.color}`,
-                        },
-                        {
-                            boxShadow:
-                                "inset 0 0 0 transparent, 0 0 0 transparent",
-                            border: "1px solid unset",
-                        },
-                    ],
-                    { duration: 1000, easing: "ease-out" }
-                );
+                        border: `1px solid ${team.color}`,
+                    },
+                    {
+                        boxShadow: "inset 0 0 0 transparent, 0 0 0 transparent",
+                    },
+                ],
+                { duration: 1500, easing: "ease-out" }
+            );
         },
         [memberList]
     );
@@ -158,7 +173,16 @@ const Team = ({
     useKeyboard(keyCallback);
 
     const [showColors, setShowColors] = useState(false);
-    useClick(() => setShowColors(false));
+    useClick((e) => {
+        if (e.target === null) throw new Error("event target is null");
+        if (
+            !Array.from((e.target as HTMLElement).classList).includes(
+                "dontCloseOnClick"
+            )
+        )
+            setShowColors(false);
+        console.log({ a: e.target });
+    });
 
     const team = teams[teamIndex];
 
@@ -195,15 +219,20 @@ const Team = ({
                                     setShowColors(false);
                                     console.log("setShowColors");
                                 }}
+                                tabIndex={showColors ? 0 : -1}
                             ></button>
                         ))}
                     </div>
                 </div>
                 <button
-                    className="colorInput"
+                    className="colorInput dontCloseOnClick"
                     onClick={() => setShowColors((prev) => !prev)}
                 >
-                    <img src={colorPaletteIcon} alt="color palette" />
+                    <img
+                        src={colorPaletteIcon}
+                        className="dontCloseOnClick"
+                        alt="color palette "
+                    />
                 </button>
 
                 <input
@@ -406,6 +435,7 @@ const SelectCategories = ({
                         type="file"
                         name="category zip input"
                         id="fileInput"
+                        accept=".ksq.zip"
                         onChange={(e) => {
                             const files = e.target.files;
                             if (files === null || files.length === 0) return;

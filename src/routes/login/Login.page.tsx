@@ -7,6 +7,7 @@ import "./Login.scss";
 import autoAnimate from "@formkit/auto-animate";
 import { register, resetPassword, signIn } from "../../firebase/auth/auth";
 import { UserData } from "../../firebase/firestore/user";
+import HomeButton from "../../components/HomeButton";
 
 const lowercaseRegex = /(?=.*[a-z])/;
 const uppercaseRegex = /(?=.*[A-Z])/;
@@ -43,8 +44,6 @@ const Login = ({ loggedIn }: { loggedIn: boolean }) => {
         pass: "",
         passRep: "",
     });
-
-    const [passwordResetOpen, setPasswordResetOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -119,6 +118,7 @@ const Login = ({ loggedIn }: { loggedIn: boolean }) => {
     return (
         <div id="loginPage">
             <div className="container">
+                <HomeButton />
                 <h1>
                     {action === Action.SignUp
                         ? "signUp"

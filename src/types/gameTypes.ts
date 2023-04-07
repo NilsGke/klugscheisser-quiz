@@ -1,8 +1,8 @@
 import { Category, Ressource } from "./categoryTypes";
 
 export interface Game {
-    teams: Team[];
-    categories: Category[];
+    teams: GameTeam[];
+    categories: GameCategory[];
 }
 
 export interface GameCategory {
@@ -11,14 +11,14 @@ export interface GameCategory {
 }
 
 export interface GameField {
-    answered: false | Team["name"];
+    answered: false | GameTeam["name"];
     question: Ressource;
     answer: Ressource;
 }
 
-interface Team {
+export interface GameTeam {
     name: string;
-    color: string;
+    color: typeof TeamColors[number];
     members: string[];
     score: number;
 }

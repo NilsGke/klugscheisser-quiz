@@ -1,12 +1,10 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
-const useClick = (callback: () => void) => {
-    const handleClick = useCallback(callback, [callback]);
+const useClick = (callback: (e: Event) => void) => {
     useEffect(() => {
-        document.addEventListener("click", handleClick);
-        return document.removeEventListener("click", handleClick);
-    }, []);
+        document.addEventListener("click", callback);
+        return () => document.removeEventListener("click", callback);
+    }, [callback]);
 };
 
-
-export default useClick
+export default useClick;

@@ -104,8 +104,7 @@
                     border-color: $white;
                 }
                 img {
-                    filter: invert(0.2) sepia(100) saturate(6)
-                        hue-rotate(194deg) brightness(0.8);
+                    filter: invert(0.3);
                     width: 100%;
                 }
                 label {

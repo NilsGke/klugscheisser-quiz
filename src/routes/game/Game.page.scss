@@ -1,4 +1,120 @@
-.gamePage {
+@import "../../colors.scss";
+
+#gamePage {
     height: 100svh;
     width: 100svw;
+
+    display: flex;
+
+    #teams,
+    #categories {
+        margin: 20px;
+        padding: 10px;
+    }
+
+    #teams {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        width: 20svw;
+        display: flex;
+        gap: 30px;
+
+        .team {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+            background: black;
+            height: 30vh;
+            max-height: 30vh;
+            width: 100%;
+            border-radius: 20px;
+            padding: 5px;
+            h2 {
+                font-size: 17px;
+            }
+            &:not(.buzzered) {
+                box-shadow: none !important;
+                z-index: 0;
+            }
+            .buzzered {
+            }
+        }
+    }
+
+    #categories {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 90svw;
+        position: relative;
+
+        display: grid;
+        grid-template-rows: 30px 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: repeat(1fr, 30);
+        grid-auto-flow: column;
+
+        .fieldContainer {
+            height: 100%;
+            .field {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid $white;
+                margin: 0;
+                font-size: 25px;
+                cursor: pointer;
+
+                transition: all 0.2s ease-out;
+                border-radius: 10px;
+
+                .points {
+                    background: black;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease-out;
+                    height: 100%;
+                    width: 100%;
+                    border-radius: 10px;
+                }
+
+                &.answered {
+                    color: $lighterDark;
+                }
+                &:not(.selected) {
+                    border-color: $lighterDark;
+                }
+
+                &.selected {
+                    animation: spinningBackground 3s linear infinite;
+                    padding: 2px;
+                    border: none;
+                    box-shadow: 0 0 50px shade($white, 60%);
+                    > div {
+                    }
+                    background: conic-gradient(
+                        from var(--gradient-angle),
+                        #000,
+                        #fff
+                    );
+                    animation: rotation 4s linear infinite;
+                    z-index: 2;
+                    &.transitioned {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
 }
