@@ -13,17 +13,18 @@ import "./AudioPlayer.scss";
 
 type props = {
     file: File;
+    autoplay?: boolean;
     fileName?: string;
 };
 
 // TODO add album art
 
-const AudioPlayer: FC<props> = ({ file }) => {
+const AudioPlayer: FC<props> = ({ file, fileName, autoplay = false }) => {
     const audioUrl = useMemo(() => URL.createObjectURL(file), [file]);
 
     const audioElementRef = useRef<HTMLAudioElement>(null);
 
-    const [playing, setPlaying] = useState(false);
+    const [playing, setPlaying] = useState(autoplay);
     const [volume, setVolume] = useState(40);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
@@ -109,6 +110,7 @@ const AudioPlayer: FC<props> = ({ file }) => {
                 preload="metadata"
                 loop
                 ref={audioElementRef}
+                autoPlay={autoplay}
             ></audio>
             <div className="top">
                 <button className="playPause" onClick={() => play(!playing)}>

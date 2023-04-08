@@ -10,10 +10,9 @@ import {
     Video,
 } from "../types/categoryTypes";
 
-type CategoryConfig = {
-    name: string;
+interface CategoryConfig extends Omit<Category, "fields"> {
     fields: [ConfigField, ConfigField, ConfigField, ConfigField, ConfigField];
-};
+}
 type ConfigField = {
     question: ConfigRessource;
     answer: ConfigRessource;
@@ -33,6 +32,7 @@ export const generateZipFromCategory = async (
 
     const categoryInfo = {
         name: category.name,
+        description: category.description,
         fields: [] as any,
     };
 
@@ -104,6 +104,7 @@ export const importCategoryFromZip = (file: File) =>
 
             const category: PartialCategory = {
                 name: config.name,
+                description: config.description,
                 fields: [
                     { question: undefined, answer: undefined },
                     { question: undefined, answer: undefined },

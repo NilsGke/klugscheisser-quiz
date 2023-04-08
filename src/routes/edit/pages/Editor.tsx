@@ -10,8 +10,9 @@ import JSZip from "jszip";
 const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     const [category, setCategory] = useState(initialCategory);
     const [name, setName] = useState(initialCategory.name);
+    const [description, setDescription] = useState(initialCategory.description);
 
-    const mediaPoolRendered = useMemo(() => <MediaPool />, []);
+    const mediaPoolRendered = useMemo(() => <MediaPool />, []); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
 
     useEffect(() => {
         console.log("category changed", category);
@@ -19,7 +20,11 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     useEffect(() => {
         console.log("name changed", name);
     }, [name]);
+    useEffect(() => {
+        console.log("description changed", description);
+    }, [description]);
 
+    // exporting
     const [exporting, setExporting] = useState<boolean>(false);
     const [exportData, setExportData] = useState<JSZip.JSZipMetadata | null>(
         null
@@ -35,6 +40,7 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
 
         if (name.trim() === "") return toast("please enter a name");
         category.name = name;
+        category.description = description;
 
         setExporting(true);
         generateZipFromCategory(category as Category, setExportData).then(
@@ -57,8 +63,6 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
         );
     }, [category, name]);
 
-    console.log(name);
-
     return (
         <div id="edit">
             <div id="topRow">
@@ -66,8 +70,15 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                     type="text"
                     id="nameInput"
                     value={name}
-                    placeholder="enter a name"
+                    placeholder="name"
                     onChange={(e) => setName(e.target.value)}
+                />
+                <input
+                    type="text"
+                    id="descriptionInput"
+                    value={description}
+                    placeholder="description / question / task"
+                    onChange={(e) => setDescription(e.target.value)}
                 />
 
                 <button className="export" onClick={exportCategory}>
@@ -115,3 +126,4 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     );
 };
 export default Edit;
+1;

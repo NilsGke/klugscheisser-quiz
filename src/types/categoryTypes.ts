@@ -1,5 +1,6 @@
 const exampleObject: Category = {
     name: "example",
+    description: "this is the description for the category",
     fields: [
         {
             question: {
@@ -71,6 +72,7 @@ const exampleObject: Category = {
 
 export const emptyCategory: PartialCategory = {
     name: "",
+    description: "",
     fields: [
         {
             question: undefined,
@@ -98,6 +100,7 @@ Object.freeze(emptyCategory);
 
 export interface Category {
     name: string;
+    description: string;
     fields: [Field, Field, Field, Field, Field];
 }
 
@@ -170,8 +173,7 @@ export interface IndexedAudio extends IndexedFile {}
 /**
  * this is for the editor. It allows fields to have no value or type
  */
-export interface PartialCategory {
-    name: string;
+export interface PartialCategory extends Omit<Category, "fields"> {
     fields: [
         PartialField,
         PartialField,
@@ -181,7 +183,7 @@ export interface PartialCategory {
     ];
 }
 
-export interface PartialField {
+export interface PartialField extends Omit<Field, "question" | "answer"> {
     question: PartialRessource;
     answer: PartialRessource;
 }

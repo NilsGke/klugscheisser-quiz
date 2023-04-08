@@ -14,10 +14,12 @@
 
     #topRow {
         grid-area: 1 / 1 / 2 / 4;
+        width: 100%;
+        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 15px;
+        padding: 5px;
         input,
         button {
             background-color: transparent;
@@ -45,6 +47,12 @@
             width: 80%;
             &::placeholder {
                 color: $grey;
+            }
+            &#nameInput {
+                width: 20%;
+            }
+            &#descriptionInput {
+                width: 70%;
             }
         }
     }

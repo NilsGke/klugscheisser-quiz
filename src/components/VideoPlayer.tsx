@@ -16,11 +16,12 @@ import fullScreenIcon from "../assets/fullscreen.svg";
 type props = {
     file: File;
     small?: boolean;
+    autoplay?: boolean;
 };
 
-const VideoPlayer: FC<props> = ({ file, small = false }) => {
+const VideoPlayer: FC<props> = ({ file, small = false, autoplay = false }) => {
     const videoUrl = useMemo(() => URL.createObjectURL(file), [file]);
-    const [playing, setPlaying] = useState(false);
+    const [playing, setPlaying] = useState(autoplay);
     const [volume, setVolume] = useState(40);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -136,7 +137,7 @@ const VideoPlayer: FC<props> = ({ file, small = false }) => {
                 </button>
             </div>
             <div className="videoContainer">
-                <video src={videoUrl} ref={videoElementRef}>
+                <video src={videoUrl} ref={videoElementRef} autoPlay={autoplay}>
                     asdf
                 </video>
                 <button className="playPause" onClick={() => play(!playing)}>
