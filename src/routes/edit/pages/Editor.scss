@@ -20,6 +20,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 5px;
+        gap: 15px;
         input,
         button {
             background-color: transparent;
@@ -53,6 +54,15 @@
             }
             &#descriptionInput {
                 width: 70%;
+            }
+            &#answerTime {
+                width: 10%;
+
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
             }
         }
     }

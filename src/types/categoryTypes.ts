@@ -1,6 +1,7 @@
 const exampleObject: Category = {
     name: "example",
     description: "this is the description for the category",
+    answerTime: 10,
     fields: [
         {
             question: {
@@ -73,6 +74,7 @@ const exampleObject: Category = {
 export const emptyCategory: PartialCategory = {
     name: "",
     description: "",
+    answerTime: 10,
     fields: [
         {
             question: undefined,
@@ -101,6 +103,7 @@ Object.freeze(emptyCategory);
 export interface Category {
     name: string;
     description: string;
+    answerTime: number;
     fields: [Field, Field, Field, Field, Field];
 }
 

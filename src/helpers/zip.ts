@@ -33,6 +33,7 @@ export const generateZipFromCategory = async (
     const categoryInfo = {
         name: category.name,
         description: category.description,
+        answerTime: category.answerTime,
         fields: [] as any,
     };
 
@@ -105,6 +106,7 @@ export const importCategoryFromZip = (file: File) =>
             const category: PartialCategory = {
                 name: config.name,
                 description: config.description,
+                answerTime: config.answerTime,
                 fields: [
                     { question: undefined, answer: undefined },
                     { question: undefined, answer: undefined },

@@ -11,6 +11,7 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     const [category, setCategory] = useState(initialCategory);
     const [name, setName] = useState(initialCategory.name);
     const [description, setDescription] = useState(initialCategory.description);
+    const [answerTime, setAnswerTime] = useState(initialCategory.answerTime);
 
     const mediaPoolRendered = useMemo(() => <MediaPool />, []); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
 
@@ -23,6 +24,9 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     useEffect(() => {
         console.log("description changed", description);
     }, [description]);
+    useEffect(() => {
+        console.log("answer-time changed", answerTime);
+    }, [answerTime]);
 
     // exporting
     const [exporting, setExporting] = useState<boolean>(false);
@@ -39,6 +43,10 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
             return toast("please fill out every field");
 
         if (name.trim() === "") return toast("please enter a name");
+
+        if (answerTime <= 0 || Number.isNaN(answerTime))
+            return toast("please enter a (positive) answer-time");
+
         category.name = name;
         category.description = description;
 
@@ -72,6 +80,7 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                     value={name}
                     placeholder="name"
                     onChange={(e) => setName(e.target.value)}
+                    title="name for this category"
                 />
                 <input
                     type="text"
@@ -79,6 +88,16 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                     value={description}
                     placeholder="description / question / task"
                     onChange={(e) => setDescription(e.target.value)}
+                    title="question or description for this category"
+                />
+                <input
+                    type="number"
+                    name="answerTime"
+                    id="answerTime"
+                    placeholder="answer Time"
+                    value={answerTime}
+                    onChange={(e) => setAnswerTime(parseInt(e.target.value))}
+                    title="time to answer question (in seconds)"
                 />
 
                 <button className="export" onClick={exportCategory}>
