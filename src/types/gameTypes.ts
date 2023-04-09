@@ -1,19 +1,16 @@
-import { Category, Ressource } from "./categoryTypes";
+import { Category, Field } from "./categoryTypes";
 
 export interface Game {
     teams: GameTeam[];
     categories: GameCategory[];
 }
 
-export interface GameCategory {
-    name: string;
+export interface GameCategory extends Omit<Category, "fields"> {
     fields: [GameField, GameField, GameField, GameField, GameField];
 }
 
-export interface GameField {
+export interface GameField extends Omit<Field, "answered"> {
     answered: false | GameTeam["name"];
-    question: Ressource;
-    answer: Ressource;
 }
 
 export interface GameTeam {
@@ -24,11 +21,11 @@ export interface GameTeam {
 }
 
 export const TeamColors = [
-    "#0f7",
-    "#fe5",
+    "#ff6464",
     "#fa0",
-    "#f32",
-    "#f0f",
-    "#05f",
+    "#fe5",
+    "#0f7",
     "#0ff",
+    "#05f",
+    "#f0f",
 ] as const;
