@@ -1,12 +1,12 @@
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDuHvssabAB5X4fBMcXElXNZ2fb2bkGpiE",
-    authDomain: "quiz-game-952ec.firebaseapp.com",
-    projectId: "quiz-game-952ec",
-    storageBucket: "quiz-game-952ec.appspot.com",
-    messagingSenderId: "457268320506",
-    appId: "1:457268320506:web:64b07a3ec90723b28d5143",
+    apiKey: "AIzaSyDAK6QV4q_AqZarHaz3aBwhofy5tc3xcNY",
+    authDomain: "klugscheisser-quiz.firebaseapp.com",
+    projectId: "klugscheisser-quiz",
+    storageBucket: "klugscheisser-quiz.appspot.com",
+    messagingSenderId: "84365752647",
+    appId: "1:84365752647:web:94c7d9f3d30b6306f7b462",
 };
 
 export const app = initializeApp(firebaseConfig);
