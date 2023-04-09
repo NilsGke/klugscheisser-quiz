@@ -40,6 +40,24 @@
                 box-shadow: none !important;
                 z-index: 0;
             }
+
+            input {
+                height: 30px;
+                width: 70px;
+                font-size: 20px;
+                background: transparent;
+                border: 1px solid transparent;
+                border-bottom-color: $lighterDark;
+                color: $white;
+                text-align: center;
+                // hide arrows
+                &::-webkit-outer-spin-button,
+                &::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+            }
+
             .buzzered {
             }
         }
@@ -74,15 +92,67 @@
                 transition: all 0.2s ease-out;
                 border-radius: 10px;
 
-                .points {
-                    background: black;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    transition: all 0.2s ease-out;
+                .contentContainer {
                     height: 100%;
                     width: 100%;
                     border-radius: 10px;
+                    overflow: hidden;
+                    background: black;
+
+                    .content {
+                        height: 100%;
+                        width: 100%;
+                        transition: all 0.2s ease-out;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        > div {
+                            position: absolute;
+
+                            transition: opacity 0.3s linear;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .points {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .description {
+                            padding: 50px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            .timeBarContainer {
+                                margin-top: 5px;
+                            }
+                        }
+                        .question {
+                            height: 100%;
+                            width: 100%;
+                            button {
+                                position: absolute;
+                                bottom: 20px;
+                                font-size: 20px;
+                                border: 1px solid $white;
+                                background: transparent;
+                                color: $white;
+                                border-radius: 10px;
+                                padding: 10px;
+                                cursor: pointer;
+                                transition: all 0.2s ease-in-out;
+                                &:hover {
+                                    box-shadow: 0 0 20px -3px $white;
+                                    background: $white;
+                                    color: $dark;
+                                }
+                            }
+                        }
+                    }
                 }
 
                 &.answered {

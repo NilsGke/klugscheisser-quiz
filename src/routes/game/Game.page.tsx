@@ -1,4 +1,11 @@
-import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+    RefObject,
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 import Setup from "./setup/Setup";
 import {
     Game,
@@ -10,69 +17,57 @@ import {
 // styles
 import "./Game.page.scss";
 import useKeyboard from "../../hooks/keyboard";
+import { Category, Ressource } from "../../types/categoryTypes";
+import TimeBar from "../../components/TimeBar";
+import AudioPlayer from "../../components/AudioPlayer";
+import VideoPlayer from "../../components/VideoPlayer";
 
 const testGame = {
     teams: [
         {
-            name: "asdf",
+            name: "Team1",
             members: ["Nils", "Lars", "Mima"],
             score: 0,
             color: "#0f7",
         },
         {
-            name: "fghj",
+            name: "Team2",
             members: ["Nils", "Lars", "Mima"],
             score: 0,
             color: "#fe5",
         },
         {
-            name: "fghj",
+            name: "Team3",
             members: ["Nils", "Lars", "Mima"],
             score: 0,
             color: "#fa0",
         },
         {
-            name: "fghj",
+            name: "Team4",
             members: ["Nils", "Lars", "Mima"],
             score: 0,
             color: "#f32",
         },
-        // {
-        //     name: "fghj",
-        //     members: ["Nils", "Lars", "Mima"],
-        //     score: 0,
-        //     color: "#f0f",
-        // },
-        // {
-        //     name: "fghj",
-        //     members: ["Nils", "Lars", "Mima"],
-        //     score: 0,
-        //     color: "#05f",
-        // },
-        // {
-        //     name: "fghj",
-        //     members: ["Nils", "Lars", "Mima"],
-        //     score: 0,
-        //     color: "#0ff",
-        // },
     ],
     categories: [
         {
             name: "text",
+            description:
+                "Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum numquam blanditiis harum quisquam ",
             fields: [
                 {
-                    question: { type: "text", content: "asdfa" },
-                    answer: { type: "text", content: "hjkl" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer" },
                     answered: "fghj",
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "ghjk" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer2" },
                     answered: false,
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "fghj" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer3" },
                     answered: false,
                 },
                 {
@@ -81,28 +76,29 @@ const testGame = {
                     answered: false,
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "sd" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer4" },
                     answered: false,
                 },
             ],
         },
         {
             name: "text",
+            description: "category description",
             fields: [
                 {
-                    question: { type: "text", content: "asdfa" },
-                    answer: { type: "text", content: "hjkl" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer" },
                     answered: "fghj",
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "ghjk" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer2" },
                     answered: false,
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "fghj" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer3" },
                     answered: false,
                 },
                 {
@@ -111,28 +107,29 @@ const testGame = {
                     answered: false,
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "sd" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer4" },
                     answered: false,
                 },
             ],
         },
         {
             name: "text",
+            description: "category description",
             fields: [
                 {
-                    question: { type: "text", content: "asdfa" },
-                    answer: { type: "text", content: "hjkl" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer" },
                     answered: "fghj",
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "ghjk" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer2" },
                     answered: false,
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "fghj" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer3" },
                     answered: false,
                 },
                 {
@@ -141,8 +138,8 @@ const testGame = {
                     answered: false,
                 },
                 {
-                    question: { type: "text", content: "asdf" },
-                    answer: { type: "text", content: "sd" },
+                    question: { type: "text", content: "question" },
+                    answer: { type: "text", content: "answer4" },
                     answered: false,
                 },
             ],
@@ -150,9 +147,18 @@ const testGame = {
     ],
 } as Game;
 
+enum State {
+    idle = "idle",
+    goingBig = "goingBig",
+    showDescription = "showDescription",
+    showQuestion = "showQuestion",
+    showAnswer = "showAnswer",
+    goingSmall = "goingSmall",
+}
+
 const Game = () => {
-    // const [gameData, setGameData] = useState<Game | null>(null);
-    const [gameData, setGameData] = useState<Game | null>(testGame);
+    const [gameData, setGameData] = useState<Game | null>(null);
+    // const [gameData, setGameData] = useState<Game | null>(testGame);
 
     const [selected, setSelected] = useState<null | {
         categoryIndex: number;
@@ -165,38 +171,46 @@ const Game = () => {
 
     const categoriesRef = useRef<HTMLDivElement>(null);
 
-    useKeyboard((key, e) => {
-        if (
-            e?.target &&
-            Array.from((e.target as HTMLInputElement).classList).includes(
-                "dontBuzzer"
+    const keyboardCallback = useCallback(
+        (key: string, e: KeyboardEvent) => {
+            if (
+                e.target &&
+                Array.from((e.target as HTMLInputElement).classList).includes(
+                    "dontBuzzer"
+                )
             )
-        )
-            return;
-        if (key === "Escape" || key === "0") return setBuzzeredTeamIndex(null);
-        const index = parseInt(key) - 1;
-        if (gameData === null || isNaN(index)) return;
-        const team = gameData.teams.at(index);
-        if (team === undefined) return;
-        setBuzzeredTeamIndex(index);
-        document.getElementById("gamePage")?.animate(
-            [
+                return;
+
+            if (key === "Escape" || key === "0")
+                return setBuzzeredTeamIndex(null);
+            const index = parseInt(key) - 1;
+            console.log(e, index, gameData);
+            if (gameData === null || isNaN(index)) return;
+            const team = gameData.teams.at(index);
+            if (team === undefined) return;
+            setBuzzeredTeamIndex(index);
+            document.getElementById("gamePage")?.animate(
+                [
+                    {
+                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
+                    },
+                    {
+                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
+                    },
+                    {
+                        boxShadow: `inset 0 0 0px -30px transparent`,
+                    },
+                ],
                 {
-                    boxShadow: `inset 0 0 400px -30px ${team.color}`,
-                },
-                {
-                    boxShadow: `inset 0 0 400px -30px ${team.color}`,
-                },
-                {
-                    boxShadow: `inset 0 0 0px -30px transparent`,
-                },
-            ],
-            {
-                duration: 1500,
-                easing: "ease-in",
-            }
-        );
-    });
+                    duration: 1500,
+                    easing: "ease-in",
+                }
+            );
+        },
+        [gameData]
+    );
+
+    useKeyboard(keyboardCallback);
 
     useLayoutEffect(() => {
         if (gameData === null) return;
@@ -206,6 +220,18 @@ const Game = () => {
 
         return () => {};
     }, [gameData]);
+
+    // game stuff
+    const [gameState, setGameState] = useState<State>(State.idle);
+    const startGameSequence = (categoryIndex: number, fieldIndex: number) => {
+        setSelected({
+            categoryIndex,
+            fieldIndex,
+        });
+        setGameState(State.goingBig);
+        setTimeout(() => setGameState(State.showDescription), 500);
+        setTimeout(() => setGameState(State.showQuestion), 4500);
+    };
 
     if (gameData === null)
         return (
@@ -217,7 +243,7 @@ const Game = () => {
         );
 
     return (
-        <div id="gamePage">
+        <div id="gamePage" className={gameState}>
             <div id="teams">
                 {gameData.teams.map((team, teamIndex) => (
                     <Team
@@ -255,13 +281,19 @@ const Game = () => {
                                             categoryIndex &&
                                         selected.fieldIndex === fieldIndex
                                     }
-                                    select={() =>
-                                        setSelected({
+                                    onClick={() =>
+                                        startGameSequence(
                                             categoryIndex,
-                                            fieldIndex,
-                                        })
+                                            fieldIndex
+                                        )
+                                    }
+                                    setGameState={(newState: State) =>
+                                        setGameState(newState)
                                     }
                                     containerRef={categoriesRef}
+                                    gameState={gameState}
+                                    category={category}
+                                    buzzeredTeamIndex={buzzeredTeamIndex}
                                 />
                             ))}
                         </>
@@ -276,17 +308,26 @@ const Field = ({
     field,
     points,
     selected,
-    select,
+    onClick,
+    setGameState,
     containerRef,
+    gameState,
+    category,
+    buzzeredTeamIndex,
 }: {
     field: GameField;
     points: number;
     selected: boolean;
-    select: () => void;
+    onClick: () => void;
+    setGameState: (newState: State) => void;
     containerRef: RefObject<HTMLDivElement>;
+    gameState: State;
+    category: Category;
+    buzzeredTeamIndex: number | null;
 }) => {
     const fieldRef = useRef<HTMLDivElement>(null);
 
+    // going big animation
     useEffect(() => {
         if (fieldRef.current === null) throw new Error("fieldRef is null");
         if (containerRef.current === null)
@@ -338,13 +379,128 @@ const Field = ({
                     (selected ? " selected" : "") +
                     (field.answered ? " answered" : "")
                 }
-                onClick={select}
+                onClick={
+                    !field.answered && gameState === State.idle
+                        ? onClick
+                        : undefined
+                }
                 ref={fieldRef}
             >
-                <div className="points">{points}</div>
+                <div className="contentContainer">
+                    <div className="content">
+                        <div
+                            className="points"
+                            style={{
+                                opacity:
+                                    gameState === State.idle ||
+                                    gameState === State.goingBig ||
+                                    !selected
+                                        ? 1
+                                        : 0,
+                            }}
+                        >
+                            {points}
+                        </div>
+
+                        {selected ? (
+                            <>
+                                <div
+                                    className="description"
+                                    style={{
+                                        opacity:
+                                            gameState === State.showDescription
+                                                ? 1
+                                                : 0,
+                                    }}
+                                >
+                                    {category.description}
+                                    {gameState === State.showDescription ? (
+                                        <TimeBar time={4000} />
+                                    ) : null}
+                                </div>
+
+                                {gameState === State.showDescription ||
+                                gameState === State.showQuestion ? (
+                                    <div
+                                        className="question"
+                                        style={{
+                                            opacity:
+                                                gameState === State.showQuestion
+                                                    ? 1
+                                                    : 0,
+                                        }}
+                                    >
+                                        {field.question.type === "text" ? (
+                                            <div className="text">
+                                                {field.question.content}
+                                            </div>
+                                        ) : (
+                                            <ResourceDisplay
+                                                resource={field.question}
+                                            />
+                                        )}
+                                        <button
+                                            className="answer"
+                                            style={{
+                                                opacity:
+                                                    buzzeredTeamIndex === null
+                                                        ? 0
+                                                        : 1,
+                                            }}
+                                            onClick={() =>
+                                                setGameState(State.showAnswer)
+                                            }
+                                        >
+                                            show Answer
+                                        </button>
+                                    </div>
+                                ) : null}
+
+                                {gameState === State.showAnswer ? (
+                                    <div
+                                        className="answer"
+                                        style={{
+                                            opacity:
+                                                gameState === State.showAnswer
+                                                    ? 1
+                                                    : 0,
+                                        }}
+                                    >
+                                        <ResourceDisplay
+                                            resource={field.answer}
+                                        />
+                                    </div>
+                                ) : null}
+                            </>
+                        ) : null}
+                    </div>
+                </div>
             </div>
         </div>
     );
+};
+
+const ResourceDisplay = ({ resource }: { resource: Ressource }) => {
+    if (resource.type === "image") {
+        const url = URL.createObjectURL(resource.content);
+        return (
+            <div className="image">
+                <img src={url} alt="" />
+            </div>
+        );
+    } else if (resource.type === "audio")
+        return (
+            <div className="audio">
+                <AudioPlayer file={resource.content} autoplay />
+            </div>
+        );
+    else if (resource.type === "video")
+        return <VideoPlayer file={resource.content} autoplay />;
+    else if (resource.type === "text")
+        return <div className="text">{resource.content}</div>;
+    // else if(resource.type === "imageCollection")
+    // return <Diashow />
+    return <div className="resource">unknwon content type?</div>;
 };
 
 const Team = ({
