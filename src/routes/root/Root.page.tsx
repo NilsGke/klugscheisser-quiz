@@ -1,6 +1,3 @@
-import { FC } from "react";
-import Header from "../../components/Header";
-import { UserData } from "../../firebase/firestore/user";
 import "./Root.page.scss";
 import { Link } from "react-router-dom";
 // assets
@@ -9,14 +6,9 @@ import gridIcon from "../../assets/grid.svg";
 import helpIcon from "../../assets/help.svg";
 import editIcon from "../../assets/edit.svg";
 
-type props = {
-    userData: UserData | null;
-};
-
-const Root: FC<props> = ({ userData }) => {
+const Root = () => {
     return (
         <div className="root">
-            <Header userData={userData} />
             <h1>Klugscheißer Quiz</h1>
             <div className="pages">
                 <Link to={"/categories"}>

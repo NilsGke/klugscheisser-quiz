@@ -1,10 +1,6 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { UserData } from "../../firebase/firestore/user";
-import Header from "../../components/Header";
 import HomeButton from "../../components/HomeButton";
-import { searchCategories } from "../../firebase/firestore/category";
 import "./Categories.page.scss";
-import { QueryDocumentSnapshot } from "firebase/firestore";
 import DotSpinner from "../../components/DotSpinner";
 import { Category } from "../../types/categoryTypes";
 
@@ -14,28 +10,25 @@ export enum CategoriesPagePurpose {
 }
 
 type props = {
-    userData: UserData | null;
     defaultPurpose: CategoriesPagePurpose;
 };
 
-const Categories: FC<props> = ({ userData, defaultPurpose }) => {
+// TEMP this is only temporary and will be replaced with proper search feature that searches on users device (indexeddb)
+
+const Categories: FC<props> = ({ defaultPurpose }) => {
     const [purpose, setPurpose] =
         useState<CategoriesPagePurpose>(defaultPurpose);
-
     // #region search
-    const [lastDoc, setLastDoc] = useState<
-        QueryDocumentSnapshot<Category> | undefined
-    >(undefined);
+    const [lastDoc, setLastDoc] = useState<undefined>(undefined);
 
     const [searchTerm, setSearchTerm] = useState("");
 
     const search = useCallback(async () => {
-        setGotAllCategories(false);
-        const { categories: newCategories, lastDoc: newLastDoc } =
-            await searchCategories(searchTerm, undefined);
-
-        setLastDoc(newLastDoc);
-        setResults(newCategories);
+        // setGotAllCategories(false);
+        // const { categories: newCategories, lastDoc: newLastDoc } =
+        //     await searchCategories(searchTerm, undefined);
+        // setLastDoc(newLastDoc);
+        // setResults(newCategories);
     }, [searchTerm]);
 
     const [loadMore, setLoadMore] = useState(false);
@@ -49,12 +42,11 @@ const Categories: FC<props> = ({ userData, defaultPurpose }) => {
         }
 
         (async () => {
-            const { categories: newCategories, lastDoc: newLastDoc } =
-                await searchCategories(searchTerm, lastDoc);
-
-            if (lastDoc !== undefined) setLastDoc(newLastDoc);
-            setResults((prev) => [...prev, ...newCategories]);
-            setLoadMore(false);
+            // const { categories: newCategories, lastDoc: newLastDoc } =
+            //     await searchCategories(searchTerm, lastDoc);
+            // if (lastDoc !== undefined) setLastDoc(newLastDoc);
+            // setResults((prev) => [...prev, ...newCategories]);
+            // setLoadMore(false);
         })();
     }, [loadMore]);
 
@@ -89,7 +81,6 @@ const Categories: FC<props> = ({ userData, defaultPurpose }) => {
 
     return (
         <div id="categoriesPage">
-            <Header userData={userData} />
             <HomeButton />
             <h1>
                 {purpose === CategoriesPagePurpose.VIEW_CATEGORIES
