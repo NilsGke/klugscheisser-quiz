@@ -1,6 +1,6 @@
 import HomeButton from "../../components/HomeButton";
 import "./Categories.page.scss";
-import { Category } from "../../types/categoryTypes";
+import { Category as CategoryType } from "../../types/categoryTypes";
 import CategoryBrowser from "../../components/CategoryBrowser";
 
 const Categories = () => {
@@ -13,7 +13,7 @@ const Categories = () => {
     );
 };
 
-const Category = ({ data: category }: { data: Category }) => {
+const Category = ({ data: category }: { data: CategoryType }) => {
     return (
         <div className="category">
             <h2>{category.name}</h2>
