@@ -2,7 +2,7 @@
 
 #editorPage #edit {
     height: 100svh;
-    width: 100svw;
+    width: 90svw;
 
     max-width: 1600px;
 
@@ -33,6 +33,7 @@
             border-radius: 20px;
             padding: 15px;
             box-shadow: 0 0 20px shade($white, 50%);
+            white-space: nowrap;
 
             transition: all 0.2s ease-out;
             &:hover {
