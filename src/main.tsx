@@ -5,9 +5,7 @@ import Root from "./routes/root/Root.page";
 import "./index.scss";
 import OfflineBanner from "./components/OfflineBanner";
 import Help from "./routes/help/Help.page";
-import Categories, {
-    CategoriesPagePurpose,
-} from "./routes/categories/Categories.page";
+import Categories from "./routes/categories/Categories.page";
 import Editor from "./routes/edit/Editor.page";
 import Game from "./routes/game/Game.page";
 import { initIndexedDB } from "./helpers/indexeddb";
@@ -62,18 +60,34 @@ const App = () => {
             element: <Editor />,
         },
         {
+            path: "/editor/:dbIndex",
+            element: <Editor />,
+        },
+        {
             path: "/categories",
-            element: (
-                <Categories
-                    defaultPurpose={CategoriesPagePurpose.VIEW_CATEGORIES}
-                />
-            ),
+            element: <Categories />,
         },
         {
             path: "/game",
             element: <Game />,
         },
+        {
+            path: "/test/:dbIndex",
+            element: <Game />,
+        },
+        {
+            path: "/view/:dbIndex",
+            element: <Viewer />,
+        },
     ]);
+
+    if (!indexedDbIsReady)
+        return (
+            <div className="loading">
+                <Spinner />
+                <div className="text">loading local database</div>
+            </div>
+        );
 
     return (
         <>
