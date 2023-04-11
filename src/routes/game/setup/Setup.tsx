@@ -1,5 +1,10 @@
 import { FC, useEffect, useRef, useState, useCallback } from "react";
-import { Game, GameCategory, TeamColors } from "../../../types/gameTypes";
+import {
+    Game,
+    GameCategory,
+    TeamColors,
+    categoryToGameCategory,
+} from "../../../types/gameTypes";
 import autoAnimate from "@formkit/auto-animate";
 import { importCategoryFromZip } from "../../../helpers/zip";
 import { Category } from "../../../types/categoryTypes";
@@ -22,6 +27,7 @@ import colorPaletteIcon from "../../../assets/colorPalette.svg";
 
 // styles
 import "./Setup.scss";
+import CategoryBrowser from "../../../components/CategoryBrowser";
 
 enum Step {
     CREATE_TEAMS,
@@ -355,94 +361,16 @@ const SelectCategories = ({
                 &lt;- Teams
             </button>
             <h2>select categories</h2>
-            <div className="categoriesWrapper" ref={categoryListRef}>
-                {categories.map((category, categoryIndex) => (
-                    <div
-                        className="category"
-                        key={category.name + categoryIndex}
-                    >
-                        <div className="head">
-                            <h3>{category.name}</h3>
-
-                            <button
-                                className="remove"
-                                onClick={() => {
-                                    const newCategories = categories.slice();
-                                    newCategories.splice(categoryIndex, 1);
-                                    setCategories(newCategories);
-                                }}
-                            >
-                                <img src={trashIcon} alt="trash can" />
-                            </button>
-                        </div>
-                        <div className="fields">
-                            {category.fields.map((field, index) => (
-                                <div className="field" key={index}>
-                                    {(() => {
-                                        if (field.question.type === "text")
-                                            return (
-                                                <div className="text">
-                                                    {field.question.content}
-                                                </div>
-                                            );
-                                        else if (
-                                            field.question.type === "image"
-                                        ) {
-                                            const url = URL.createObjectURL(
-                                                field.question.content
-                                            );
-                                            return (
-                                                <div className="image">
-                                                    <img src={url} alt="" />
-                                                </div>
-                                            );
-                                        } else if (
-                                            field.question.type === "audio"
-                                        )
-                                            return (
-                                                <div className="image">
-                                                    <AudioPlayer
-                                                        file={
-                                                            field.question
-                                                                .content
-                                                        }
-                                                    />
-                                                </div>
-                                            );
-                                        else if (
-                                            field.question.type === "video"
-                                        )
-                                            return (
-                                                <VideoPlayer
-                                                    file={
-                                                        field.question.content
-                                                    }
-                                                />
-                                            );
-                                    })()}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                ))}
-                <div className="category add">
-                    {(fileInputRef.current?.files || []).length >= 1 ? (
-                        <Spinner />
-                    ) : (
-                        <img src={add} alt="add icon" />
-                    )}
-                    <input
-                        type="file"
-                        name="category zip input"
-                        id="fileInput"
-                        accept=".ksq.zip"
-                        onChange={(e) => {
-                            const files = e.target.files;
-                            if (files === null || files.length === 0) return;
-                            setFile(files[0]);
-                        }}
-                    />
-                </div>
+            <div className="container">
+                <CategoryBrowser
+                    selecting
+                    onChange={(categories) => {
+                        const gameCategories = categories.map(
+                            categoryToGameCategory
+                        );
+                        setCategories(gameCategories);
+                    }}
+                />
             </div>
             <button className="done" onClick={finish}>
                 Done! -&gt;
