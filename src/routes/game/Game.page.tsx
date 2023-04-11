@@ -9,7 +9,7 @@ import {
 import Setup from "./setup/Setup";
 // types
 import {
-    Game,
+    Game as GameType,
     GameField,
     GameTeam,
     TeamColors,
@@ -155,7 +155,7 @@ const testGame = {
             ],
         },
     ],
-} as Game;
+} as GameType;
 
 enum State {
     idle = "idle",
@@ -167,7 +167,7 @@ enum State {
 }
 
 const Game = () => {
-    const [gameData, setGameData] = useState<Game | null>(null);
+    const [gameData, setGameData] = useState<GameType | null>(null);
     // const [gameData, setGameData] = useState<Game | null>(testGame);
 
     const [selected, setSelected] = useState<null | {
@@ -296,7 +296,7 @@ const Game = () => {
         return (
             <div id="gamePage">
                 <Setup
-                    setGameData={(gameData: Game) => setGameData(gameData)}
+                    setGameData={(gameData: GameType) => setGameData(gameData)}
                 />
             </div>
         );
@@ -310,7 +310,7 @@ const Game = () => {
                         team={team}
                         setTeam={(newTeam: GameTeam) => {
                             const newTeams =
-                                gameData.teams.slice() as Game["teams"];
+                                gameData.teams.slice() as GameType["teams"];
                             newTeams[teamIndex] = newTeam;
                             setGameData((prev) =>
                                 prev === null
