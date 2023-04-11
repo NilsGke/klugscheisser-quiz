@@ -10,6 +10,9 @@ import Categories, {
 } from "./routes/categories/Categories.page";
 import Editor from "./routes/edit/Editor.page";
 import Game from "./routes/game/Game.page";
+import { initIndexedDB } from "./helpers/indexeddb";
+import Spinner from "./components/Spinner";
+import Viewer from "./routes/viewer/View.page";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -20,6 +23,11 @@ const App = () => {
     const [network, setNetwork] = useState<NetworkStatus>(
         navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE
     );
+
+    const [indexedDbIsReady, setIndexedDbIsReady] = useState(false);
+    useEffect(() => {
+        initIndexedDB().then(() => setIndexedDbIsReady(true));
+    }, []);
 
     // offline detection
     useEffect(() => {
