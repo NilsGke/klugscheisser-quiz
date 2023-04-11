@@ -125,23 +125,22 @@
 
         .seek-slider,
         .volume-slider {
+            $tracksize: 4px;
             height: $tracksize;
-            background-color: $lighterDark;
             border-radius: 10px;
             width: 80%;
-
-            .track {
-                height: 100%;
-                border-radius: 10px;
+            .rc-slider-rail,
+            .rc-slider-track {
+                background-color: $grey;
             }
-            .thumb {
-                $size: 10px;
-                height: $size;
-                width: $size;
+
+            .rc-slider-handle {
                 background-color: $white;
-                border-radius: 100%;
-                top: calc($tracksize / 2 - $size / 2);
                 cursor: pointer;
+                border: 1px solid $grey;
+                &.rc-slider-handle-dragging {
+                    box-shadow: 0 0 0 5px $grey;
+                }
             }
         }
     }
