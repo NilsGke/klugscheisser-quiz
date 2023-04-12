@@ -18,10 +18,13 @@ import {
 } from "../../types/gameTypes";
 import { Category, Resource } from "../../types/categoryTypes";
 // helpers
-import { getStoredCategory } from "../../helpers/indexeddb";
+import {
+    getStoredCategory,
+    removeCategoryFromDb,
+} from "../../helpers/indexeddb";
 // hooks
 import useKeyboard from "../../hooks/keyboard";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 // components
 import AudioPlayer from "../../components/AudioPlayer";
 import VideoPlayer from "../../components/VideoPlayer";
@@ -220,6 +223,9 @@ const Game = () => {
         [gameData]
     );
 
+    // remove category from db if url is ./test/:dbIndex/destroy
+    const { pathname } = useLocation();
+
     // load testgame if specified in url
     const { dbIndex } = useParams();
     const [loading, setLoading] = useState(false);
@@ -228,33 +234,35 @@ const Game = () => {
         const index = parseInt(dbIndex);
         if (isNaN(index)) return;
         setLoading(true);
-        if (dbIndex)
-            getStoredCategory(parseInt(dbIndex)).then((category) => {
-                setGameData({
-                    teams: [
-                        {
-                            name: "Team 1",
-                            color: TeamColors[0],
-                            members: ["player 1", "player 2"],
-                            score: 0,
-                        },
-                        {
-                            name: "Team 2",
-                            color: TeamColors[1],
-                            members: ["player 3", "player 4"],
-                            score: 0,
-                        },
-                        {
-                            name: "Team 3",
-                            color: TeamColors[2],
-                            members: ["player 5", "player 6"],
-                            score: 0,
-                        },
-                    ],
-                    categories: [categoryToGameCategory(category)],
-                });
-                setLoading(false);
+        getStoredCategory(index).then((category) => {
+            setGameData({
+                teams: [
+                    {
+                        name: "Team 1",
+                        color: TeamColors[0],
+                        members: ["player 1", "player 2"],
+                        score: 0,
+                    },
+                    {
+                        name: "Team 2",
+                        color: TeamColors[1],
+                        members: ["player 3", "player 4"],
+                        score: 0,
+                    },
+                    {
+                        name: "Team 3",
+                        color: TeamColors[2],
+                        members: ["player 5", "player 6"],
+                        score: 0,
+                    },
+                ],
+                categories: [categoryToGameCategory(category)],
             });
+
+            // remove category from db if url is .../test/:dbIndex/destroy
+            if (pathname.includes("/destroy")) removeCategoryFromDb(index);
+            setLoading(false);
+        });
     }, []);
 
     useKeyboard(keyboardCallback);
