@@ -1,11 +1,13 @@
+import toast from "react-simple-toasts";
+import { JSZipMetadata } from "jszip";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Category, PartialCategory } from "../../../types/categoryTypes";
+import { PartialCategory, isCategory } from "../../../types/categoryTypes";
 import "./Editor.scss";
 import MediaPool from "../MediaPool/MediaPool";
 import CategoryEditor from "../CategoryEditor/CategoryEditor";
-import toast from "react-simple-toasts";
 import { generateZipFromCategory } from "../../../helpers/zip";
-import JSZip from "jszip";
+import { storeCategoryInDB } from "../../../helpers/indexeddb";
+import HomeButton from "../../../components/HomeButton";
 
 const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
     const [category, setCategory] = useState(initialCategory);
@@ -30,10 +32,8 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
 
     // exporting
     const [exporting, setExporting] = useState<boolean>(false);
-    const [exportData, setExportData] = useState<JSZip.JSZipMetadata | null>(
-        null
-    );
-    const exportCategory = useCallback(() => {
+    const [exportData, setExportData] = useState<JSZipMetadata | null>(null);
+    const exportCategory = useCallback(async () => {
         if (
             !category.fields.every(
                 (field) =>
@@ -50,9 +50,15 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
         category.name = name;
         category.description = description;
 
+        if (!isCategory(category))
+            return toast("your category is not complete!");
+
         setExporting(true);
-        generateZipFromCategory(category as Category, setExportData).then(
-            (result) => {
+
+        const promiseDbIndex = storeCategoryInDB(category);
+
+        generateZipFromCategory(category, setExportData).then(
+            async (result) => {
                 const url = window.URL.createObjectURL(result);
                 const link = document.createElement("a");
                 link.href = url;
@@ -66,13 +72,31 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-                setExporting(false);
+                promiseDbIndex.then((dbIndex) => {
+                    window.onbeforeunload = null;
+                    window.location.replace(`/editor/${dbIndex}`);
+                    setExporting(false);
+                });
             }
         );
     }, [category, name]);
 
+    // ask user to confirm unload
+    useEffect(() => {
+        const unloadHandler = (e: BeforeUnloadEvent) => {
+            if (!exporting) {
+                e.preventDefault();
+                return (e.returnValue = "");
+            }
+        };
+        window.addEventListener("beforeunload", unloadHandler);
+
+        return () => window.removeEventListener("beforeunload", unloadHandler);
+    }, [exporting]);
+
     return (
         <div id="edit">
+            <HomeButton confirm />
             <div id="topRow">
                 <input
                     type="text"
@@ -101,7 +125,7 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                 />
 
                 <button className="export" onClick={exportCategory}>
-                    export
+                    save & export
                 </button>
             </div>
             <div className="mediaPoolWrapper">{mediaPoolRendered}</div>

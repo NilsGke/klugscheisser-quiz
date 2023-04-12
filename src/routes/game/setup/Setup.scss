@@ -196,91 +196,97 @@
 
     .categorySelector {
         height: 80vh;
-        .categoriesWrapper {
+        .container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            gap: 10px;
-
-            .category {
-                height: 100%;
+            .categoriesWrapper {
                 display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100%;
+                gap: 10px;
 
-                .head {
+                .category {
+                    height: 100%;
                     display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: relative;
-                    width: 100%;
 
-                    h3 {
-                        font-size: 20px;
-                    }
-                    button.remove {
-                        background-color: transparent;
-                        border: none;
-                        position: absolute;
-                        right: 0;
-                        cursor: pointer;
-                        height: 30px;
-                        aspect-ratio: 1;
-                        img {
-                            height: 70%;
+                    .head {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: relative;
+                        width: 100%;
+
+                        h3 {
+                            font-size: 20px;
                         }
-                    }
-                }
-                .fields {
-                    height: 95%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: column;
-                    gap: 5px;
-                    .field {
-                        height: calc(20% - 8px);
-                        > div {
-                            height: 100%;
-                            width: 100%;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            background-color: $lighterDark;
-                            padding: 5px;
-                            border-radius: 8px;
-                            > img,
-                            > div {
-                                height: 90%;
-                                border-radius: 5px;
+                        button.remove {
+                            background-color: transparent;
+                            border: none;
+                            position: absolute;
+                            right: 0;
+                            cursor: pointer;
+                            height: 30px;
+                            aspect-ratio: 1;
+                            img {
+                                height: 70%;
                             }
                         }
                     }
-                }
+                    .fields {
+                        height: 95%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        gap: 5px;
+                        .field {
+                            height: calc(20% - 8px);
+                            > div {
+                                height: 100%;
+                                width: 100%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                background-color: $lighterDark;
+                                padding: 5px;
+                                border-radius: 8px;
+                                > img,
+                                > div {
+                                    height: 90%;
+                                    border-radius: 5px;
+                                }
+                            }
+                        }
+                    }
 
-                &.add {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    position: relative;
-                    transition: background 0.2s ease-out;
-                    &:hover {
-                        background-color: $lighterDark;
-                    }
-                    img {
-                        filter: invert(1);
-                        height: 10%;
-                        opacity: 0.2;
-                    }
-                    input {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        height: 100%;
-                        width: 100%;
-                        opacity: 0;
-                        cursor: pointer;
+                    &.add {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: relative;
+                        transition: background 0.2s ease-out;
+                        &:hover {
+                            background-color: $lighterDark;
+                        }
+                        img {
+                            filter: invert(1);
+                            height: 10%;
+                            opacity: 0.2;
+                        }
+                        input {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            height: 100%;
+                            width: 100%;
+                            opacity: 0;
+                            cursor: pointer;
+                        }
                     }
                 }
+            }
+            .categoryBrowser {
+                height: 80vh;
             }
         }
     }

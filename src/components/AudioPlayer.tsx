@@ -1,6 +1,8 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import ReactSlider from "react-slider";
 import getTimeFromSeconds from "../helpers/timeFromSeconds";
+
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 // assets
 import playIcon from "../assets/play.svg";
 import pauseIcon from "../assets/pause.svg";
@@ -123,13 +125,14 @@ const AudioPlayer: FC<props> = ({ file, fileName, autoplay = false }) => {
                 <span id="current-time" className="time">
                     {getTimeFromSeconds(currentTime)}
                 </span>
-
-                <ReactSlider
+                <Slider
                     className="seek-slider"
                     value={currentTime}
                     min={0}
                     max={Math.floor(duration)}
-                    onChange={(value) => changeTime(value)}
+                    onChange={(value) =>
+                        changeTime(typeof value === "object" ? value[0] : value)
+                    }
                 />
                 <span id="duration" className="time">
                     {getTimeFromSeconds(duration)}
@@ -138,14 +141,14 @@ const AudioPlayer: FC<props> = ({ file, fileName, autoplay = false }) => {
 
             <div className="volume">
                 <span className="volume">{volume}%</span>
-                <ReactSlider
+                <Slider
                     className="volume-slider"
-                    thumbClassName="thumb"
-                    trackClassName="track"
                     value={volume}
                     min={0}
                     max={100}
-                    onChange={(value) => setVolume(value)}
+                    onChange={(value) =>
+                        setVolume(typeof value === "object" ? value[0] : value)
+                    }
                 />
                 <button
                     className="mute"

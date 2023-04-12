@@ -192,3 +192,10 @@ export interface PartialField extends Omit<Field, "question" | "answer"> {
 }
 
 export type PartialRessource = undefined | Ressource;
+
+export const isField = (partialField: PartialField): partialField is Field =>
+    partialField.question !== undefined && partialField.answer !== undefined;
+
+export const isCategory = (
+    partialCategory: PartialCategory
+): partialCategory is Category => partialCategory.fields.every(isField);

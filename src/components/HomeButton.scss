@@ -7,13 +7,13 @@ a.homeButton {
     left: $marg;
     height: 60px;
     aspect-ratio: 1;
-    background: $dark;
+    background: $lighterDark;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 100%;
     padding: 10px;
-    box-shadow: 0 0 40px -10px shade($white, 50%);
+    box-shadow: 0 0 40px -10px shade($white, 70%);
     img {
         height: 70%;
         width: 70%;

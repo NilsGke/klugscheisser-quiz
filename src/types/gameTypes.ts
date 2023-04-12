@@ -29,3 +29,18 @@ export const TeamColors = [
     "#05f",
     "#f0f",
 ] as const;
+
+export const categoryToGameCategory = (category: Category): GameCategory => {
+    const gameCategory: GameCategory = {
+        ...category,
+        fields: [
+            { ...category.fields[0], answered: false },
+            { ...category.fields[1], answered: false },
+            { ...category.fields[2], answered: false },
+            { ...category.fields[3], answered: false },
+            { ...category.fields[4], answered: false },
+        ],
+    };
+
+    return gameCategory;
+};

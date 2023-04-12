@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import ReactSlider from "react-slider";
 import getTimeFromSeconds from "../helpers/timeFromSeconds";
 
 // styles
@@ -12,6 +11,7 @@ import volume1 from "../assets/volume1.svg";
 import volume2 from "../assets/volume2.svg";
 import volume3 from "../assets/volume3.svg";
 import fullScreenIcon from "../assets/fullscreen.svg";
+import Slider from "rc-slider";
 
 type props = {
     file: File;
@@ -108,15 +108,18 @@ const VideoPlayer: FC<props> = ({ file, small = false, autoplay = false }) => {
             }
         >
             <div className="volume">
-                <ReactSlider
+                <Slider
                     className={"volume-slider"}
-                    thumbClassName="thumb"
-                    trackClassName="track"
-                    value={small ? volume : 100 - volume}
+                    value={volume}
                     min={0}
                     max={100}
-                    onChange={(value) => setVolume(small ? value : 100 - value)}
-                    orientation={small ? "horizontal" : "vertical"}
+                    onChange={
+                        (value) =>
+                            setVolume(
+                                typeof value === "object" ? value[0] : value
+                            ) // not pretty and technically unecessery but true typesafety
+                    }
+                    vertical={!small}
                 />
                 <button
                     className="mute"
@@ -157,13 +160,16 @@ const VideoPlayer: FC<props> = ({ file, small = false, autoplay = false }) => {
                     <span id="current-time" className="time">
                         {getTimeFromSeconds(currentTime)}
                     </span>
-
-                    <ReactSlider
+                    <Slider
                         className="seek-slider"
                         value={currentTime}
                         min={0}
                         max={Math.floor(duration)}
-                        onChange={(value) => changeTime(value)}
+                        onChange={(value) =>
+                            changeTime(
+                                typeof value === "object" ? value[0] : value
+                            )
+                        }
                     />
                     <span id="duration" className="time">
                         {getTimeFromSeconds(duration)}

@@ -12,19 +12,19 @@ const Root = () => {
             <h1>Klugscheißer Quiz</h1>
             <div className="pages">
                 <Link to={"/categories"}>
-                    <h2 className="desc">Öffentliche Kategorien</h2>
-                    <img src={gridIcon} alt="" />
+                    <h2 className="desc">My Categories</h2>
+                    <img src={gridIcon} alt="icon showing a grid (category)" />
                 </Link>
                 <Link to={"/game"}>
-                    <h2 className="desc">Spielen</h2>
-                    <img src={playIcon} alt="" />
+                    <h2 className="desc">Play</h2>
+                    <img src={playIcon} alt="play icon" />
                 </Link>
                 <Link to={"/editor"}>
-                    <h2 className="desc">Kategorie Editor</h2>
+                    <h2 className="desc">Editor</h2>
                     <img src={editIcon} alt="question mark icon" />
                 </Link>
             </div>
-            <Link to={"help"} className="helpIcon">
+            <Link to={"/help"} className="helpIcon">
                 <img src={helpIcon} alt="question mark icon" />
             </Link>
         </div>

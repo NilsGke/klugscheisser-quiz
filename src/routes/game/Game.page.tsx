@@ -7,20 +7,30 @@ import {
     useState,
 } from "react";
 import Setup from "./setup/Setup";
+// types
 import {
     Game,
-    GameCategory,
     GameField,
     GameTeam,
+    TeamColors,
     GameTeam as TeamType,
+    categoryToGameCategory,
 } from "../../types/gameTypes";
-// styles
-import "./Game.page.scss";
-import useKeyboard from "../../hooks/keyboard";
 import { Category, Ressource } from "../../types/categoryTypes";
-import TimeBar from "../../components/TimeBar";
+// helpers
+import { getStoredCategory } from "../../helpers/indexeddb";
+// hooks
+import useKeyboard from "../../hooks/keyboard";
+import { useParams } from "react-router-dom";
+// components
 import AudioPlayer from "../../components/AudioPlayer";
 import VideoPlayer from "../../components/VideoPlayer";
+import Spinner from "../../components/Spinner";
+import TimeBar from "../../components/TimeBar";
+// styles
+import "./Game.page.scss";
+//assets
+import closeIcon from "../../assets/close.svg";
 
 const testGame = {
     teams: [
@@ -184,7 +194,7 @@ const Game = () => {
             if (key === "Escape" || key === "0")
                 return setBuzzeredTeamIndex(null);
             const index = parseInt(key) - 1;
-            console.log(e, index, gameData);
+
             if (gameData === null || isNaN(index)) return;
             const team = gameData.teams.at(index);
             if (team === undefined) return;
@@ -210,6 +220,43 @@ const Game = () => {
         [gameData]
     );
 
+    // load testgame if specified in url
+    const { dbIndex } = useParams();
+    const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        if (dbIndex === undefined) return;
+        const index = parseInt(dbIndex);
+        if (isNaN(index)) return;
+        setLoading(true);
+        if (dbIndex)
+            getStoredCategory(parseInt(dbIndex)).then((category) => {
+                setGameData({
+                    teams: [
+                        {
+                            name: "Team 1",
+                            color: TeamColors[0],
+                            members: ["player 1", "player 2"],
+                            score: 0,
+                        },
+                        {
+                            name: "Team 2",
+                            color: TeamColors[1],
+                            members: ["player 3", "player 4"],
+                            score: 0,
+                        },
+                        {
+                            name: "Team 3",
+                            color: TeamColors[2],
+                            members: ["player 5", "player 6"],
+                            score: 0,
+                        },
+                    ],
+                    categories: [categoryToGameCategory(category)],
+                });
+                setLoading(false);
+            });
+    }, []);
+
     useKeyboard(keyboardCallback);
 
     useLayoutEffect(() => {
@@ -221,17 +268,29 @@ const Game = () => {
         return () => {};
     }, [gameData]);
 
+    const activeTimers = useRef<NodeJS.Timeout[]>([]);
+    const abortTimers = () => {
+        activeTimers.current.forEach(clearTimeout);
+        activeTimers.current = [];
+    };
+
     // game stuff
     const [gameState, setGameState] = useState<State>(State.idle);
     const startGameSequence = (categoryIndex: number, fieldIndex: number) => {
+        abortTimers();
+
         setSelected({
             categoryIndex,
             fieldIndex,
         });
         setGameState(State.goingBig);
-        setTimeout(() => setGameState(State.showDescription), 500);
-        setTimeout(() => setGameState(State.showQuestion), 4500);
+        activeTimers.current = [
+            setTimeout(() => setGameState(State.showDescription), 500),
+            setTimeout(() => setGameState(State.showQuestion), 4500),
+        ];
     };
+
+    if (loading) return <Spinner />;
 
     if (gameData === null)
         return (
@@ -281,12 +340,18 @@ const Game = () => {
                                             categoryIndex &&
                                         selected.fieldIndex === fieldIndex
                                     }
-                                    onClick={() =>
+                                    unselect={() => {
+                                        abortTimers();
+                                        setSelected(null);
+                                        setGameState(State.idle);
+                                    }}
+                                    onClick={() => {
+                                        abortTimers();
                                         startGameSequence(
                                             categoryIndex,
                                             fieldIndex
-                                        )
-                                    }
+                                        );
+                                    }}
                                     setGameState={(newState: State) =>
                                         setGameState(newState)
                                     }
@@ -308,6 +373,7 @@ const Field = ({
     field,
     points,
     selected,
+    unselect,
     onClick,
     setGameState,
     containerRef,
@@ -318,6 +384,7 @@ const Field = ({
     field: GameField;
     points: number;
     selected: boolean;
+    unselect: () => void;
     onClick: () => void;
     setGameState: (newState: State) => void;
     containerRef: RefObject<HTMLDivElement>;
@@ -326,6 +393,8 @@ const Field = ({
     buzzeredTeamIndex: number | null;
 }) => {
     const fieldRef = useRef<HTMLDivElement>(null);
+
+    const activeTimer = useRef<NodeJS.Timeout | null>(null);
 
     // going big animation
     useEffect(() => {
@@ -339,11 +408,8 @@ const Field = ({
         const offsetLeft = fieldRef.current.offsetLeft;
         const offsetTop = fieldRef.current.offsetTop;
 
-        const containerRect = containerRef.current.getBoundingClientRect();
         const containerHeight = containerRef.current.clientHeight;
         const containerWidth = containerRef.current.clientWidth;
-
-        console.log({ containerWidth, width, offsetLeft, containerRect });
 
         fieldRef.current.style.position = "absolute";
         fieldRef.current.animate(
@@ -363,30 +429,76 @@ const Field = ({
             ],
             { duration: 500, easing: "ease-out" }
         );
-        setTimeout(() => {
+        activeTimer.current = setTimeout(() => {
             if (fieldRef.current !== null)
                 fieldRef.current.classList.add("transitioned");
         }, 500);
-
-        return () => {};
     }, [selected]);
 
+    const fieldContainerRef = useRef<HTMLDivElement>(null);
+
+    // going small animation
+    const close = () => {
+        if (fieldRef.current === null) throw new Error("fieldRef is null");
+        if (fieldContainerRef.current === null)
+            throw new Error("fieldContainerRef is null");
+        if (containerRef.current === null)
+            throw new Error("containerRef is null");
+
+        const height = fieldContainerRef.current.clientHeight;
+        const width = fieldContainerRef.current.clientWidth;
+        const offsetLeft = fieldContainerRef.current.offsetLeft;
+        const offsetTop = fieldContainerRef.current.offsetTop;
+
+        const containerHeight = containerRef.current.clientHeight;
+        const containerWidth = containerRef.current.clientWidth;
+
+        clearTimeout(activeTimer.current || undefined);
+
+        setGameState(State.idle);
+
+        fieldRef.current.classList.remove("transitioned");
+
+        fieldRef.current.style.position = "absolute";
+        fieldRef.current.animate(
+            [
+                {
+                    height: containerHeight + "px",
+                    width: containerWidth + "px",
+                    left: "0px",
+                    top: "0px",
+                },
+                {
+                    height: `${height}px`,
+                    width: `${width}px`,
+                    left: offsetLeft + "px",
+                    top: offsetTop + "px",
+                },
+            ],
+            { duration: 500, easing: "ease-out" }
+        );
+
+        setTimeout(() => {
+            unselect();
+            if (fieldRef.current) fieldRef.current.style.position = "relative";
+        }, 500);
+    };
+
     return (
-        <div className="fieldContainer">
+        <div className="fieldContainer" ref={fieldContainerRef}>
             <div
                 className={
                     "field" +
                     (selected ? " selected" : "") +
                     (field.answered ? " answered" : "")
                 }
-                onClick={
-                    !field.answered && gameState === State.idle
-                        ? onClick
-                        : undefined
-                }
+                onClick={!field.answered && !selected ? onClick : undefined}
                 ref={fieldRef}
             >
                 <div className="contentContainer">
+                    <button className="close" onClick={close}>
+                        <img src={closeIcon} alt="close icon" />
+                    </button>
                     <div className="content">
                         <div
                             className="points"

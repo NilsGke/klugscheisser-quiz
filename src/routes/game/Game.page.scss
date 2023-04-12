@@ -97,7 +97,27 @@
                     width: 100%;
                     border-radius: 10px;
                     overflow: hidden;
-                    background: black;
+                    background: $lighterDark;
+                    position: relative;
+
+                    > button.close {
+                        opacity: 0;
+                        transition: opacity 0.2s linear;
+
+                        position: absolute;
+                        right: 20px;
+                        top: 20px;
+                        z-index: 2;
+                        background-color: transparent;
+                        border: none;
+                        height: 30px;
+                        aspect-ratio: 1;
+                        cursor: pointer;
+
+                        > img {
+                            height: 60%;
+                        }
+                    }
 
                     .content {
                         height: 100%;
@@ -134,7 +154,8 @@
                         .question {
                             height: 100%;
                             width: 100%;
-                            button {
+                            padding: 4%;
+                            > button {
                                 position: absolute;
                                 bottom: 20px;
                                 font-size: 20px;
@@ -149,6 +170,20 @@
                                     box-shadow: 0 0 20px -3px $white;
                                     background: $white;
                                     color: $dark;
+                                }
+                            }
+                            &:has(> .videoPlayer) {
+                                padding: 50px;
+                            }
+                            &:has(> .videoPlayer) {
+                                padding: 50px;
+                            }
+                            .image {
+                                height: 80%;
+                                > img {
+                                    height: 100%;
+                                    max-width: 100%;
+                                    border-radius: 10px;
                                 }
                             }
                         }
@@ -168,6 +203,11 @@
                     border: none;
                     box-shadow: 0 0 50px shade($white, 60%);
                     > div {
+                    }
+                    .contentContainer {
+                        > button.close {
+                            opacity: 1;
+                        }
                     }
                     background: conic-gradient(
                         from var(--gradient-angle),
