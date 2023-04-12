@@ -341,3 +341,14 @@ export const searchStoredCategories = (searchTerm: string) =>
             reject((event.target as IDBRequest).error);
         };
     });
+
+export const removeCategoryFromDb = (dbIndex: Indexed<Category>["dbIndex"]) =>
+    new Promise((resolve, reject) => {
+        const request = db
+            .transaction("categories", "readwrite")
+            .objectStore("categories")
+            .delete(dbIndex);
+
+        request.onsuccess = resolve;
+        request.onerror = reject;
+    });
