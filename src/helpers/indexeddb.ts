@@ -193,6 +193,19 @@ export const storeCategoryInDB = (category: Category) =>
         request.onerror = reject;
     });
 
+export const updateCategoryInDB = (category: Indexed<Category>) =>
+    new Promise<number>((resolve, reject) => {
+        console.log("update category", category);
+
+        const request = db
+            .transaction(["categories"], "readwrite")
+            .objectStore("categories")
+            .put(category, category.dbIndex);
+
+        request.onsuccess = (e) => resolve((e.target as IDBRequest).result);
+        request.onerror = reject;
+    });
+
 export const getStoredCategory = (index: number) =>
     new Promise<Indexed<Category>>((resolve, reject) => {
         const request = db
