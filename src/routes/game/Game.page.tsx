@@ -603,11 +603,21 @@ const ResourceDisplay = ({ resource }: { resource: Resource }) => {
     } else if (resource.type === "audio")
         return (
             <div className="audio">
-                <AudioPlayer file={resource.content} autoplay />
+                <AudioPlayer
+                    file={resource.content}
+                    initialVolume={resource.volume}
+                    autoplay
+                />
             </div>
         );
     else if (resource.type === "video")
-        return <VideoPlayer file={resource.content} autoplay />;
+        return (
+            <VideoPlayer
+                file={resource.content}
+                initialVolume={resource.volume}
+                autoplay
+            />
+        );
     else if (resource.type === "text")
         return <div className="text">{resource.content}</div>;
     // else if(resource.type === "imageCollection")

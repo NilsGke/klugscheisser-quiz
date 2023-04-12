@@ -265,6 +265,7 @@ const MediaElement = ({
             <div className="audio">
                 <AudioPlayer
                     file={resource.content}
+                    initialVolume={resource.volume}
                     onVolumeChange={(value) => {
                         const newCategory = category;
                         newCategory.fields[fieldIndex][type] = Object.assign(
@@ -292,6 +293,7 @@ const MediaElement = ({
             <div className="video">
                 <VideoPlayer
                     file={resource.content}
+                    initialVolume={resource.volume}
                     onVolumeChange={(value) => {
                         const newCategory = category;
                         newCategory.fields[fieldIndex][type] = Object.assign(
