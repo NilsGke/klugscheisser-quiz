@@ -1,3 +1,5 @@
+import { Indexed } from "../helpers/indexeddb";
+
 const exampleObject: Category = {
     name: "example",
     description: "this is the description for the category",
@@ -199,3 +201,11 @@ export const isField = (partialField: PartialField): partialField is Field =>
 export const isCategory = (
     partialCategory: PartialCategory
 ): partialCategory is Category => partialCategory.fields.every(isField);
+
+export const indexCategory = (
+    category: Category,
+    index: number
+): Indexed<Category> =>
+    Object.assign(category, {
+        dbIndex: index,
+    });
