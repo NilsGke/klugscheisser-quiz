@@ -6,7 +6,7 @@ import {
     Image,
     MediaType,
     PartialCategory,
-    TextRessource,
+    TextResource,
     Video,
 } from "../types/categoryTypes";
 
@@ -14,11 +14,12 @@ interface CategoryConfig extends Omit<Category, "fields"> {
     fields: [ConfigField, ConfigField, ConfigField, ConfigField, ConfigField];
 }
 type ConfigField = {
-    question: ConfigRessource;
-    answer: ConfigRessource;
+    question: ConfigResource;
+    answer: ConfigResource;
 };
-type ConfigRessource = {
+type ConfigResource = {
     type: MediaType;
+    volume?: number;
     content: string | FileName;
 };
 
@@ -54,23 +55,29 @@ export const generateZipFromCategory = async (
             media.push(field.answer.content);
         }
 
+        const question = {
+            type: field.question.type,
+            content:
+                field.question.type === "text"
+                    ? field.question.content
+                    : questionMediaIndex + "_" + field.question.content.name,
+        } as any;
+        if (field.question.type === "audio" || field.question.type === "video")
+            question.volume = field.question.volume;
+
+        const answer = {
+            type: field.answer.type,
+            content:
+                field.answer.type === "text"
+                    ? field.answer.content
+                    : answerMediaIndex + "_" + field.answer.content.name,
+        } as any;
+        if (field.question.type === "audio" || field.question.type === "video")
+            question.volume = field.question.volume;
+
         categoryInfo.fields.push({
-            question: {
-                type: field.question.type,
-                content:
-                    field.question.type === "text"
-                        ? field.question.content
-                        : questionMediaIndex +
-                          "_" +
-                          field.question.content.name,
-            },
-            answer: {
-                type: field.answer.type,
-                content:
-                    field.answer.type === "text"
-                        ? field.answer.content
-                        : answerMediaIndex + "_" + field.answer.content.name,
-            },
+            question,
+            answer,
         });
         if (field.question.type === "text") return;
     });
@@ -151,7 +158,7 @@ const applyMediaFromZipFile = (
         if (configField[fieldType].type === "text")
             category.fields[index][fieldType] = configField[
                 fieldType
-            ] as TextRessource;
+            ] as TextResource;
         else {
             const mediaBlob = await zip
                 .file(`media/${configField[fieldType].content}`)
@@ -171,6 +178,7 @@ const applyMediaFromZipFile = (
             if (configField[fieldType].type === "audio")
                 category.fields[index][fieldType] = {
                     type: "audio",
+                    volume: configField[fieldType].volume || 50,
                     content: file as Audio,
                 };
             else if (configField[fieldType].type === "image")
@@ -181,6 +189,8 @@ const applyMediaFromZipFile = (
             else if (configField[fieldType].type === "video")
                 category.fields[index][fieldType] = {
                     type: "video",
+                    volume: configField[fieldType].volume || 50,
+
                     content: file as Video,
                 };
         }
