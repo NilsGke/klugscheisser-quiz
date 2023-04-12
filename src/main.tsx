@@ -76,6 +76,10 @@ const App = () => {
             element: <Game />,
         },
         {
+            path: "/test/:dbIndex/destroy",
+            element: <Game />,
+        },
+        {
             path: "/view/:dbIndex",
             element: <Viewer />,
         },
