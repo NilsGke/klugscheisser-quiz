@@ -12,19 +12,13 @@
     flex-direction: column;
     height: 100svh;
 
-    // background image
-    &::before {
-        content: "";
+    #background {
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url(./background.excalidraw.svg);
+        height: 100svh;
+        width: 100svw;
         filter: invert(1) opacity(0.2) blur(2.5px);
         z-index: -1;
         animation: backgroundShift 30s linear infinite;
-        background-clip: lime;
         @keyframes backgroundShift {
             from {
                 background-position-x: 0svw;

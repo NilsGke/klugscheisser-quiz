@@ -5,6 +5,7 @@ import playIcon from "../../assets/play.svg";
 import gridIcon from "../../assets/grid.svg";
 import helpIcon from "../../assets/help.svg";
 import editIcon from "../../assets/edit.svg";
+import backgroundImage from "../../assets/background.excalidraw.svg";
 
 const Root = () => {
     return (
@@ -27,6 +28,12 @@ const Root = () => {
             <Link to={"/help"} className="helpIcon">
                 <img src={helpIcon} alt="question mark icon" />
             </Link>
+            <div
+                id="background"
+                style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                }}
+            ></div>
         </div>
     );
 };
