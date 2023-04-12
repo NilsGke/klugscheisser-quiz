@@ -263,7 +263,17 @@ const MediaElement = ({
     if (resource.type === "audio")
         content = (
             <div className="audio">
-                <AudioPlayer file={resource.content} />
+                <AudioPlayer
+                    file={resource.content}
+                    onVolumeChange={(value) => {
+                        const newCategory = category;
+                        newCategory.fields[fieldIndex][type] = Object.assign(
+                            resource,
+                            { volume: value }
+                        );
+                        setCategory(newCategory);
+                    }}
+                />
                 <button
                     className="remove"
                     onClick={() => {
@@ -280,7 +290,17 @@ const MediaElement = ({
     if (resource.type === "video")
         content = (
             <div className="video">
-                <VideoPlayer file={resource.content} />
+                <VideoPlayer
+                    file={resource.content}
+                    onVolumeChange={(value) => {
+                        const newCategory = category;
+                        newCategory.fields[fieldIndex][type] = Object.assign(
+                            resource,
+                            { volume: value }
+                        );
+                        setCategory(newCategory);
+                    }}
+                />
                 <button
                     className="remove"
                     onClick={() => {
