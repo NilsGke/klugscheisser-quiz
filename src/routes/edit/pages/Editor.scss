@@ -29,9 +29,10 @@
             color: $white;
         }
         button {
+            height: 50px;
             cursor: pointer;
             border-radius: 20px;
-            padding: 15px;
+            padding: 10px;
             box-shadow: 0 0 20px shade($white, 50%);
             white-space: nowrap;
 
@@ -40,6 +41,16 @@
                 background-color: $white;
                 color: $dark;
                 box-shadow: 0 0 30px shade($white, 0%);
+            }
+            &.test {
+                aspect-ratio: 1;
+                img {
+                    transition: filter 0.2s ease-in-out;
+                    filter: invert(1);
+                }
+                &:hover img {
+                    filter: invert(0);
+                }
             }
         }
         input {

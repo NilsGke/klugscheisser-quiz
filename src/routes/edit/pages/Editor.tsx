@@ -17,6 +17,7 @@ import {
     updateCategoryInDB,
 } from "../../../helpers/indexeddb";
 import HomeButton from "../../../components/HomeButton";
+import testIcon from "../../../assets/test.svg";
 
 const Edit = ({
     initialCategory,
@@ -117,6 +118,24 @@ const Edit = ({
         return () => window.removeEventListener("beforeunload", unloadHandler);
     }, [exporting]);
 
+    const test = async () => {
+        const wholeCategory: Category = {
+            answerTime,
+            description: description ?? "[empty]",
+            name: name ?? "[empty]",
+            fields: category.fields.map((field) => ({
+                question: field.question ?? {
+                    content: "[empty]",
+                    type: "text",
+                },
+                answer: field.answer ?? { content: "[empty]", type: "text" },
+            })) as Category["fields"],
+        };
+
+        const dbIndex = await storeCategoryInDB(wholeCategory);
+        window.open(`/test/${dbIndex}/destroy`);
+    };
+
     return (
         <div id="edit">
             <HomeButton confirm />
@@ -146,6 +165,14 @@ const Edit = ({
                     onChange={(e) => setAnswerTime(parseInt(e.target.value))}
                     title="time to answer question (in seconds)"
                 />
+
+                <button
+                    className="test"
+                    title="test your category in a game"
+                    onClick={test}
+                >
+                    <img src={testIcon} alt="" />
+                </button>
 
                 <button className="export" onClick={exportCategory}>
                     save & export
