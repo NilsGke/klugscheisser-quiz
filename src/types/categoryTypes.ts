@@ -214,6 +214,10 @@ export const indexCategory = (
         dbIndex: index,
     });
 
-export const addVolumeToResource = (
-    resource: Omit<VideoResource, "volume">
+export const addVolumeToVideoResource = (
+    resource: Omit<VideoResource, "volume"> | VideoResource
 ): VideoResource => Object.assign(resource, { volume: 50 });
+
+export const addVolumeToAudioResource = (
+    resource: Omit<AudioResource, "volume"> | AudioResource
+): AudioResource => Object.assign(resource, { volume: 50 });
