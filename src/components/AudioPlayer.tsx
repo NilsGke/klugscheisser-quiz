@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import ReactSlider from "react-slider";
 import getTimeFromSeconds from "../helpers/timeFromSeconds";
 
 import Slider from "rc-slider";
