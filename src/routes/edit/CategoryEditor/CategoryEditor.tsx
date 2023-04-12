@@ -76,16 +76,16 @@ const MediaElement = ({
     category: PartialCategory;
     setCategory: (newCategory: PartialCategory) => void;
 }) => {
-    const ressource = category.fields[fieldIndex][type];
+    const resource = category.fields[fieldIndex][type];
 
     // generate url for media
     const [url, setUrl] = useState<string>();
     useEffect(() => {
         if (
-            ressource === undefined ||
-            ressource.type === undefined ||
-            ressource.type === "text" ||
-            ressource.type === "imageCollection"
+            resource === undefined ||
+            resource.type === undefined ||
+            resource.type === "text" ||
+            resource.type === "imageCollection"
         )
             return;
         var reader = new FileReader();
@@ -102,14 +102,14 @@ const MediaElement = ({
             }
         };
 
-        reader.readAsDataURL(ressource.content);
+        reader.readAsDataURL(resource.content);
 
         return () => {};
-    }, [ressource]);
+    }, [resource]);
 
     // handle text input
     const [text, setText] = useState(
-        ressource ? (ressource.type === "text" ? ressource.content : "") : ""
+        resource ? (resource.type === "text" ? resource.content : "") : ""
     );
 
     const blurHandler = () => {
@@ -127,12 +127,12 @@ const MediaElement = ({
     useEffect(() => {
         if (textAreaRef.current === null) return;
         textAreaRef.current.focus();
-    }, [ressource?.type]);
+    }, [resource?.type]);
     useEffect(() => {
         if (
             textAreaRef.current === null ||
-            ressource === undefined ||
-            ressource.type !== "text"
+            resource === undefined ||
+            resource.type !== "text"
         )
             return;
         textAreaRef.current.addEventListener("blur", blurHandler);
@@ -141,7 +141,7 @@ const MediaElement = ({
             if (textAreaRef.current === null) return;
             textAreaRef.current.removeEventListener("blur", blurHandler);
         };
-    }, [ressource?.type, text]);
+    }, [resource?.type, text]);
 
     // handle drag and drop
     const mediaElementRef = useRef<HTMLDivElement>(null);
@@ -203,7 +203,7 @@ const MediaElement = ({
     // generate content
     let content: JSX.Element = <></>;
 
-    if (ressource === undefined || ressource.type === undefined)
+    if (resource === undefined || resource.type === undefined)
         return (
             <div className="mediaElement" ref={mediaElementRef}>
                 <button
@@ -222,7 +222,7 @@ const MediaElement = ({
             </div>
         );
 
-    if (ressource.type === "text")
+    if (resource.type === "text")
         content = (
             <div className="text">
                 <textarea
@@ -243,7 +243,7 @@ const MediaElement = ({
             </div>
         );
 
-    if (ressource.type === "image")
+    if (resource.type === "image")
         content = (
             <div className="image">
                 <img src={url} alt="image" />
@@ -260,10 +260,21 @@ const MediaElement = ({
             </div>
         );
 
-    if (ressource.type === "audio")
+    if (resource.type === "audio")
         content = (
             <div className="audio">
-                <AudioPlayer file={ressource.content} />
+                <AudioPlayer
+                    file={resource.content}
+                    initialVolume={resource.volume}
+                    onVolumeChange={(value) => {
+                        const newCategory = category;
+                        newCategory.fields[fieldIndex][type] = Object.assign(
+                            resource,
+                            { volume: value }
+                        );
+                        setCategory(newCategory);
+                    }}
+                />
                 <button
                     className="remove"
                     onClick={() => {
@@ -277,10 +288,21 @@ const MediaElement = ({
             </div>
         );
 
-    if (ressource.type === "video")
+    if (resource.type === "video")
         content = (
             <div className="video">
-                <VideoPlayer file={ressource.content} />
+                <VideoPlayer
+                    file={resource.content}
+                    initialVolume={resource.volume}
+                    onVolumeChange={(value) => {
+                        const newCategory = category;
+                        newCategory.fields[fieldIndex][type] = Object.assign(
+                            resource,
+                            { volume: value }
+                        );
+                        setCategory(newCategory);
+                    }}
+                />
                 <button
                     className="remove"
                     onClick={() => {

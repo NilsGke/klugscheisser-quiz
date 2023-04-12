@@ -15,19 +15,27 @@ import "./AudioPlayer.scss";
 
 type props = {
     file: File;
+    initialVolume?: number;
+    onVolumeChange?: (value: number) => void;
     autoplay?: boolean;
     fileName?: string;
 };
 
 // TODO add album art
 
-const AudioPlayer: FC<props> = ({ file, fileName, autoplay = false }) => {
+const AudioPlayer: FC<props> = ({
+    file,
+    fileName,
+    onVolumeChange,
+    initialVolume = 50,
+    autoplay = false,
+}) => {
     const audioUrl = useMemo(() => URL.createObjectURL(file), [file]);
 
     const audioElementRef = useRef<HTMLAudioElement>(null);
 
     const [playing, setPlaying] = useState(autoplay);
-    const [volume, setVolume] = useState(40);
+    const [volume, setVolume] = useState(initialVolume);
     const [duration, setDuration] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
 
@@ -81,6 +89,11 @@ const AudioPlayer: FC<props> = ({ file, fileName, autoplay = false }) => {
     useEffect(() => {
         if (audioElementRef.current)
             audioElementRef.current.volume = volume / 100;
+    }, [volume]);
+
+    // forward volume change to parent
+    useEffect(() => {
+        if (onVolumeChange) onVolumeChange(volume);
     }, [volume]);
 
     const play = (play: boolean) => {

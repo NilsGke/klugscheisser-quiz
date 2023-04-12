@@ -15,14 +15,22 @@ import Slider from "rc-slider";
 
 type props = {
     file: File;
+    initialVolume?: number;
+    onVolumeChange?: (value: number) => void;
     small?: boolean;
     autoplay?: boolean;
 };
 
-const VideoPlayer: FC<props> = ({ file, small = false, autoplay = false }) => {
+const VideoPlayer: FC<props> = ({
+    file,
+    initialVolume = 50,
+    onVolumeChange,
+    small = false,
+    autoplay = false,
+}) => {
     const videoUrl = useMemo(() => URL.createObjectURL(file), [file]);
     const [playing, setPlaying] = useState(autoplay);
-    const [volume, setVolume] = useState(40);
+    const [volume, setVolume] = useState(initialVolume);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
 
@@ -78,6 +86,11 @@ const VideoPlayer: FC<props> = ({ file, small = false, autoplay = false }) => {
     useEffect(() => {
         if (videoElementRef.current)
             videoElementRef.current.volume = volume / 100;
+    }, [volume]);
+
+    // forward volume change to parent
+    useEffect(() => {
+        if (onVolumeChange) onVolumeChange(volume);
     }, [volume]);
 
     const play = (play: boolean) => {

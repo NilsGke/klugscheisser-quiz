@@ -16,7 +16,7 @@ import {
     GameTeam as TeamType,
     categoryToGameCategory,
 } from "../../types/gameTypes";
-import { Category, Ressource } from "../../types/categoryTypes";
+import { Category, Resource } from "../../types/categoryTypes";
 // helpers
 import { getStoredCategory } from "../../helpers/indexeddb";
 // hooks
@@ -592,7 +592,7 @@ const Field = ({
     );
 };
 
-const ResourceDisplay = ({ resource }: { resource: Ressource }) => {
+const ResourceDisplay = ({ resource }: { resource: Resource }) => {
     if (resource.type === "image") {
         const url = URL.createObjectURL(resource.content);
         return (
@@ -603,11 +603,21 @@ const ResourceDisplay = ({ resource }: { resource: Ressource }) => {
     } else if (resource.type === "audio")
         return (
             <div className="audio">
-                <AudioPlayer file={resource.content} autoplay />
+                <AudioPlayer
+                    file={resource.content}
+                    initialVolume={resource.volume}
+                    autoplay
+                />
             </div>
         );
     else if (resource.type === "video")
-        return <VideoPlayer file={resource.content} autoplay />;
+        return (
+            <VideoPlayer
+                file={resource.content}
+                initialVolume={resource.volume}
+                autoplay
+            />
+        );
     else if (resource.type === "text")
         return <div className="text">{resource.content}</div>;
     // else if(resource.type === "imageCollection")
