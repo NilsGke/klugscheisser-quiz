@@ -16,7 +16,7 @@ import {
     GameTeam as TeamType,
     categoryToGameCategory,
 } from "../../types/gameTypes";
-import { Category, Ressource } from "../../types/categoryTypes";
+import { Category, Resource } from "../../types/categoryTypes";
 // helpers
 import { getStoredCategory } from "../../helpers/indexeddb";
 // hooks
@@ -592,7 +592,7 @@ const Field = ({
     );
 };
 
-const ResourceDisplay = ({ resource }: { resource: Ressource }) => {
+const ResourceDisplay = ({ resource }: { resource: Resource }) => {
     if (resource.type === "image") {
         const url = URL.createObjectURL(resource.content);
         return (

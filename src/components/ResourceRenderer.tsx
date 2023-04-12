@@ -1,4 +1,4 @@
-import { Ressource } from "../types/categoryTypes";
+import { Resource } from "../types/categoryTypes";
 import AudioPlayer from "./AudioPlayer";
 import VideoPlayer from "./VideoPlayer";
 
@@ -6,7 +6,7 @@ const ResourceRenderer = ({
     resource,
     autoplay = false,
 }: {
-    resource: Ressource;
+    resource: Resource;
     autoplay?: boolean;
 }) => {
     if (resource.type === "image") {
