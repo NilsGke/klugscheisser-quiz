@@ -3,12 +3,15 @@ import {
     IndexedFile,
     MediaType,
     MediaTypes,
+    addVolumeToAudioResource,
+    addVolumeToVideoResource,
 } from "../types/categoryTypes";
 
 /** ### version documentation
  *
  * @version 3 all media stores
  * @version 4 added category store
+ * @version 5 added volume to audio and video
  *
  */
 let db: IDBDatabase;
@@ -19,7 +22,7 @@ export type Indexed<T> = T & {
 
 export const initIndexedDB = () =>
     new Promise<void>((resolve, reject) => {
-        const request = window.indexedDB.open("LocalFileDatabase", 4);
+        const request = window.indexedDB.open("LocalFileDatabase", 5);
 
         request.onerror = (event) => {
             console.error("indexed db request threw an error", { event });
@@ -55,7 +58,7 @@ export const initIndexedDB = () =>
                 "color:purple;"
             );
 
-            const proms: Promise<Event>[] = [];
+            const proms: Promise<Event | void>[] = [];
 
             // Create an stores for each media type
             if (event.oldVersion === 0)
@@ -86,6 +89,54 @@ export const initIndexedDB = () =>
                         });
                         objectStore.transaction.oncomplete = resolve;
                         objectStore.transaction.onerror = reject;
+                    })
+                );
+
+            // add volume to categories media
+            if (event.oldVersion === 0 || event.newVersion === 5)
+                proms.push(
+                    new Promise((resolve, reject) => {
+                        const transaction = (event.target as IDBOpenDBRequest)
+                            .transaction;
+                        if (transaction === null)
+                            return reject("event.target.transaction is null");
+
+                        const request = transaction
+                            .objectStore("categories")
+                            .openCursor();
+
+                        request.onsuccess = (e: Event) => {
+                            const cursor = request.result;
+                            if (cursor === null) return resolve();
+                            const category: Category = cursor.value;
+
+                            const newFields = category.fields.map((field) => ({
+                                question:
+                                    field.question.type === "audio"
+                                        ? addVolumeToAudioResource(
+                                              field.question
+                                          )
+                                        : field.question.type === "video"
+                                        ? addVolumeToVideoResource(
+                                              field.question
+                                          )
+                                        : field.question,
+
+                                answer:
+                                    field.answer.type === "audio"
+                                        ? addVolumeToAudioResource(field.answer)
+                                        : field.answer.type === "video"
+                                        ? addVolumeToVideoResource(field.answer)
+                                        : field.answer,
+                            }));
+
+                            cursor.update({
+                                ...category,
+                                fields: newFields,
+                            });
+                            cursor.continue();
+                        };
+                        request.onerror = reject;
                     })
                 );
 
