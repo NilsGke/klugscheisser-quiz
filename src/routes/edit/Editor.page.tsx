@@ -11,17 +11,20 @@ const Editor = () => {
     const [category, setCategory] = useState<PartialCategory | null>(null);
 
     // set initial category if set in URL
-    const { dbIndex } = useParams();
+    const { dbIndex: dbIndexParam } = useParams();
     const [loading, setLoading] = useState(false);
+    const [dbIndex, setdbIndex] = useState<number | undefined>(undefined);
     useEffect(() => {
-        if (dbIndex === undefined) return;
-        const index = parseInt(dbIndex);
+        if (dbIndexParam === undefined) return;
+        const index = parseInt(dbIndexParam);
         if (isNaN(index)) return;
         setLoading(true);
-        if (dbIndex)
-            getStoredCategory(parseInt(dbIndex))
-                .then(setCategory)
-                .then(() => setLoading(false));
+        getStoredCategory(index)
+            .then(setCategory)
+            .then(() => {
+                setdbIndex(index);
+                setLoading(false);
+            });
     }, []);
 
     return (
@@ -34,7 +37,7 @@ const Editor = () => {
             ) : loading ? (
                 <Spinner />
             ) : (
-                <Edit initialCategory={category} />
+                <Edit initialCategory={category} dbIndex={dbIndex} />
             )}
         </div>
     );

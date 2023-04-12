@@ -1,15 +1,30 @@
 import toast from "react-simple-toasts";
 import { JSZipMetadata } from "jszip";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { PartialCategory, isCategory } from "../../../types/categoryTypes";
+import {
+    Category,
+    PartialCategory,
+    indexCategory,
+    isCategory,
+} from "../../../types/categoryTypes";
 import "./Editor.scss";
 import MediaPool from "../MediaPool/MediaPool";
 import CategoryEditor from "../CategoryEditor/CategoryEditor";
 import { generateZipFromCategory } from "../../../helpers/zip";
-import { storeCategoryInDB } from "../../../helpers/indexeddb";
+import {
+    Indexed,
+    storeCategoryInDB,
+    updateCategoryInDB,
+} from "../../../helpers/indexeddb";
 import HomeButton from "../../../components/HomeButton";
 
-const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
+const Edit = ({
+    initialCategory,
+    dbIndex,
+}: {
+    initialCategory: PartialCategory;
+    dbIndex?: Indexed<Category>["dbIndex"];
+}) => {
     const [category, setCategory] = useState(initialCategory);
     const [name, setName] = useState(initialCategory.name);
     const [description, setDescription] = useState(initialCategory.description);
@@ -55,7 +70,12 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
 
         setExporting(true);
 
-        const promiseDbIndex = storeCategoryInDB(category);
+        let promiseDbIndex: Promise<Indexed<Category>["dbIndex"]>;
+        if (dbIndex)
+            promiseDbIndex = updateCategoryInDB(
+                indexCategory(category, dbIndex)
+            );
+        else promiseDbIndex = storeCategoryInDB(category);
 
         generateZipFromCategory(category, setExportData).then(
             async (result) => {
@@ -72,10 +92,13 @@ const Edit = ({ initialCategory }: { initialCategory: PartialCategory }) => {
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
-                promiseDbIndex.then((dbIndex) => {
-                    window.onbeforeunload = null;
-                    window.location.replace(`/editor/${dbIndex}`);
-                    setExporting(false);
+                promiseDbIndex.then((promisedDbIndex) => {
+                    if (dbIndex === undefined) {
+                        window.onbeforeunload = null;
+                        window.location.replace(`/editor/${promisedDbIndex}`);
+                    }
+                    toast("✅ category saved and exported");
+                    setTimeout(() => setExporting(false), 1000);
                 });
             }
         );
