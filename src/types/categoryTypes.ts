@@ -111,33 +111,33 @@ export interface Category {
 
 // fields
 export interface Field {
-    question: Ressource;
-    answer: Ressource;
+    question: Resource;
+    answer: Resource;
 }
 
-export type Ressource =
-    | TextRessource
-    | (ImageRessource | ImageRessourceCollection)
-    | VideoRessource
-    | AudioRessource;
+export type Resource =
+    | TextResource
+    | (ImageResource | ImageResourceCollection)
+    | VideoResource
+    | AudioResource;
 
-export interface TextRessource {
+export interface TextResource {
     type: "text";
     content: string;
 }
-export interface ImageRessource {
+export interface ImageResource {
     type: "image";
     content: Image;
 }
-export interface ImageRessourceCollection {
+export interface ImageResourceCollection {
     type: "imageCollection";
     content: Image[];
 }
-export interface VideoRessource {
+export interface VideoResource extends Volume {
     type: "video";
     content: Video;
 }
-export interface AudioRessource {
+export interface AudioResource extends Volume {
     type: "audio";
     content: Audio;
 }
@@ -173,6 +173,10 @@ export interface IndexedImage extends IndexedFile {}
 export interface IndexedVideo extends IndexedFile {}
 export interface IndexedAudio extends IndexedFile {}
 
+export interface Volume {
+    volume: number;
+}
+
 // interfaces for editor:
 
 /**
@@ -189,11 +193,11 @@ export interface PartialCategory extends Omit<Category, "fields"> {
 }
 
 export interface PartialField extends Omit<Field, "question" | "answer"> {
-    question: PartialRessource;
-    answer: PartialRessource;
+    question: PartialResource;
+    answer: PartialResource;
 }
 
-export type PartialRessource = undefined | Ressource;
+export type PartialResource = undefined | Resource;
 
 export const isField = (partialField: PartialField): partialField is Field =>
     partialField.question !== undefined && partialField.answer !== undefined;
@@ -209,3 +213,7 @@ export const indexCategory = (
     Object.assign(category, {
         dbIndex: index,
     });
+
+export const addVolumeToResource = (
+    resource: Omit<VideoResource, "volume">
+): VideoResource => Object.assign(resource, { volume: 50 });
