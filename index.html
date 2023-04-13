@@ -12,22 +12,5 @@
     <body>
         <div id="root"></div>
         <script type="module" src="./src/main.tsx"></script>
-        <script>
-            if ("serviceWorker" in navigator) {
-                navigator.serviceWorker
-                    .register("/sw.js", {
-                        scope: "/",
-                    })
-                    .then((registration) => {
-                        console.log(
-                            "%cService Worker Registered!",
-                            "color: lime;"
-                        );
-                    });
-                navigator.serviceWorker.ready.then((registration) => {
-                    console.log("%cService Worker Ready", "color:cyan;");
-                });
-            }
-        </script>
     </body>
 </html>
