@@ -14,10 +14,14 @@ type props = {
     submit?: (categories: Indexed<Category>[]) => void;
     onChange?: (categories: Indexed<Category>[]) => void;
     finish?: boolean;
+
+    chooseOne?: boolean;
+    choose?: (category: Indexed<Category>) => void;
 };
 enum Purpose {
     VIEWING,
-    SELECTING,
+    CHOOSE_ONE,
+    SELECTING_MULTIPLE,
 }
 
 const CategoryBrowser: FC<props> = ({
@@ -25,8 +29,13 @@ const CategoryBrowser: FC<props> = ({
     selecting = false,
     onChange,
     finish = false,
+
+    chooseOne = false,
+    choose,
 }) => {
-    const purpose: Purpose = selecting ? Purpose.SELECTING : Purpose.VIEWING;
+    const purpose: Purpose = selecting
+        ? Purpose.SELECTING_MULTIPLE
+        : Purpose.VIEWING;
 
     const [categories, setCategories] = useState<Indexed<Category>[]>([]);
     useEffect(() => {
@@ -75,7 +84,9 @@ const CategoryBrowser: FC<props> = ({
                         <CategoryElement
                             key={category.dbIndex}
                             category={category}
-                            selectable={purpose === Purpose.SELECTING}
+                            selectable={purpose === Purpose.SELECTING_MULTIPLE}
+                            choosable={chooseOne}
+                            choose={choose ? () => choose(category) : undefined}
                             toggle={() => {
                                 if (!selectedIndexes.includes(category.dbIndex))
                                     setSelectedIndexes((prev) => [
@@ -101,7 +112,7 @@ const CategoryBrowser: FC<props> = ({
                 </div>
             </div>
 
-            {purpose === Purpose.SELECTING ? (
+            {purpose === Purpose.SELECTING_MULTIPLE ? (
                 <>
                     <div className="separator"></div>
                     <div className="selected">
@@ -147,6 +158,9 @@ const CategoryElement = ({
 
     removable = false,
     remove,
+
+    choosable = false,
+    choose,
 }: {
     category: Indexed<Category>;
 
@@ -156,9 +170,15 @@ const CategoryElement = ({
 
     removable?: boolean;
     remove?: () => void;
+
+    choosable?: boolean;
+    choose?: () => void;
 }) => {
     return (
-        <div className="category">
+        <div
+            className={"category" + (choosable ? " choosable" : "")}
+            onClick={choose}
+        >
             {selectable ? (
                 <div
                     className={
@@ -184,15 +204,17 @@ const CategoryElement = ({
                 <p className="description">{category.description}</p>
             </div>
             <div className="buttons">
-                <button
-                    className="edit"
-                    title="open category in editor"
-                    onClick={() =>
-                        window.open(`/editor/${category.dbIndex}`, "_blank")
-                    }
-                >
-                    <img src={editIcon} alt="edit icon" />
-                </button>
+                {!choosable ? (
+                    <button
+                        className="edit"
+                        title="open category in editor"
+                        onClick={() =>
+                            window.open(`/editor/${category.dbIndex}`, "_blank")
+                        }
+                    >
+                        <img src={editIcon} alt="edit icon" />
+                    </button>
+                ) : null}
                 <button
                     className="view"
                     title="view category"
