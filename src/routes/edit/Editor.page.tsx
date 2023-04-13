@@ -25,7 +25,7 @@ const Editor = () => {
                 setdbIndex(index);
                 setLoading(false);
             });
-    }, []);
+    }, [dbIndexParam]);
 
     return (
         <div id="editorPage">
