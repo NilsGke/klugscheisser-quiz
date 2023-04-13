@@ -59,7 +59,7 @@ const App = () => {
                 setNewVersion(true);
             },
             onOfflineReady() {
-                alert("offline ready");
+                console.log("offline ready");
             },
         });
         return () => {};
