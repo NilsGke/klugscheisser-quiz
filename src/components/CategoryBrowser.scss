@@ -21,7 +21,7 @@
                 // height: 30px;
                 font-size: 18px;
                 background-color: transparent;
-                border: 1px solid $lighterDark;
+                border: 1px solid $grey;
                 border-radius: 10px;
                 color: $white;
                 padding: 5px;
@@ -40,39 +40,34 @@
 
     > .browser .results,
     > .selected .categories {
-        @media only screen and (min-width: 860px) {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-        }
-        @media only screen and (min-width: 1300px) {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
-        @media only screen and (min-width: 1720px) {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-        }
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: auto;
 
         margin-top: 20px;
-        // display: flex;
-        // align-items: center;
-        // justify-content: center;
-        // flex-direction: column;
         gap: 10px;
         .category {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 10px;
             width: 400px;
+            max-height: 150px;
             height: auto;
             background-color: $dark;
-            border: 1px solid $lighterDark;
+            border: 1px solid $grey;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-direction: row;
             flex-wrap: nowrap;
+
+            &.choosable {
+                cursor: pointer;
+                transition: background-color 0.2s ease-out;
+                &:hover {
+                    background-color: $lighterDark;
+                }
+            }
 
             &:not(:last-child) {
                 margin-bottom: 10px;
@@ -146,5 +141,10 @@
                 }
             }
         }
+    }
+
+    .selected .categories {
+        flex-direction: column;
+        flex-wrap: nowrap;
     }
 }
