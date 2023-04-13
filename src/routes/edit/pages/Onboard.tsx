@@ -10,6 +10,8 @@ import "./Onboard.scss";
 import folderIcon from "../../../assets/folder.svg";
 import addIcon from "../../../assets/addRound.svg";
 import closeIcon from "../../../assets/close.svg";
+import CategoryBrowser from "../../../components/CategoryBrowser";
+import { useNavigate } from "react-router-dom";
 
 enum Action {
     IMPORT,
@@ -90,18 +92,28 @@ const Onboard = ({
         // todo
     }, [file]);
 
+    const navigate = useNavigate();
+
     return (
         <div id="onboard">
             <HomeButton />
             <div className="decide">
-                <button onClick={() => setAction(Action.IMPORT)}>
-                    <img src={folderIcon} alt="import logo" />
-                    <p>Kategorie Importieren (bearbeiten)</p>
-                </button>
-                <button onClick={() => setCategory(emptyCategory)}>
-                    <img src={addIcon} alt="create new logo" />
-                    <p>Neue Kategorie erstellen</p>
-                </button>
+                <CategoryBrowser
+                    chooseOne
+                    choose={(category) =>
+                        navigate(`/editor/${category.dbIndex}`)
+                    }
+                />
+                <div className="actions">
+                    <button onClick={() => setAction(Action.IMPORT)}>
+                        <img src={folderIcon} alt="import logo" />
+                        <p>Import Category-File</p>
+                    </button>
+                    <button onClick={() => setCategory(emptyCategory)}>
+                        <img src={addIcon} alt="create new logo" />
+                        <p>Create New Category</p>
+                    </button>
+                </div>
             </div>
             <div
                 id="popupContainer"

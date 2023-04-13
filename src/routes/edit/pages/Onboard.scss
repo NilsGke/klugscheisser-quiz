@@ -2,37 +2,67 @@
 
 #onboard {
     .decide {
-        height: 70vh;
-        width: 70vw;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: row;
+        height: 85vh;
+        width: 90vw;
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        grid-template-rows: 1fr;
         gap: 1vw;
-        button {
-            height: 50vh;
-            width: 35vw;
-            background-color: transparent;
-            border: 1px solid $white;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-direction: column;
-            padding: 30px;
-            cursor: pointer;
-            transition: transform 0.3s ease-out;
-            &:hover {
-                transform: scale(1.02);
+
+        .categoryBrowser {
+            height: 100%;
+            width: 100%;
+            .results {
+                height: auto;
+                grid-template-columns: 1fr;
+                @media only screen and (min-width: 1100px) {
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                @media only screen and (min-width: 1540px) {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                }
+                @media only screen and (min-width: 1720px) {
+                    display: grid;
+                    grid-template-columns: repeat(3, 3fr) !important;
+                }
+                .category {
+                    max-height: 150px;
+                }
             }
-            img {
-                height: 60%;
-                filter: invert(0.4);
-            }
-            p {
-                margin-bottom: 10%;
-                font-size: 30px;
-                color: $white;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            > button {
+                height: 80%;
+                width: 80%;
+                background-color: transparent;
+                border: 1px solid $grey;
+                border-radius: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                flex-direction: column;
+                padding: 10px;
+                cursor: pointer;
+                transition: transform 0.3s ease-out;
+                &:hover {
+                    transform: scale(1.02);
+                }
+                img {
+                    height: 60%;
+                    filter: invert(0.4);
+                }
+                p {
+                    margin-bottom: 10%;
+                    font-size: 20px;
+                    color: $white;
+                }
             }
         }
     }
