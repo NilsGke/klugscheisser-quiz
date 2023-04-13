@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root/Root.page";
@@ -11,6 +11,8 @@ import Game from "./routes/game/Game.page";
 import { initIndexedDB } from "./helpers/indexeddb";
 import Spinner from "./components/Spinner";
 import Viewer from "./routes/viewer/View.page";
+import { registerSW } from "virtual:pwa-register";
+import NewVersionbanner from "./components/NewVersionbanner";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -44,6 +46,23 @@ const App = () => {
             window.removeEventListener("online", online);
             window.removeEventListener("offline", offline);
         };
+    }, []);
+
+    const [newVersion, setNewVersion] = useState(false);
+    const updateSWRef = useRef<
+        ((reloadPage?: boolean | undefined) => Promise<void>) | null
+    >(null);
+    // handle app version update
+    useEffect(() => {
+        updateSWRef.current = registerSW({
+            onNeedRefresh() {
+                setNewVersion(true);
+            },
+            onOfflineReady() {
+                alert("offline ready");
+            },
+        });
+        return () => {};
     }, []);
 
     const router = createBrowserRouter([
@@ -96,6 +115,11 @@ const App = () => {
     return (
         <>
             {network === NetworkStatus.OFFLINE ? <OfflineBanner /> : null}
+            {newVersion ? (
+                <NewVersionbanner
+                    update={() => updateSWRef.current && updateSWRef.current()}
+                />
+            ) : null}
             <RouterProvider router={router} />
         </>
     );
