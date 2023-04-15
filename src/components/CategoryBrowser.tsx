@@ -122,8 +122,9 @@ const CategoryBrowser: FC<props> = ({
                                 .filter((c) =>
                                     selectedIndexes.includes(c.dbIndex)
                                 )
-                                .map((category) => (
+                                .map((category, i) => (
                                     <CategoryElement
+                                        key={i}
                                         category={category}
                                         removable
                                         remove={() =>
