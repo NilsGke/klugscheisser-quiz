@@ -78,10 +78,11 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                button {
+                button.select,
+                button.remove {
                     height: 30px;
                     aspect-ratio: 1;
-                    border: 1px solid $lighterDark;
+                    border: 1px solid $grey;
                     display: flex;
                     align-items: center;
                     justify-content: center;
