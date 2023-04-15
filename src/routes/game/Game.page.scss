@@ -27,7 +27,7 @@
             justify-content: center;
             flex-direction: column;
 
-            background: black;
+            background: $dark;
             height: 30vh;
             max-height: 30vh;
             width: 100%;
@@ -58,7 +58,7 @@
                 }
             }
 
-            .buzzered {
+            &.buzzered {
             }
         }
     }
@@ -76,6 +76,13 @@
         grid-template-columns: repeat(1fr, 30);
         grid-auto-flow: column;
 
+        h2 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
         .fieldContainer {
             height: 100%;
             .field {
@@ -88,6 +95,12 @@
                 margin: 0;
                 font-size: 25px;
                 cursor: pointer;
+                &:has(.description),
+                &:has(.question),
+                &:has(.answer),
+                &.answered {
+                    cursor: default;
+                }
 
                 transition: all 0.2s ease-out;
                 border-radius: 10px;
@@ -151,11 +164,12 @@
                                 margin-top: 5px;
                             }
                         }
-                        .question {
+                        .question,
+                        .answer {
                             height: 100%;
                             width: 100%;
                             padding: 4%;
-                            > button {
+                            > button.reveal {
                                 position: absolute;
                                 bottom: 20px;
                                 font-size: 20px;
@@ -186,12 +200,26 @@
                                     border-radius: 10px;
                                 }
                             }
+                            .videoPlayer {
+                                height: 80%;
+                                width: 80%;
+                                &.playing {
+                                    animation-name: none;
+                                }
+                                .videoContainer {
+                                    width: 100%;
+                                    height: 100%;
+                                    video {
+                                        height: 100%;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
 
                 &.answered {
-                    color: $lighterDark;
+                    color: $grey;
                 }
                 &:not(.selected) {
                     border-color: $lighterDark;
@@ -201,18 +229,125 @@
                     animation: spinningBackground 3s linear infinite;
                     padding: 2px;
                     border: none;
-                    box-shadow: 0 0 50px shade($white, 60%);
+                    box-shadow: 0 0 50px shade($white, 90%);
                     > div {
                     }
                     .contentContainer {
                         > button.close {
                             opacity: 1;
                         }
+                        .content {
+                            .answer {
+                                height: 100%;
+                                width: 100%;
+                                position: relative;
+                                .points {
+                                    position: absolute;
+                                    bottom: 30px;
+                                    transition: bottom 0.2s ease-in-out;
+
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    flex-direction: column;
+                                    flex-wrap: nowrap;
+                                    gap: 10px;
+
+                                    button,
+                                    input {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+
+                                        height: 40px;
+                                        background-color: transparent;
+                                        border: 1px solid $white;
+                                        border-radius: 5px;
+                                        padding: 10px;
+                                        color: $white;
+                                        cursor: pointer;
+                                        font-size: 24px;
+                                        img {
+                                            height: 100%;
+                                            filter: invert(1);
+                                        }
+                                        &[type="number"] {
+                                            width: 70px;
+                                            &::-webkit-inner-spin-button,
+                                            &::-webkit-outer-spin-button {
+                                                -webkit-appearance: none;
+                                                margin: 0;
+                                            }
+                                            cursor: text;
+                                        }
+                                    }
+
+                                    > div {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        gap: 10px;
+                                    }
+
+                                    .normal {
+                                        button {
+                                            &:nth-child(1) {
+                                                color: $red;
+                                                transition: all 0.2s linear;
+                                                &:hover {
+                                                    color: $white;
+                                                    background: $red;
+                                                }
+                                            }
+                                            &:nth-child(3) {
+                                                color: $green;
+                                                transition: all 0.2s linear;
+                                                &:hover {
+                                                    color: $white;
+                                                    background: $green;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .custom {
+                                        max-height: 40px;
+                                        transition: max-height 0.2s ease-in-out;
+                                        overflow: hidden;
+                                        &.hidden {
+                                            max-height: 0px;
+                                        }
+                                        button {
+                                            transition: all 0.2s linear;
+                                            &:nth-child(1) {
+                                                color: $red;
+                                                &:hover {
+                                                    color: $white;
+                                                    background: $red;
+                                                }
+                                            }
+                                            &:nth-child(3) {
+                                                &:hover {
+                                                    background: $yellow;
+                                                }
+                                            }
+                                            &:nth-child(4) {
+                                                color: $green;
+                                                &:hover {
+                                                    color: $white;
+                                                    background: $green;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     background: conic-gradient(
                         from var(--gradient-angle),
-                        #000,
-                        #fff
+                        $lighterDark,
+                        $lighterDark,
+                        $white
                     );
                     animation: rotation 4s linear infinite;
                     z-index: 2;
