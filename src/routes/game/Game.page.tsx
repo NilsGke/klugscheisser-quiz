@@ -1,4 +1,5 @@
 import {
+    Fragment,
     RefObject,
     useCallback,
     useEffect,
@@ -7,6 +8,9 @@ import {
     useState,
 } from "react";
 import Setup from "./setup/Setup";
+import editIcon from "../../assets/edit.svg";
+import checkIcon from "../../assets/check.svg";
+
 // types
 import {
     Game,
@@ -173,6 +177,41 @@ const Game = () => {
         ];
     };
 
+    const grantPoints = (points: number) => {
+        if (buzzeredTeamIndex === null)
+            throw new Error(
+                "buzzeredTeamIndex is null while trying to grant points to team"
+            );
+
+        setGameData((prev) => {
+            if (prev === null)
+                throw new Error("game is null while trying to set score");
+            if (selected === null)
+                throw new Error(
+                    "selected team is null while trying to set score and disable field"
+                );
+
+            const newTeams = prev.teams;
+            newTeams[buzzeredTeamIndex].score += points;
+
+            const newCategories = prev.categories;
+            const field =
+                newCategories[selected.categoryIndex].fields[
+                    selected.fieldIndex
+                ];
+            field.answered = prev.teams[buzzeredTeamIndex].name;
+
+            return {
+                categories: newCategories,
+                teams: newTeams,
+            };
+        });
+        abortTimers();
+        setBuzzeredTeamIndex(null);
+        setSelected(null);
+        setGameState(State.idle);
+    };
+
     if (loading) return <Spinner />;
 
     if (gameData === null)
@@ -210,7 +249,7 @@ const Game = () => {
             </div>
             <div id="categories" ref={categoriesRef}>
                 {gameData.categories.map((category, categoryIndex) => (
-                    <>
+                    <Fragment key={category.name + categoryIndex}>
                         <h2>{category.name}</h2>
                         <>
                             {category.fields.map((field, fieldIndex) => (
@@ -218,6 +257,9 @@ const Game = () => {
                                     key={fieldIndex}
                                     field={field}
                                     points={(fieldIndex + 1) * 100}
+                                    grantPoints={(points) =>
+                                        grantPoints(points)
+                                    }
                                     selected={
                                         selected?.categoryIndex ===
                                             categoryIndex &&
@@ -245,7 +287,7 @@ const Game = () => {
                                 />
                             ))}
                         </>
-                    </>
+                    </Fragment>
                 ))}
             </div>
         </div>
@@ -255,6 +297,7 @@ const Game = () => {
 const Field = ({
     field,
     points,
+    grantPoints,
     selected,
     unselect,
     onClick,
@@ -266,6 +309,7 @@ const Field = ({
 }: {
     field: GameField;
     points: number;
+    grantPoints: (points: number) => void;
     selected: boolean;
     unselect: () => void;
     onClick: () => void;
@@ -367,6 +411,9 @@ const Field = ({
         }, 500);
     };
 
+    const [showCustomPoints, setShowCustomPoints] = useState(false);
+    const [customPoints, setCustomPoints] = useState<number | "">("");
+
     return (
         <div className="fieldContainer" ref={fieldContainerRef}>
             <div
@@ -435,7 +482,7 @@ const Field = ({
                                             />
                                         )}
                                         <button
-                                            className="answer"
+                                            className="reveal"
                                             style={{
                                                 opacity:
                                                     buzzeredTeamIndex === null
@@ -464,6 +511,115 @@ const Field = ({
                                         <ResourceDisplay
                                             resource={field.answer}
                                         />
+                                        {buzzeredTeamIndex !== null ? (
+                                            <div className="points">
+                                                <div className="normal">
+                                                    <button
+                                                        onClick={() => {
+                                                            grantPoints(
+                                                                -points
+                                                            );
+                                                            close();
+                                                        }}
+                                                    >
+                                                        -{points}
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            setShowCustomPoints(
+                                                                (prev) => !prev
+                                                            )
+                                                        }
+                                                    >
+                                                        <img
+                                                            src={editIcon}
+                                                            alt=""
+                                                        />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            grantPoints(points);
+                                                            close();
+                                                        }}
+                                                    >
+                                                        {points}
+                                                    </button>
+                                                </div>
+                                                <div
+                                                    className={
+                                                        "custom" +
+                                                        (showCustomPoints
+                                                            ? " visible"
+                                                            : " hidden")
+                                                    }
+                                                >
+                                                    <button
+                                                        onClick={() => {
+                                                            grantPoints(
+                                                                Math.round(
+                                                                    points / 2
+                                                                ) * -1
+                                                            );
+                                                            close();
+                                                        }}
+                                                    >
+                                                        -
+                                                        {Math.round(points / 2)}
+                                                    </button>
+                                                    <input
+                                                        type="number"
+                                                        placeholder={Math.round(
+                                                            points / 3
+                                                        ).toString()}
+                                                        value={customPoints}
+                                                        onChange={(e) =>
+                                                            setCustomPoints(
+                                                                isNaN(
+                                                                    parseInt(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                )
+                                                                    ? ""
+                                                                    : parseInt(
+                                                                          e
+                                                                              .target
+                                                                              .value
+                                                                      )
+                                                            )
+                                                        }
+                                                        className="custom dontBuzzer"
+                                                    />
+                                                    <button
+                                                        className="submit"
+                                                        onClick={() => {
+                                                            grantPoints(
+                                                                customPoints ||
+                                                                    0
+                                                            );
+                                                            close();
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={checkIcon}
+                                                            alt=""
+                                                        />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            grantPoints(
+                                                                Math.round(
+                                                                    points / 2
+                                                                )
+                                                            );
+                                                            close();
+                                                        }}
+                                                    >
+                                                        {Math.round(points / 2)}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : null}
                                     </div>
                                 ) : null}
                             </>
@@ -560,8 +716,10 @@ const Team = ({
 
             <div className="content">
                 <div className="members">
-                    {team.members.map((memberName) => (
-                        <div className="member">{memberName}</div>
+                    {team.members.map((memberName, i) => (
+                        <div className="member" key={memberName}>
+                            {memberName}
+                        </div>
                     ))}
                 </div>
                 <div className="score">
