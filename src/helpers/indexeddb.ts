@@ -93,7 +93,7 @@ export const initIndexedDB = () =>
                 );
 
             // add volume to categories media
-            if (event.oldVersion === 0 || event.newVersion === 5)
+            if (event.newVersion === 5)
                 proms.push(
                     new Promise((resolve, reject) => {
                         const transaction = (event.target as IDBOpenDBRequest)
