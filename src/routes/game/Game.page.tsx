@@ -38,6 +38,7 @@ import TimeBar from "../../components/TimeBar";
 import "./Game.page.scss";
 //assets
 import closeIcon from "../../assets/close.svg";
+import JSConfetti from "js-confetti";
 
 enum State {
     idle = "idle",
@@ -47,6 +48,8 @@ enum State {
     showAnswer = "showAnswer",
     goingSmall = "goingSmall",
 }
+
+const jsConfetti = new JSConfetti();
 
 const Game = () => {
     const [gameData, setGameData] = useState<Game | null>(null);
@@ -200,6 +203,18 @@ const Game = () => {
                     selected.fieldIndex
                 ];
             field.answered = prev.teams[buzzeredTeamIndex].name;
+
+            jsConfetti.addConfetti({
+                confettiColors: [prev.teams[buzzeredTeamIndex].color],
+                confettiNumber: points,
+                confettiRadius: 4,
+            });
+            if (points > 0)
+                jsConfetti.addConfetti({
+                    confettiNumber: 20,
+                    emojis: ["✅"],
+                    emojiSize: 20,
+                });
 
             return {
                 categories: newCategories,
