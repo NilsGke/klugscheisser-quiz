@@ -6,13 +6,15 @@ import "./index.scss";
 import OfflineBanner from "./components/OfflineBanner";
 import Help from "./routes/help/Help.page";
 import Categories from "./routes/categories/Categories.page";
-import Editor from "./routes/edit/Editor.page";
+import CategoryEditor from "./routes/edit/Editor.page";
 import Game from "./routes/game/Game.page";
 import { initIndexedDB } from "./helpers/indexeddb";
 import Spinner from "./components/Spinner";
 import Viewer from "./routes/viewer/View.page";
 import { registerSW } from "virtual:pwa-register";
 import NewVersionbanner from "./components/NewVersionbanner";
+import Boards from "./routes/boards/Boards.page";
+import BoardEditor from "./routes/boards/editor/BoardEditor.page";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -74,33 +76,47 @@ const App = () => {
             path: "/help",
             element: <Help />,
         },
-        {
-            path: "/editor",
-            element: <Editor />,
-        },
-        {
-            path: "/editor/:dbIndex",
-            element: <Editor />,
-        },
+        // categories
         {
             path: "/categories",
             element: <Categories />,
         },
         {
+            path: "/categories/editor",
+            element: <CategoryEditor />,
+        },
+        {
+            path: "/categories/editor/:dbIndex",
+            element: <CategoryEditor />,
+        },
+        {
+            path: "/categories/test/:dbIndex",
+            element: <Game />,
+        },
+        {
+            path: "/categories/view/:dbIndex",
+            element: <Viewer />,
+        },
+        {
+            path: "/categories/test/:dbIndex/destroy",
+            element: <Game />,
+        },
+        // boards
+        {
+            path: "/boards",
+            element: <Boards />,
+        },
+        {
+            path: "/boards/editor",
+            element: <BoardEditor />,
+        },
+        {
+            path: "/boards/editor/:dbIndex",
+            element: <BoardEditor />,
+        },
+        {
             path: "/game",
             element: <Game />,
-        },
-        {
-            path: "/test/:dbIndex",
-            element: <Game />,
-        },
-        {
-            path: "/test/:dbIndex/destroy",
-            element: <Game />,
-        },
-        {
-            path: "/view/:dbIndex",
-            element: <Viewer />,
         },
     ]);
 
