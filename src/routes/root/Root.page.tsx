@@ -1,10 +1,10 @@
 import "./Root.page.scss";
 import { Link } from "react-router-dom";
 // assets
-import playIcon from "../../assets/play.svg";
-import gridIcon from "../../assets/grid.svg";
+import playIcon from "../../assets/playOutline.svg";
 import helpIcon from "../../assets/help.svg";
-import editIcon from "../../assets/edit.svg";
+import boardIcon from "../../assets/board.svg";
+import categoryIcon from "../../assets/category.svg";
 import backgroundImage from "../../assets/background.excalidraw.svg";
 
 const Root = () => {
@@ -12,17 +12,17 @@ const Root = () => {
         <div className="root">
             <h1>Klugscheißer Quiz</h1>
             <div className="pages">
-                <Link to={"/categories"}>
-                    <h2 className="desc">My Categories</h2>
-                    <img src={gridIcon} alt="icon showing a grid (category)" />
+                <Link to={"/boards"}>
+                    <h2 className="desc">Boards</h2>
+                    <img src={boardIcon} alt="grid icon (board)" />
                 </Link>
                 <Link to={"/game"}>
                     <h2 className="desc">Play</h2>
                     <img src={playIcon} alt="play icon" />
                 </Link>
-                <Link to={"/editor"}>
-                    <h2 className="desc">Editor</h2>
-                    <img src={editIcon} alt="question mark icon" />
+                <Link to={"/categories"}>
+                    <h2 className="desc">Categories</h2>
+                    <img src={categoryIcon} alt="category icon" />
                 </Link>
             </div>
             <Link to={"/help"} className="helpIcon">
