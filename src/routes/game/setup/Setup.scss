@@ -195,98 +195,173 @@
     }
 
     .categorySelector {
-        height: 80vh;
+        height: 90vh;
+        width: 95vw;
+
+        max-width: 1760px;
+
+        button.openBoards {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 20px;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid $grey;
+            background-color: transparent;
+            color: $white;
+            cursor: pointer;
+            box-shadow: 0 0 0 #7f7e7b;
+            transition: all 0.2s ease-out;
+            &:hover {
+                background-color: $white;
+                color: $dark;
+                border-color: $white;
+                box-shadow: 0 0 20px #fefbf5;
+            }
+        }
         .container {
+            height: 90%;
+            width: 100%;
             display: flex;
-            .categoriesWrapper {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 100%;
-                gap: 10px;
+            position: relative;
+            .categoryBrowser {
+                height: 80vh;
+                padding: 0;
 
-                .category {
-                    height: 100%;
+                .categoriesWrapper {
                     display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    gap: 10px;
 
-                    .head {
+                    .category {
+                        height: 100%;
                         display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        position: relative;
-                        width: 100%;
 
-                        h3 {
-                            font-size: 20px;
-                        }
-                        button.remove {
-                            background-color: transparent;
-                            border: none;
-                            position: absolute;
-                            right: 0;
-                            cursor: pointer;
-                            height: 30px;
-                            aspect-ratio: 1;
-                            img {
-                                height: 70%;
+                        .head {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                            width: 100%;
+
+                            h3 {
+                                font-size: 20px;
                             }
-                        }
-                    }
-                    .fields {
-                        height: 95%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-direction: column;
-                        gap: 5px;
-                        .field {
-                            height: calc(20% - 8px);
-                            > div {
-                                height: 100%;
-                                width: 100%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                background-color: $lighterDark;
-                                padding: 5px;
-                                border-radius: 8px;
-                                > img,
-                                > div {
-                                    height: 90%;
-                                    border-radius: 5px;
+                            button.remove {
+                                background-color: transparent;
+                                border: none;
+                                position: absolute;
+                                right: 0;
+                                cursor: pointer;
+                                height: 30px;
+                                aspect-ratio: 1;
+                                img {
+                                    height: 70%;
                                 }
                             }
                         }
-                    }
+                        .fields {
+                            height: 95%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            flex-direction: column;
+                            gap: 5px;
+                            .field {
+                                height: calc(20% - 8px);
+                                > div {
+                                    height: 100%;
+                                    width: 100%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    background-color: $lighterDark;
+                                    padding: 5px;
+                                    border-radius: 8px;
+                                    > img,
+                                    > div {
+                                        height: 90%;
+                                        border-radius: 5px;
+                                    }
+                                }
+                            }
+                        }
 
-                    &.add {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        position: relative;
-                        transition: background 0.2s ease-out;
-                        &:hover {
-                            background-color: $lighterDark;
-                        }
-                        img {
-                            filter: invert(1);
-                            height: 10%;
-                            opacity: 0.2;
-                        }
-                        input {
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            height: 100%;
-                            width: 100%;
-                            opacity: 0;
-                            cursor: pointer;
+                        &.add {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            position: relative;
+                            transition: background 0.2s ease-out;
+                            &:hover {
+                                background-color: $lighterDark;
+                            }
+                            img {
+                                filter: invert(1);
+                                height: 10%;
+                                opacity: 0.2;
+                            }
+                            input {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                height: 100%;
+                                width: 100%;
+                                opacity: 0;
+                                cursor: pointer;
+                            }
                         }
                     }
                 }
             }
-            .categoryBrowser {
-                height: 80vh;
+        }
+    }
+    .selectBoardWrapper {
+        position: absolute;
+        height: 100svh;
+        width: 100svw;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(5px) brightness(0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: -1;
+        opacity: 0;
+        transition: all 0.2s ease-out;
+
+        &.visible {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .selectBoard {
+            padding: 10px;
+            background: $dark;
+            border-radius: 20px;
+            height: 80vh;
+            width: 80vw;
+            max-width: 1000px;
+            position: relative;
+
+            button.close {
+                background-color: transparent;
+                border: none;
+                position: absolute;
+                cursor: pointer;
+                top: 20px;
+                right: 20px;
+
+                height: 30px;
+                aspect-ratio: 1;
+
+                img {
+                    height: 80%;
+                    aspect-ratio: 1;
+                }
             }
         }
     }
@@ -295,7 +370,7 @@
     .previous,
     .done {
         position: absolute;
-        background-color: transparent;
+        background-color: $lighterDark;
         border-radius: 30px;
         border: 1px solid $lighterDark;
         color: $white;
@@ -303,6 +378,7 @@
         cursor: pointer;
         transition: background 0.2s ease-out;
         font-size: 20px;
+        z-index: 1;
         &:hover {
             background-color: $lighterDark;
         }
