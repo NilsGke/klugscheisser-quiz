@@ -7,10 +7,14 @@
     display: flex;
     align-items: start;
     justify-content: center;
-    gap: 60px;
+    gap: 30px;
+    width: 100%;
 
     .browser {
         height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
         .searchHeader {
             width: 100%;
             display: flex;
@@ -28,8 +32,13 @@
             }
         }
         .results {
-            height: 95%;
+            height: 100%;
+            display: flex;
             overflow-y: scroll;
+            .category {
+                max-height: 150px;
+                margin: 0;
+            }
         }
     }
     .separator {
@@ -144,8 +153,13 @@
         }
     }
 
-    .selected .categories {
-        flex-direction: column;
-        flex-wrap: nowrap;
+    .selected {
+        min-width: 430px;
+        overflow-y: scroll;
+        height: 100%;
+        .categories {
+            flex-direction: column;
+            flex-wrap: nowrap;
+        }
     }
 }
