@@ -87,18 +87,21 @@ const Game = () => {
             document.getElementById("gamePage")?.animate(
                 [
                     {
-                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
+                        boxShadow: `inset 0 0 0px 10px ${team.color}`,
                     },
                     {
-                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
+                        boxShadow: `inset 0 0 400px 190px ${team.color}`,
                     },
+                    ...new Array(5).fill({
+                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
+                    }),
                     {
                         boxShadow: `inset 0 0 0px -30px transparent`,
                     },
                 ],
                 {
-                    duration: 1500,
-                    easing: "ease-in",
+                    duration: 3000,
+                    easing: "ease-out",
                 }
             );
         },
