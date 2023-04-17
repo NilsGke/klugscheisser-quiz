@@ -1,0 +1,45 @@
+@import "../../colors.scss";
+
+#boardsPage {
+    height: 100svh;
+    width: 100svw;
+    padding: 40px;
+    h1 {
+        display: flex;
+        justify-content: center;
+    }
+    .content {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        grid-template-rows: 100%;
+        height: auto;
+        max-height: 90vh;
+        > button.add {
+            align-self: center;
+            height: 50%;
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid #4c4c4c;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-direction: column;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+            &:hover {
+                transform: scale(1.02);
+            }
+            img {
+                height: 60%;
+                filter: invert(0.4);
+            }
+            p {
+                margin-bottom: 10%;
+                font-size: 20px;
+                color: #fefbf5;
+            }
+        }
+    }
+}

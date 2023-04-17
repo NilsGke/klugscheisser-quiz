@@ -1,0 +1,224 @@
+@import "../../../colors.scss";
+
+#boardEditor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .editor {
+        height: 100svh;
+        width: 100svw;
+        max-width: 1500px;
+        padding: 35px;
+        .topRow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 20px;
+            input {
+                width: 100%;
+                background-color: transparent;
+                border: 1px solid $grey;
+                border-radius: 20px;
+                padding: 8px;
+                font-size: 22px;
+                color: $white;
+                height: 50px;
+            }
+            button {
+                height: 50px;
+                cursor: pointer;
+                border-radius: 20px;
+                padding: 10px 15px;
+                box-shadow: 0 0 20px #7f7e7b;
+                white-space: nowrap;
+                transition: all 0.2s ease-out;
+                background-color: transparent;
+                border: 1px solid #fefbf5;
+                font-size: 20px;
+                color: #fefbf5;
+                &:hover {
+                    background-color: #fefbf5;
+                    color: #151516;
+                    box-shadow: 0 0 30px #fefbf5;
+                }
+            }
+            @media (max-width: 1635px) {
+                input {
+                    margin-left: 70px;
+                }
+            }
+        }
+        .categories {
+            height: 94%;
+            width: 100%;
+            display: grid;
+
+            .category {
+                height: 100% !important;
+                border: none;
+
+                h2 {
+                    white-space: nowrap;
+                }
+
+                .fields {
+                    margin-top: 20px;
+                    height: 95%;
+                    width: 100%;
+                    display: grid;
+                    grid-template-rows: repeat(5, 1fr);
+                    gap: 5px;
+                    place-items: center;
+                    .field {
+                        background-color: $lighterDark;
+                        max-width: 350px;
+                        display: grid;
+                        place-items: center;
+                        height: 100%;
+                        width: 100%;
+                        position: relative;
+
+                        > div {
+                            position: absolute;
+                            height: 100%;
+                            width: 100%;
+                            top: 0;
+                            left: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 20px;
+
+                            &:first-child {
+                                overflow: hidden;
+                                filter: blur(1px) brightness(80%);
+                                padding: 5px;
+
+                                &.image {
+                                    max-height: 100%;
+                                    height: 100%;
+                                    img {
+                                        border-radius: 5px;
+                                        max-height: 100%;
+                                        max-width: 100%;
+                                    }
+                                }
+                            }
+                            &:last-child {
+                                background-color: $lighterDark;
+                                opacity: 0.9;
+                                transition: opacity 0.2s ease-out;
+                                color: $white;
+                            }
+                        }
+
+                        &:hover {
+                            > div:first-child {
+                                filter: none;
+                            }
+                            > div:last-child {
+                                opacity: 0;
+                                pointer-events: none;
+                            }
+                        }
+                    }
+                }
+
+                .controls {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-top: 20px;
+
+                    button {
+                        background-color: transparent;
+                        border: none;
+                        height: 30px;
+                        aspect-ratio: 1;
+                        cursor: pointer;
+                        img {
+                            height: 80%;
+                        }
+                        &.move {
+                            img {
+                                filter: invert(1);
+                            }
+                            &.left {
+                                rotate: 90deg;
+                            }
+                            &.right {
+                                rotate: -90deg;
+                            }
+                        }
+                    }
+                }
+
+                &.add {
+                    padding: 0;
+                    button {
+                        border-radius: 20px;
+                        height: 100%;
+                        width: 100%;
+                        background-color: transparent;
+                        cursor: pointer;
+                        border: none;
+                        img {
+                            height: 70px;
+                            filter: invert(0.3);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .addCategoryContainer {
+        position: absolute;
+        height: 100svh;
+        width: 100svw;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(4px) brightness(0.5);
+
+        &.hidden {
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .addCategory {
+            height: 80%;
+            width: 80%;
+            background: $dark;
+            border-radius: 30px;
+            position: relative;
+            button.close {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background-color: transparent;
+                cursor: pointer;
+                border-radius: 100%;
+                height: 40px;
+                aspect-ratio: 1;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                img {
+                    height: 70%;
+                    width: 70%;
+                }
+            }
+            .searchHeader {
+                width: calc(100% - 50px);
+            }
+            .categoryBrowser {
+                height: 100%;
+            }
+        }
+    }
+}
