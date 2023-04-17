@@ -5,9 +5,11 @@ import VideoPlayer from "./VideoPlayer";
 const ResourceRenderer = ({
     resource,
     autoplay = false,
+    small = false,
 }: {
     resource: Resource;
     autoplay?: boolean;
+    small?: boolean;
 }) => {
     if (resource.type === "image") {
         const url = URL.createObjectURL(resource.content);
@@ -32,6 +34,7 @@ const ResourceRenderer = ({
                 file={resource.content}
                 initialVolume={resource.volume}
                 autoplay={autoplay}
+                small={small}
             />
         );
     else if (resource.type === "text")
