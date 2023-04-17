@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import "./CategoryBrowser.scss";
 import { Category } from "../types/categoryTypes";
 import { Indexed, getStoredCategories } from "../helpers/indexeddb";
@@ -8,15 +8,20 @@ import testIcon from "../assets/test.svg";
 import checkIcon from "../assets/check.svg";
 import removeIcon from "../assets/close.svg";
 import eyeIcon from "../assets/eye.svg";
+import autoAnimate from "@formkit/auto-animate";
 
 type props = {
     selecting?: boolean;
     submit?: (categories: Indexed<Category>[]) => void;
-    onChange?: (categories: Indexed<Category>[]) => void;
     finish?: boolean;
 
     chooseOne?: boolean;
     choose?: (category: Indexed<Category>) => void;
+
+    exclude?: Indexed<Category>["dbIndex"][];
+
+    setSelected?: (selected: Indexed<Category>[]) => void;
+    selected?: Indexed<Category>[];
 };
 enum Purpose {
     VIEWING,
@@ -24,14 +29,19 @@ enum Purpose {
     SELECTING_MULTIPLE,
 }
 
+/** adding `selected` prop makes this component controlled by its parent */
 const CategoryBrowser: FC<props> = ({
     submit,
-    selecting = false,
-    onChange,
     finish = false,
 
     chooseOne = false,
     choose,
+
+    exclude = [],
+
+    selecting = false,
+    selected,
+    setSelected,
 }) => {
     const purpose: Purpose = selecting
         ? Purpose.SELECTING_MULTIPLE
@@ -44,28 +54,26 @@ const CategoryBrowser: FC<props> = ({
 
     const [searchTerm, setSearchTerm] = useState("");
 
-    const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+    const listRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (listRef.current) autoAnimate(listRef.current);
+    }, []);
 
-    const filtered = categories.filter(
-        (category) =>
-            category.name.includes(searchTerm) ||
-            category.description.includes(searchTerm)
-    );
-
-    if (onChange)
-        useEffect(() => {
-            onChange(
-                categories.filter((category) =>
-                    selectedIndexes.includes(category.dbIndex)
-                )
-            );
-        }, [selectedIndexes]);
+    const filtered = categories
+        .filter((category) => !exclude.includes(category.dbIndex))
+        .filter(
+            (category) =>
+                category.name
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase()) ||
+                category.description
+                    .toLowerCase()
+                    .includes(searchTerm.toLowerCase())
+        );
 
     const submitFun = () => {
-        if (!submit) return;
-        const chosenCategories = categories.filter((c) =>
-            selectedIndexes.includes(c.dbIndex)
-        );
+        if (!submit || !selected) return;
+        const chosenCategories = categories.filter((c) => selected.includes(c));
         submit(chosenCategories);
     };
 
@@ -79,7 +87,7 @@ const CategoryBrowser: FC<props> = ({
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                <div className="results">
+                <div className="results" ref={listRef}>
                     {filtered.map((category) => (
                         <CategoryElement
                             key={category.dbIndex}
@@ -88,21 +96,15 @@ const CategoryBrowser: FC<props> = ({
                             choosable={chooseOne}
                             choose={choose ? () => choose(category) : undefined}
                             toggle={() => {
-                                if (!selectedIndexes.includes(category.dbIndex))
-                                    setSelectedIndexes((prev) => [
-                                        ...prev,
-                                        category.dbIndex,
-                                    ]);
+                                if (!selected || !setSelected) return;
+                                if (!selected.includes(category))
+                                    setSelected([...selected, category]);
                                 else
-                                    setSelectedIndexes((prev) =>
-                                        prev.filter(
-                                            (i) => i !== category.dbIndex
-                                        )
+                                    setSelected(
+                                        selected.filter((i) => i !== category)
                                     );
                             }}
-                            selected={selectedIndexes.includes(
-                                category.dbIndex
-                            )}
+                            selected={selected?.includes(category)}
                         />
                     ))}
 
@@ -112,31 +114,27 @@ const CategoryBrowser: FC<props> = ({
                 </div>
             </div>
 
-            {purpose === Purpose.SELECTING_MULTIPLE ? (
+            {purpose === Purpose.SELECTING_MULTIPLE && selected ? (
                 <>
                     <div className="separator"></div>
                     <div className="selected">
                         <h2>Selected</h2>
                         <div className="categories">
-                            {categories
-                                .filter((c) =>
-                                    selectedIndexes.includes(c.dbIndex)
-                                )
-                                .map((category, i) => (
-                                    <CategoryElement
-                                        key={i}
-                                        category={category}
-                                        removable
-                                        remove={() =>
-                                            setSelectedIndexes((prev) =>
-                                                prev.filter(
-                                                    (i) =>
-                                                        i !== category.dbIndex
+                            {selected.map((category, i) => (
+                                <CategoryElement
+                                    key={i}
+                                    category={category}
+                                    removable
+                                    remove={() => {
+                                        if (setSelected && selected)
+                                            setSelected(
+                                                selected.filter(
+                                                    (c) => c !== category
                                                 )
-                                            )
-                                        }
-                                    />
-                                ))}
+                                            );
+                                    }}
+                                />
+                            ))}
                         </div>
                         {finish ? (
                             <button className="submit" onClick={submitFun}>
@@ -208,9 +206,9 @@ const CategoryElement = ({
                 {!choosable ? (
                     <button
                         className="edit"
-                        title="open category in editor"
+                        title="edit category"
                         onClick={() =>
-                            window.open(`/editor/${category.dbIndex}`, "_blank")
+                            (window.location.href = `/categories/editor/${category.dbIndex}`)
                         }
                     >
                         <img src={editIcon} alt="edit icon" />
@@ -220,7 +218,10 @@ const CategoryElement = ({
                     className="view"
                     title="view category"
                     onClick={() =>
-                        window.open(`/view/${category.dbIndex}`, "_blank")
+                        window.open(
+                            `/categories/view/${category.dbIndex}`,
+                            "_blank"
+                        )
                     }
                 >
                     <img src={eyeIcon} alt="view icon" />
@@ -229,7 +230,10 @@ const CategoryElement = ({
                     className="test"
                     title="test category in a game"
                     onClick={() =>
-                        window.open(`/test/${category.dbIndex}`, "_blank")
+                        window.open(
+                            `/categories/test/${category.dbIndex}`,
+                            "_blank"
+                        )
                     }
                 >
                     <img src={testIcon} alt="test in new Tab icon" />
