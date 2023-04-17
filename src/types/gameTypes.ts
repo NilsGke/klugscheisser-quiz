@@ -1,3 +1,4 @@
+import { Indexed } from "../helpers/indexeddb";
 import { Category, Field } from "./categoryTypes";
 
 export interface Game {
@@ -5,7 +6,7 @@ export interface Game {
     categories: GameCategory[];
 }
 
-export interface GameCategory extends Omit<Category, "fields"> {
+export interface GameCategory extends Omit<Indexed<Category>, "fields"> {
     fields: [GameField, GameField, GameField, GameField, GameField];
 }
 
@@ -30,7 +31,9 @@ export const TeamColors = [
     "#f0f",
 ] as const;
 
-export const categoryToGameCategory = (category: Category): GameCategory => {
+export const categoryToGameCategory = (
+    category: Indexed<Category>
+): GameCategory => {
     const gameCategory: GameCategory = {
         ...category,
         fields: [
