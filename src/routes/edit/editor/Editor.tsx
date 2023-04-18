@@ -16,8 +16,8 @@ import {
     storeCategoryInDB,
     updateCategoryInDB,
 } from "../../../helpers/indexeddb";
-import HomeButton from "../../../components/HomeButton";
 import testIcon from "../../../assets/test.svg";
+import BackButton from "../../../components/BackButton";
 
 const Edit = ({
     initialCategory,
@@ -96,7 +96,9 @@ const Edit = ({
                 promiseDbIndex.then((promisedDbIndex) => {
                     if (dbIndex === undefined) {
                         window.onbeforeunload = null;
-                        window.location.replace(`/editor/${promisedDbIndex}`);
+                        window.location.replace(
+                            `/categories/editor/${promisedDbIndex}`
+                        );
                     }
                     toast("✅ category saved and exported");
                     setTimeout(() => setExporting(false), 1000);
@@ -138,7 +140,7 @@ const Edit = ({
 
     return (
         <div id="edit">
-            <HomeButton confirm />
+            <BackButton confirm to="/categories" />
             <div id="topRow">
                 <input
                     type="text"

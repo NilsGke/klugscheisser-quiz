@@ -1,0 +1,112 @@
+@import "../colors.scss";
+
+.boardBrowser {
+    padding: 40px;
+    height: 100%;
+    width: 100%;
+    input {
+        height: 40px;
+        border-radius: 10px;
+        width: 100%;
+        border: 1px solid $grey;
+        background: transparent;
+        margin-bottom: 20px;
+        font-size: 20px;
+        color: $white;
+        padding: 5px;
+    }
+
+    .boardsContainer {
+        height: calc(100% - 40px - 20px);
+        width: 100%;
+        overflow-y: scroll;
+        .boards {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+
+            .board {
+                height: 300px;
+                width: 200px;
+                border: 1px solid $lighterDark;
+                padding: 10px;
+                border-radius: 20px;
+
+                h2 {
+                    height: 30px;
+                    margin-bottom: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .categoriesWrapper {
+                    height: calc(100% - 30px - 10px - 40px - 10px);
+                    overflow-y: scroll;
+                    border: 1px solid $lighterDark;
+                    border-radius: 20px;
+                    padding: 10px;
+                    .categories {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-direction: column;
+                        gap: 5px;
+                        .category {
+                            padding: 5px;
+                            border: 1px solid $lighterDark;
+                            h3 {
+                                white-space: nowrap;
+                                font-size: 15px;
+                            }
+                            &.deleted {
+                                color: $grey;
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+                .actions {
+                    margin-top: 10px;
+                    height: 30px;
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    justify-content: center;
+                    button {
+                        height: 100%;
+                        aspect-ratio: 1;
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        img {
+                            height: 70%;
+                            width: 70%;
+                        }
+                        &.play,
+                        &.edit {
+                            filter: invert(1);
+                        }
+                        &.select {
+                            width: 90px;
+                            background-color: $lighterDark;
+                            border-radius: 20px;
+                            height: 35px;
+                            color: $white;
+                            font-size: 20px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transition: background 0.2s ease-out;
+                            &:hover {
+                                background-color: $grey;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

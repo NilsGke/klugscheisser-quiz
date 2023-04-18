@@ -1,22 +1,21 @@
 import { FC, useEffect, useRef, useState, useCallback } from "react";
 import {
     Game,
-    GameCategory,
     TeamColors,
     categoryToGameCategory,
 } from "../../../types/gameTypes";
 import autoAnimate from "@formkit/auto-animate";
-import { importCategoryFromZip } from "../../../helpers/zip";
 import { Category } from "../../../types/categoryTypes";
 import useKeyboard from "../../../hooks/keyboard";
 import toast from "react-simple-toasts";
 import useClick from "../../../hooks/useClick";
+import { Indexed } from "../../../helpers/indexeddb";
+import { categoryIsDeleted } from "../../../types/boardTypes";
 
 // components
-import AudioPlayer from "../../../components/AudioPlayer";
-import VideoPlayer from "../../../components/VideoPlayer";
-import Spinner from "../../../components/Spinner";
 import HomeButton from "../../../components/HomeButton";
+import CategoryBrowser from "../../../components/CategoryBrowser";
+import BoardBrowser from "../../../components/BoardBrowser";
 
 // assets
 import add from "../../../assets/add.svg";
@@ -24,10 +23,10 @@ import addGroup from "../../../assets/addGroup.svg";
 import trashIcon from "../../../assets/trash.svg";
 import remove from "../../../assets/remove.svg";
 import colorPaletteIcon from "../../../assets/colorPalette.svg";
+import closeIcon from "../../../assets/close.svg";
 
 // styles
 import "./Setup.scss";
-import CategoryBrowser from "../../../components/CategoryBrowser";
 
 enum Step {
     CREATE_TEAMS,
@@ -89,6 +88,23 @@ const CreateTeams = ({
     const teamsList = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (teamsList.current) autoAnimate(teamsList.current);
+    }, []);
+
+    useEffect(() => {
+        setTeams([
+            {
+                color: TeamColors[0],
+                members: [],
+                name: "",
+                score: 0,
+            },
+            {
+                color: TeamColors[1],
+                members: [],
+                name: "",
+                score: 0,
+            },
+        ]);
     }, []);
 
     return (
@@ -323,59 +339,66 @@ const SelectCategories = ({
     categories: Game["categories"];
     setCategories: (categories: Game["categories"]) => void;
 }) => {
-    const [file, setFile] = useState<File | null>(null);
-    const addCategory = useCallback(
-        (category: Category) => {
-            const gameCategory = {
-                ...category,
-                fields: category.fields.map((field) => ({
-                    ...field,
-                    answered: false,
-                })),
-            } as GameCategory;
-            const newCategories = categories.slice();
-            newCategories.push(gameCategory);
-            setCategories(newCategories);
-        },
-        [categories]
-    );
+    const [loadBoardOpen, setLoadBoardOpen] = useState(false);
+    const [selected, setSelected] = useState<Indexed<Category>[]>([]);
 
-    const fileInputRef = useRef<HTMLInputElement>(null);
     useEffect(() => {
-        if (file === null) return;
-        importCategoryFromZip(file).then((category) => {
-            addCategory(category);
-            setFile(null);
-            if (fileInputRef.current) fileInputRef.current.files = null;
-        });
-    }, [file]);
+        setCategories(selected.map(categoryToGameCategory));
+    }, [selected]);
 
-    const categoryListRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (categoryListRef.current) autoAnimate(categoryListRef.current);
-    }, [categoryListRef]);
+    console.log(selected);
 
     return (
-        <div className="categorySelector">
-            <button className="previous" onClick={previous}>
-                &lt;- Teams
-            </button>
-            <h2>select categories</h2>
-            <div className="container">
-                <CategoryBrowser
-                    selecting
-                    onChange={(categories) => {
-                        const gameCategories = categories.map(
-                            categoryToGameCategory
-                        );
-                        setCategories(gameCategories);
-                    }}
-                />
+        <>
+            <div className="categorySelector">
+                <button className="previous" onClick={previous}>
+                    &lt;- Teams
+                </button>
+                <button
+                    onClick={() => setLoadBoardOpen(true)}
+                    className={"openBoards"}
+                >
+                    select board
+                </button>
+                <h2>select categories</h2>
+                <div className="container">
+                    <CategoryBrowser
+                        selecting
+                        setSelected={(categories) => setSelected(categories)}
+                        selected={selected}
+                    />
+                </div>
+
+                <button className="done" onClick={finish}>
+                    Done! -&gt;
+                </button>
             </div>
-            <button className="done" onClick={finish}>
-                Done! -&gt;
-            </button>
-        </div>
+            <div
+                className={
+                    "selectBoardWrapper" + (loadBoardOpen ? " visible" : "")
+                }
+            >
+                <div className="selectBoard">
+                    <button
+                        className="close"
+                        onClick={() => setLoadBoardOpen(false)}
+                    >
+                        <img src={closeIcon} alt="" />
+                    </button>
+                    <BoardBrowser
+                        select={(board) => {
+                            const categories = board.categories.filter(
+                                (c) => !categoryIsDeleted(c)
+                            ) as Indexed<Category>[];
+                            console.log(categories);
+
+                            setSelected([...selected, ...categories]);
+                            setLoadBoardOpen(false);
+                        }}
+                    />
+                </div>
+            </div>
+        </>
     );
 };
 
