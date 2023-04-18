@@ -114,11 +114,13 @@ const Game = () => {
     // load testgame if specified in url
     const { dbIndex } = useParams();
     const [loading, setLoading] = useState(false);
+    const [testMode, setTestMode] = useState(false);
     useEffect(() => {
         if (dbIndex === undefined) return;
         const index = parseInt(dbIndex);
         if (isNaN(index)) return;
         setLoading(true);
+        setTestMode(true);
         getStoredCategory(index).then((category) => {
             setGameData({
                 teams: [
@@ -302,6 +304,7 @@ const Game = () => {
                                     gameState={gameState}
                                     category={category}
                                     buzzeredTeamIndex={buzzeredTeamIndex}
+                                    testMode={testMode}
                                 />
                             ))}
                         </>
@@ -324,6 +327,7 @@ const Field = ({
     gameState,
     category,
     buzzeredTeamIndex,
+    testMode,
 }: {
     field: GameField;
     points: number;
@@ -336,6 +340,7 @@ const Field = ({
     gameState: State;
     category: Category;
     buzzeredTeamIndex: number | null;
+    testMode: boolean;
 }) => {
     const fieldRef = useRef<HTMLDivElement>(null);
 
@@ -503,7 +508,8 @@ const Field = ({
                                             className="reveal"
                                             style={{
                                                 opacity:
-                                                    buzzeredTeamIndex === null
+                                                    buzzeredTeamIndex ===
+                                                        null && !testMode
                                                         ? 0
                                                         : 1,
                                             }}
