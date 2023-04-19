@@ -135,7 +135,7 @@ const Edit = ({
         };
 
         const dbIndex = await storeCategoryInDB(wholeCategory);
-        window.open(`/test/${dbIndex}/destroy`);
+        window.open(`/categories/test/${dbIndex}/destroy`);
     };
 
     return (
