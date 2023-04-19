@@ -12,10 +12,9 @@ import {
     getStoredBoard,
     storeBoardInDB,
     updateBoardInDB,
-} from "../../../db/indexeddb";
+} from "../../../db/boards";
 import toast from "react-simple-toasts";
 import { useParams } from "react-router-dom";
-import HomeButton from "../../../components/HomeButton";
 import BackButton from "../../../components/BackButton";
 
 const BoardEditor = () => {

@@ -6,7 +6,7 @@ import {
     getStoredFiles,
     getStoredFilesLength,
     storeFileInIndexedDB,
-} from "../../../db/indexeddb";
+} from "../../../db/media";
 import toast from "react-simple-toasts";
 import DotSpinner from "../../../components/DotSpinner";
 

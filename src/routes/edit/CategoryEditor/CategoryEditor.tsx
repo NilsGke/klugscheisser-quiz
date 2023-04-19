@@ -6,7 +6,7 @@ import {
     PartialCategory,
 } from "../../../types/categoryTypes";
 import "./Category.scss";
-import { getStoredFile } from "../../../db/indexeddb";
+import { getStoredFile } from "../../../db/media";
 import removeIcon from "../../../assets/close.svg";
 import AudioPlayer from "../../../components/AudioPlayer";
 import VideoPlayer from "../../../components/VideoPlayer";

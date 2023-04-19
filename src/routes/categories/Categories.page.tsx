@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Categories.page.scss";
-import { storeCategoryInDB } from "../../db/indexeddb";
+import { storeCategoryInDB } from "../../db/categories";
 import toast from "react-simple-toasts";
 import { importCategoryFromZip } from "../../helpers/zip";
 import { useNavigate } from "react-router-dom";

@@ -22,7 +22,7 @@ import {
 } from "../../types/gameTypes";
 import { Category, Resource } from "../../types/categoryTypes";
 // helpers
-import { getStoredCategory, removeCategoryFromDb } from "../../db/indexeddb";
+import { getStoredCategory, removeCategoryFromDb } from "../../db/categories";
 // hooks
 import useKeyboard from "../../hooks/keyboard";
 import { useLocation, useParams } from "react-router-dom";

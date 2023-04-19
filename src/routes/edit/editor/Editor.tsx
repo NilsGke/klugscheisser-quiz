@@ -11,11 +11,8 @@ import "./Editor.scss";
 import MediaPool from "../MediaPool/MediaPool";
 import CategoryEditor from "../CategoryEditor/CategoryEditor";
 import { generateZipFromCategory } from "../../../helpers/zip";
-import {
-    Indexed,
-    storeCategoryInDB,
-    updateCategoryInDB,
-} from "../../../db/indexeddb";
+import { Indexed } from "../../../db/indexeddb";
+import { storeCategoryInDB, updateCategoryInDB } from "../../../db/categories";
 import testIcon from "../../../assets/test.svg";
 import BackButton from "../../../components/BackButton";
 
