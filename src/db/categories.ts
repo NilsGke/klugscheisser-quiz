@@ -1,5 +1,5 @@
-import { StoredBoard } from "../types/boardTypes";
-import { Category } from "../types/categoryTypes";
+import { StoredBoard } from "$types/boardTypes";
+import { Category } from "$types/categoryTypes";
 import { db, Indexed } from "./indexeddb";
 
 export const storeCategoryInDB = (category: Category) =>

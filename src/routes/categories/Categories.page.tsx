@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import "./Categories.page.scss";
-import { storeCategoryInDB } from "../../db/categories";
+import { storeCategoryInDB } from "$db/categories";
 import toast from "react-simple-toasts";
-import { importCategoryFromZip } from "../../helpers/zip";
+import { importCategoryFromZip } from "$helpers/zip";
 import { useNavigate } from "react-router-dom";
 // components
-import HomeButton from "../../components/HomeButton";
-import CategoryBrowser from "../../components/CategoryBrowser";
+import HomeButton from "$components/HomeButton";
+import CategoryBrowser from "$components/CategoryBrowser";
 // styles
 import "./Categories.page.scss";
 // assets
-import folderIcon from "../../assets/folder.svg";
-import addIcon from "../../assets/addRound.svg";
-import closeIcon from "../../assets/close.svg";
+import folderIcon from "$assets/folder.svg";
+import addIcon from "$assets/addRound.svg";
+import closeIcon from "$assets/close.svg";
 
 const Categories = () => {
     const [importOpen, setImportOpen] = useState(false);

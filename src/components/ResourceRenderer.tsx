@@ -1,4 +1,4 @@
-import { Resource } from "../types/categoryTypes";
+import { Resource } from "$types/categoryTypes";
 import AudioPlayer from "./AudioPlayer";
 import VideoPlayer from "./VideoPlayer";
 

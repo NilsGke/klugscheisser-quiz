@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { getStoredBoards, removeBoardFromDB } from "../db/boards";
-import { Indexed } from "../db/indexeddb";
-import { Board, categoryIsDeleted } from "../types/boardTypes";
-import playIcon from "../assets/play.svg";
-import deleteIcon from "../assets/delete.svg";
-import editIcon from "../assets/edit.svg";
+import { getStoredBoards, removeBoardFromDB } from "$db/boards";
+import { Indexed } from "$db/indexeddb";
+import { Board, categoryIsDeleted } from "$types/boardTypes";
+import playIcon from "$assets/play.svg";
+import deleteIcon from "$assets/delete.svg";
+import editIcon from "$assets/edit.svg";
 import "./BoardBrowser.scss";
 import { useNavigate } from "react-router-dom";
 import autoAnimate from "@formkit/auto-animate";

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Indexed } from "../../db/indexeddb";
-import { getStoredCategory } from "../../db/categories";
-import { Category } from "../../types/categoryTypes";
-import Spinner from "../../components/Spinner";
-import ResourceRenderer from "../../components/ResourceRenderer";
+import { Indexed } from "$db/indexeddb";
+import { getStoredCategory } from "$db/categories";
+import { Category } from "$types/categoryTypes";
+import Spinner from "$components/Spinner";
+import ResourceRenderer from "$components/ResourceRenderer";
 
 import "./View.page.scss";
 

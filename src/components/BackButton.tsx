@@ -1,7 +1,7 @@
 import "./BackButton.scss";
 
 import { Link } from "react-router-dom";
-import arrowIcon from "../assets/arrow.svg";
+import arrowIcon from "$assets/arrow.svg";
 import "./HomeButton.scss";
 import { FC } from "react";
 

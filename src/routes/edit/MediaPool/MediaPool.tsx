@@ -1,24 +1,24 @@
 import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
-import { IndexedFile, MediaType } from "../../../types/categoryTypes";
+import { IndexedFile, MediaType } from "$types/categoryTypes";
 import "./MediaPool.scss";
 import {
     deleteStoredFile,
     getStoredFiles,
     getStoredFilesLength,
     storeFileInIndexedDB,
-} from "../../../db/media";
+} from "$db/media";
 import toast from "react-simple-toasts";
-import DotSpinner from "../../../components/DotSpinner";
+import DotSpinner from "$components/DotSpinner";
 
 // assets
-import audioIcon from "../../../assets/audioFile.svg";
-import imageIcon from "../../../assets/image.svg";
-import videoIcon from "../../../assets/videoCam.svg";
-import trashIcon from "../../../assets/delete.svg";
+import audioIcon from "$assets/audioFile.svg";
+import imageIcon from "$assets/image.svg";
+import videoIcon from "$assets/videoCam.svg";
+import trashIcon from "$assets/delete.svg";
 import { confirmAlert } from "react-confirm-alert";
 import autoAnimate from "@formkit/auto-animate";
-import AudioPlayer from "../../../components/AudioPlayer";
-import VideoPlayer from "../../../components/VideoPlayer";
+import AudioPlayer from "$components/AudioPlayer";
+import VideoPlayer from "$components/VideoPlayer";
 
 const MediaPool = () => {
     const [mediaType, setMediaType] = useState<MediaType>("image");

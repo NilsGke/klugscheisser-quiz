@@ -1,21 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { Board, categoryIsDeleted } from "../../../types/boardTypes";
-import ResourceRenderer from "../../../components/ResourceRenderer";
-import CategoryBrowser from "../../../components/CategoryBrowser";
-import closeIcon from "../../../assets/close.svg";
-import addIcon from "../../../assets/addRound.svg";
-import deleteIcon from "../../../assets/delete.svg";
-import arrowIcon from "../../../assets/arrow.svg";
+import { Board, categoryIsDeleted } from "$types/boardTypes";
+import ResourceRenderer from "$components/ResourceRenderer";
+import CategoryBrowser from "$components/CategoryBrowser";
+import closeIcon from "$assets/close.svg";
+import addIcon from "$assets/addRound.svg";
+import deleteIcon from "$assets/delete.svg";
+import arrowIcon from "$assets/arrow.svg";
 import "./BoardEditor.page.scss";
 import autoAnimate from "@formkit/auto-animate";
-import {
-    getStoredBoard,
-    storeBoardInDB,
-    updateBoardInDB,
-} from "../../../db/boards";
+import { getStoredBoard, storeBoardInDB, updateBoardInDB } from "$db/boards";
 import toast from "react-simple-toasts";
 import { useParams } from "react-router-dom";
-import BackButton from "../../../components/BackButton";
+import BackButton from "$components/BackButton";
 
 const BoardEditor = () => {
     const [board, setBoard] = useState<Board>({

@@ -4,12 +4,12 @@ import {
     MediaType,
     MediaTypes,
     PartialCategory,
-} from "../../../types/categoryTypes";
+} from "$types/categoryTypes";
 import "./Category.scss";
-import { getStoredFile } from "../../../db/media";
-import removeIcon from "../../../assets/close.svg";
-import AudioPlayer from "../../../components/AudioPlayer";
-import VideoPlayer from "../../../components/VideoPlayer";
+import { getStoredFile } from "$db/media";
+import removeIcon from "$assets/close.svg";
+import AudioPlayer from "$components/AudioPlayer";
+import VideoPlayer from "$components/VideoPlayer";
 
 type props = {
     category: PartialCategory;

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Edit from "./editor/Editor";
-import { PartialCategory, emptyCategory } from "../../types/categoryTypes";
+import { PartialCategory, emptyCategory } from "$types/categoryTypes";
 import "./Editor.page.scss";
-import Spinner from "../../components/Spinner";
-import { getStoredCategory } from "../../db/categories";
+import Spinner from "$components/Spinner";
+import { getStoredCategory } from "$db/categories";
 
 const Editor = () => {
     const [category, setCategory] = useState<PartialCategory | null>(null);

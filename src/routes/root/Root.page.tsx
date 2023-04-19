@@ -1,11 +1,11 @@
 import "./Root.page.scss";
 import { Link } from "react-router-dom";
 // assets
-import playIcon from "../../assets/playOutline.svg";
-import helpIcon from "../../assets/help.svg";
-import boardIcon from "../../assets/board.svg";
-import categoryIcon from "../../assets/category.svg";
-import backgroundImage from "../../assets/background.excalidraw.svg";
+import playIcon from "$assets/playOutline.svg";
+import helpIcon from "$assets/help.svg";
+import boardIcon from "$assets/board.svg";
+import categoryIcon from "$assets/category.svg";
+import backgroundImage from "$assets/background.excalidraw.svg";
 
 const Root = () => {
     return (

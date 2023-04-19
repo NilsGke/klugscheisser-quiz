@@ -1,6 +1,6 @@
 //assets
 import "./Help.page.scss";
-import HomeButton from "../../components/HomeButton";
+import HomeButton from "$components/HomeButton";
 
 const Help = () => {
     return (

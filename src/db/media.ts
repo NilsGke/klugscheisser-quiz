@@ -1,4 +1,4 @@
-import { MediaType, IndexedFile } from "../types/categoryTypes";
+import { MediaType, IndexedFile } from "$types/categoryTypes";
 import { db } from "./indexeddb";
 
 export const storeFileInIndexedDB = (file: File, mediaType: MediaType) => {

@@ -1,15 +1,15 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import getTimeFromSeconds from "../helpers/timeFromSeconds";
+import getTimeFromSeconds from "$helpers/timeFromSeconds";
 
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 // assets
-import playIcon from "../assets/play.svg";
-import pauseIcon from "../assets/pause.svg";
-import volume0 from "../assets/volume0.svg";
-import volume1 from "../assets/volume1.svg";
-import volume2 from "../assets/volume2.svg";
-import volume3 from "../assets/volume3.svg";
+import playIcon from "$assets/play.svg";
+import pauseIcon from "$assets/pause.svg";
+import volume0 from "$assets/volume0.svg";
+import volume1 from "$assets/volume1.svg";
+import volume2 from "$assets/volume2.svg";
+import volume3 from "$assets/volume3.svg";
 // styles
 import "./AudioPlayer.scss";
 

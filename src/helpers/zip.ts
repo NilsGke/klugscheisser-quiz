@@ -8,7 +8,7 @@ import {
     PartialCategory,
     TextResource,
     Video,
-} from "../types/categoryTypes";
+} from "$types/categoryTypes";
 
 interface CategoryConfig extends Omit<Category, "fields"> {
     fields: [ConfigField, ConfigField, ConfigField, ConfigField, ConfigField];

@@ -1,15 +1,15 @@
 import { FC, useEffect, useRef, useState } from "react";
 import "./CategoryBrowser.scss";
-import { Category } from "../types/categoryTypes";
-import { Indexed } from "../db/indexeddb";
+import { Category } from "$types/categoryTypes";
+import { Indexed } from "$db/indexeddb";
 // assets
-import editIcon from "../assets/edit.svg";
-import testIcon from "../assets/test.svg";
-import checkIcon from "../assets/check.svg";
-import removeIcon from "../assets/close.svg";
-import eyeIcon from "../assets/eye.svg";
+import editIcon from "$assets/edit.svg";
+import testIcon from "$assets/test.svg";
+import checkIcon from "$assets/check.svg";
+import removeIcon from "$assets/close.svg";
+import eyeIcon from "$assets/eye.svg";
 import autoAnimate from "@formkit/auto-animate";
-import { getStoredCategories } from "../db/categories";
+import { getStoredCategories } from "$db/categories";
 
 type props = {
     selecting?: boolean;

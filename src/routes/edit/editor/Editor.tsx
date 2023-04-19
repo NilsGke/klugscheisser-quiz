@@ -6,15 +6,15 @@ import {
     PartialCategory,
     indexCategory,
     isCategory,
-} from "../../../types/categoryTypes";
+} from "$types/categoryTypes";
 import "./Editor.scss";
 import MediaPool from "../MediaPool/MediaPool";
 import CategoryEditor from "../CategoryEditor/CategoryEditor";
-import { generateZipFromCategory } from "../../../helpers/zip";
-import { Indexed } from "../../../db/indexeddb";
-import { storeCategoryInDB, updateCategoryInDB } from "../../../db/categories";
-import testIcon from "../../../assets/test.svg";
-import BackButton from "../../../components/BackButton";
+import { generateZipFromCategory } from "$helpers/zip";
+import { Indexed } from "$db/indexeddb";
+import { storeCategoryInDB, updateCategoryInDB } from "$db/categories";
+import testIcon from "$assets/test.svg";
+import BackButton from "$components/BackButton";
 
 const Edit = ({
     initialCategory,

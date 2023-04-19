@@ -1,5 +1,5 @@
-import { Board, StoredBoard, DeletedCategory } from "../types/boardTypes";
-import { Category } from "../types/categoryTypes";
+import { Board, StoredBoard, DeletedCategory } from "$types/boardTypes";
+import { Category } from "$types/categoryTypes";
 import { getStoredCategory } from "./categories";
 import { Indexed, db } from "./indexeddb";
 

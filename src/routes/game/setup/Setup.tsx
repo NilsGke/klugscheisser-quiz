@@ -1,29 +1,25 @@
 import { FC, useEffect, useRef, useState, useCallback } from "react";
-import {
-    Game,
-    TeamColors,
-    categoryToGameCategory,
-} from "../../../types/gameTypes";
+import { Game, TeamColors, categoryToGameCategory } from "$types/gameTypes";
 import autoAnimate from "@formkit/auto-animate";
-import { Category } from "../../../types/categoryTypes";
-import useKeyboard from "../../../hooks/keyboard";
+import { Category } from "$types/categoryTypes";
+import useKeyboard from "$hooks/keyboard";
 import toast from "react-simple-toasts";
-import useClick from "../../../hooks/useClick";
-import { Indexed } from "../../../db/indexeddb";
-import { categoryIsDeleted } from "../../../types/boardTypes";
+import useClick from "$hooks/useClick";
+import { Indexed } from "$db/indexeddb";
+import { categoryIsDeleted } from "$types/boardTypes";
 
 // components
-import HomeButton from "../../../components/HomeButton";
-import CategoryBrowser from "../../../components/CategoryBrowser";
-import BoardBrowser from "../../../components/BoardBrowser";
+import HomeButton from "$components/HomeButton";
+import CategoryBrowser from "$components/CategoryBrowser";
+import BoardBrowser from "$components/BoardBrowser";
 
 // assets
-import add from "../../../assets/add.svg";
-import addGroup from "../../../assets/addGroup.svg";
-import trashIcon from "../../../assets/trash.svg";
-import remove from "../../../assets/remove.svg";
-import colorPaletteIcon from "../../../assets/colorPalette.svg";
-import closeIcon from "../../../assets/close.svg";
+import add from "$assets/add.svg";
+import addGroup from "$assets/addGroup.svg";
+import trashIcon from "$assets/trash.svg";
+import remove from "$assets/remove.svg";
+import colorPaletteIcon from "$assets/colorPalette.svg";
+import closeIcon from "$assets/close.svg";
 
 // styles
 import "./Setup.scss";

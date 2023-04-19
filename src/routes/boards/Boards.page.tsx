@@ -1,6 +1,6 @@
-import BoardBrowser from "../../components/BoardBrowser";
-import HomeButton from "../../components/HomeButton";
-import addIcon from "../../assets/addRound.svg";
+import BoardBrowser from "$components/BoardBrowser";
+import HomeButton from "$components/HomeButton";
+import addIcon from "$assets/addRound.svg";
 import "./Boards.page.scss";
 import { useNavigate } from "react-router-dom";
 

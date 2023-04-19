@@ -16,7 +16,16 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "sourceMap": true,
-        "types": ["vite-plugin-pwa/client"]
+        "types": ["vite-plugin-pwa/client"],
+        "baseUrl": "./src",
+        "paths": {
+            "$assets/*": ["assets/*"],
+            "$components/*": ["components/*"],
+            "$types/*": ["types/*"],
+            "$db/*": ["db/*"],
+            "$hooks/*": ["hooks/*"],
+            "$helpers/*": ["helpers/*"]
+        }
     },
     "include": ["src"],
     "references": [{ "path": "./tsconfig.node.json" }]

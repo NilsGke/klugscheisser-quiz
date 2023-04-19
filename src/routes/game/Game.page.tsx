@@ -8,8 +8,7 @@ import {
     useState,
 } from "react";
 import Setup from "./setup/Setup";
-import editIcon from "../../assets/edit.svg";
-import checkIcon from "../../assets/check.svg";
+import JSConfetti from "js-confetti";
 
 // types
 import {
@@ -19,23 +18,24 @@ import {
     TeamColors,
     GameTeam as TeamType,
     categoryToGameCategory,
-} from "../../types/gameTypes";
-import { Category, Resource } from "../../types/categoryTypes";
+} from "$types/gameTypes";
+import { Category, Resource } from "$types/categoryTypes";
 // helpers
-import { getStoredCategory, removeCategoryFromDb } from "../../db/categories";
+import { getStoredCategory, removeCategoryFromDb } from "$db/categories";
 // hooks
-import useKeyboard from "../../hooks/keyboard";
+import useKeyboard from "$hooks/keyboard";
 import { useLocation, useParams } from "react-router-dom";
 // components
-import AudioPlayer from "../../components/AudioPlayer";
-import VideoPlayer from "../../components/VideoPlayer";
-import Spinner from "../../components/Spinner";
-import TimeBar from "../../components/TimeBar";
+import AudioPlayer from "$components/AudioPlayer";
+import VideoPlayer from "$components/VideoPlayer";
+import Spinner from "$components/Spinner";
+import TimeBar from "$components/TimeBar";
 // styles
 import "./Game.page.scss";
 //assets
-import closeIcon from "../../assets/close.svg";
-import JSConfetti from "js-confetti";
+import closeIcon from "$assets/close.svg";
+import editIcon from "$assets/edit.svg";
+import checkIcon from "$assets/check.svg";
 
 enum State {
     idle = "idle",

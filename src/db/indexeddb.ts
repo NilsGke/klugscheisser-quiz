@@ -3,7 +3,7 @@ import {
     MediaTypes,
     addVolumeToAudioResource,
     addVolumeToVideoResource,
-} from "../types/categoryTypes";
+} from "$types/categoryTypes";
 
 /** ### version documentation
  *
