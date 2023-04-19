@@ -9,7 +9,7 @@ import { Category } from "../../../types/categoryTypes";
 import useKeyboard from "../../../hooks/keyboard";
 import toast from "react-simple-toasts";
 import useClick from "../../../hooks/useClick";
-import { Indexed } from "../../../helpers/indexeddb";
+import { Indexed } from "../../../db/indexeddb";
 import { categoryIsDeleted } from "../../../types/boardTypes";
 
 // components

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Indexed, getStoredCategory } from "../../helpers/indexeddb";
+import { Indexed, getStoredCategory } from "../../db/indexeddb";
 import { Category } from "../../types/categoryTypes";
 import Spinner from "../../components/Spinner";
 import ResourceRenderer from "../../components/ResourceRenderer";

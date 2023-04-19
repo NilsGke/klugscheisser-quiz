@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import "./CategoryBrowser.scss";
 import { Category } from "../types/categoryTypes";
-import { Indexed, getStoredCategories } from "../helpers/indexeddb";
+import { Indexed, getStoredCategories } from "../db/indexeddb";
 // assets
 import editIcon from "../assets/edit.svg";
 import testIcon from "../assets/test.svg";

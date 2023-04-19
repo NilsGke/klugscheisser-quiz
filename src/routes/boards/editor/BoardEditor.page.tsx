@@ -12,7 +12,7 @@ import {
     getStoredBoard,
     storeBoardInDB,
     updateBoardInDB,
-} from "../../../helpers/indexeddb";
+} from "../../../db/indexeddb";
 import toast from "react-simple-toasts";
 import { useParams } from "react-router-dom";
 import HomeButton from "../../../components/HomeButton";

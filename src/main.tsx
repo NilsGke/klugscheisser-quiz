@@ -8,7 +8,7 @@ import Help from "./routes/help/Help.page";
 import Categories from "./routes/categories/Categories.page";
 import CategoryEditor from "./routes/edit/Editor.page";
 import Game from "./routes/game/Game.page";
-import { initIndexedDB } from "./helpers/indexeddb";
+import { initIndexedDB } from "./db/indexeddb";
 import Spinner from "./components/Spinner";
 import Viewer from "./routes/viewer/View.page";
 import { registerSW } from "virtual:pwa-register";

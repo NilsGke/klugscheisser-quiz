@@ -1,4 +1,4 @@
-import { Indexed } from "../helpers/indexeddb";
+import { Indexed } from "../db/indexeddb";
 import { Category, Field } from "./categoryTypes";
 
 export interface Game {

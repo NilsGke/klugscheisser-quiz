@@ -1,4 +1,4 @@
-import { Indexed } from "../helpers/indexeddb";
+import { Indexed } from "../db/indexeddb";
 
 export const emptyCategory: PartialCategory = {
     name: "",

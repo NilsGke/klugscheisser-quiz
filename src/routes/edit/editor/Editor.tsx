@@ -15,7 +15,7 @@ import {
     Indexed,
     storeCategoryInDB,
     updateCategoryInDB,
-} from "../../../helpers/indexeddb";
+} from "../../../db/indexeddb";
 import testIcon from "../../../assets/test.svg";
 import BackButton from "../../../components/BackButton";
 

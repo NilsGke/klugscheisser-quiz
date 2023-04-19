@@ -1,9 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {
-    Indexed,
-    getStoredBoards,
-    removeBoardFromDB,
-} from "../helpers/indexeddb";
+import { Indexed, getStoredBoards, removeBoardFromDB } from "../db/indexeddb";
 import { Board, categoryIsDeleted } from "../types/boardTypes";
 import playIcon from "../assets/play.svg";
 import deleteIcon from "../assets/delete.svg";

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Edit from "./editor/Editor";
 import { PartialCategory, emptyCategory } from "../../types/categoryTypes";
 import "./Editor.page.scss";
-import { getStoredCategory } from "../../helpers/indexeddb";
+import { getStoredCategory } from "../../db/indexeddb";
 import Spinner from "../../components/Spinner";
 
 const Editor = () => {
