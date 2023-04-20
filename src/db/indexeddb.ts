@@ -19,7 +19,7 @@ export type Indexed<T> = T & {
     dbIndex: number;
 };
 
-const DB_VERSION = 6;
+const DB_VERSION = 7;
 
 export const initIndexedDB = () =>
     new Promise<void>((resolve, reject) => {
@@ -150,6 +150,18 @@ export const initIndexedDB = () =>
                         });
                         objectStore.createIndex("name", "name", {
                             unique: false,
+                        });
+                        objectStore.transaction.oncomplete = resolve;
+                        objectStore.transaction.onerror = reject;
+                    })
+                );
+
+            // create game store and delete indexes
+            if (event.oldVersion === 0 || event.newVersion === 7)
+                proms.push(
+                    new Promise((resolve, reject) => {
+                        const objectStore = db.createObjectStore("games", {
+                            autoIncrement: true,
                         });
                         objectStore.transaction.oncomplete = resolve;
                         objectStore.transaction.onerror = reject;
