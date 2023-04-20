@@ -69,9 +69,6 @@ export const initIndexedDB = () =>
                             const objectStore = db.createObjectStore(type, {
                                 autoIncrement: true,
                             });
-                            objectStore.createIndex("name", "name", {
-                                unique: false,
-                            });
                             objectStore.transaction.oncomplete = resolve;
                             objectStore.transaction.onerror = reject;
                         })
@@ -84,9 +81,6 @@ export const initIndexedDB = () =>
                     new Promise((resolve, reject) => {
                         const objectStore = db.createObjectStore("categories", {
                             autoIncrement: true,
-                        });
-                        objectStore.createIndex("name", "name", {
-                            unique: false,
                         });
                         objectStore.transaction.oncomplete = resolve;
                         objectStore.transaction.onerror = reject;
@@ -147,9 +141,6 @@ export const initIndexedDB = () =>
                     new Promise((resolve, reject) => {
                         const objectStore = db.createObjectStore("boards", {
                             autoIncrement: true,
-                        });
-                        objectStore.createIndex("name", "name", {
-                            unique: false,
                         });
                         objectStore.transaction.oncomplete = resolve;
                         objectStore.transaction.onerror = reject;
