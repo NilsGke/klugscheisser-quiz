@@ -6,59 +6,99 @@
 
     display: flex;
 
-    #teams,
+    $pad: 10px;
+    aside,
     #categories {
         margin: 20px;
-        padding: 10px;
+        padding: $pad;
     }
 
-    #teams {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
+    aside {
         width: 20svw;
-        display: flex;
+        display: grid;
         gap: 30px;
+        grid-template-rows: calc(100% - 80px - 2 * $pad) 80px;
+        grid-template-columns: 100%;
 
-        .team {
+        #teams {
+            align-self: center;
+            height: 100%;
+
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+            display: flex;
+            gap: 30px;
+
+            .team {
+                display: grid;
+                align-content: space-evenly;
+                justify-content: center;
+
+                background: $dark;
+                height: 30vh;
+                max-height: 30vh;
+                width: 100%;
+                border-radius: 20px;
+                padding: 5px;
+                h2 {
+                    font-size: 17px;
+                }
+                &:not(.buzzered) {
+                    box-shadow: none !important;
+                    z-index: 0;
+                }
+
+                input {
+                    height: 40px;
+                    width: 80px;
+                    font-size: 24px;
+                    background: transparent;
+                    border: none;
+                    border-bottom: 2px solid $grey;
+                    color: $white;
+                    text-align: center;
+                    // hide arrows
+                    &::-webkit-outer-spin-button,
+                    &::-webkit-inner-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                }
+
+                &.buzzered {
+                }
+            }
+        }
+        #gameControls {
+            align-self: flex-end;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
 
+            width: 100%;
+            height: 80px;
             background: $dark;
-            height: 30vh;
-            max-height: 30vh;
+            max-height: 10vh;
             width: 100%;
             border-radius: 20px;
-            padding: 5px;
-            h2 {
-                font-size: 17px;
-            }
-            &:not(.buzzered) {
-                box-shadow: none !important;
-                z-index: 0;
-            }
-
-            input {
-                height: 30px;
-                width: 70px;
-                font-size: 20px;
+            border: 1px solid $grey;
+            display: flex;
+            padding: 20px;
+            > button {
+                border-radius: 10px;
                 background: transparent;
-                border: 1px solid transparent;
-                border-bottom-color: $lighterDark;
+                border: 1px solid $grey;
                 color: $white;
-                text-align: center;
-                // hide arrows
-                &::-webkit-outer-spin-button,
-                &::-webkit-inner-spin-button {
-                    -webkit-appearance: none;
-                    margin: 0;
+                padding: 10px;
+                height: 40px;
+                cursor: pointer;
+                &:hover {
+                    scale: 1.01;
                 }
-            }
-
-            &.buzzered {
             }
         }
     }
@@ -272,7 +312,7 @@
                                             filter: invert(1);
                                         }
                                         &[type="number"] {
-                                            width: 70px;
+                                            width: 85px;
                                             &::-webkit-inner-spin-button,
                                             &::-webkit-outer-spin-button {
                                                 -webkit-appearance: none;

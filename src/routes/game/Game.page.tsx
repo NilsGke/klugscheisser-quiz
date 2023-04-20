@@ -242,28 +242,55 @@ const Game = () => {
 
     return (
         <div id="gamePage" className={gameState}>
-            <div id="teams">
-                {gameData.teams.map((team, teamIndex) => (
-                    <Team
-                        key={teamIndex}
-                        team={team}
-                        setTeam={(newTeam: GameTeam) => {
-                            const newTeams =
-                                gameData.teams.slice() as Game["teams"];
-                            newTeams[teamIndex] = newTeam;
-                            setGameData((prev) =>
-                                prev === null
-                                    ? null
-                                    : {
-                                          categories: prev?.categories,
-                                          teams: newTeams,
-                                      }
-                            );
-                        }}
-                        buzzered={teamIndex === buzzeredTeamIndex}
-                    />
-                ))}
-            </div>
+            <aside>
+                <div id="teams">
+                    {gameData.teams.map((team, teamIndex) => (
+                        <Team
+                            key={teamIndex}
+                            team={team}
+                            index={teamIndex}
+                            setTeam={(newTeam: GameTeam) => {
+                                const newTeams =
+                                    gameData.teams.slice() as Game["teams"];
+                                newTeams[teamIndex] = newTeam;
+                                setGameData((prev) =>
+                                    prev === null
+                                        ? null
+                                        : {
+                                              categories: prev?.categories,
+                                              teams: newTeams,
+                                          }
+                                );
+                            }}
+                            buzzered={teamIndex === buzzeredTeamIndex}
+                        />
+                    ))}
+                </div>
+                <div id="gameControls">
+                    {testMode ? (
+                        <button
+                            className="endTest"
+                            onClick={() => {
+                                setGameData(null);
+                                window.close();
+                            }}
+                        >
+                            end test
+                        </button>
+                    ) : (
+                        <button
+                            className="end"
+                            onClick={() =>
+                                confirm(
+                                    "Do you really want to reset the game? This action cannot be undone!"
+                                ) && setGameData(null)
+                            }
+                        >
+                            end game
+                        </button>
+                    )}
+                </div>
+            </aside>
             <div id="categories" ref={categoriesRef}>
                 {gameData.categories.map((category, categoryIndex) => (
                     <Fragment key={category.name + categoryIndex}>
@@ -689,10 +716,12 @@ const Team = ({
     team,
     buzzered,
     setTeam,
+    index,
 }: {
     team: TeamType;
     buzzered: boolean;
     setTeam: (newTeam: GameTeam) => void;
+    index: number;
 }) => {
     const teamRef = useRef<HTMLDivElement>(null);
 
@@ -733,31 +762,29 @@ const Team = ({
             }}
             ref={teamRef}
         >
-            <h2>{team.name}</h2>
+            <h2>{team.name === "" ? `Team #${index + 1}` : team.name}</h2>
 
-            <div className="content">
-                <div className="members">
-                    {team.members.map((memberName, i) => (
-                        <div className="member" key={memberName}>
-                            {memberName}
-                        </div>
-                    ))}
-                </div>
-                <div className="score">
-                    <input
-                        type="number"
-                        className="scoreInput dontBuzzer"
-                        value={team.score}
-                        onChange={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setTeam({
-                                ...team,
-                                score: parseInt(e.target.value),
-                            });
-                        }}
-                    />
-                </div>
+            <div className="members">
+                {team.members.map((memberName, i) => (
+                    <div className="member" key={memberName}>
+                        {memberName}
+                    </div>
+                ))}
+            </div>
+            <div className="score">
+                <input
+                    type="number"
+                    className="scoreInput dontBuzzer"
+                    value={team.score}
+                    onChange={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setTeam({
+                            ...team,
+                            score: parseInt(e.target.value),
+                        });
+                    }}
+                />
             </div>
         </div>
     );
