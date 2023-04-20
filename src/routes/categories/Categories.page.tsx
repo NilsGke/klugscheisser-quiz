@@ -85,7 +85,7 @@ const Categories = () => {
 
         importCategoryFromZip(file).then((category) =>
             storeCategoryInDB(category).then((dbIndex) =>
-                navigate(`categories/editor/${dbIndex}`)
+                navigate(`/categories/editor/${dbIndex}`)
             )
         );
     }, [file]);
