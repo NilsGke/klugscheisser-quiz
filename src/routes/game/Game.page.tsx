@@ -36,6 +36,7 @@ import "./Game.page.scss";
 import closeIcon from "$assets/close.svg";
 import editIcon from "$assets/edit.svg";
 import checkIcon from "$assets/check.svg";
+import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
 
 enum State {
     idle = "idle",
@@ -149,6 +150,33 @@ const Game = () => {
         });
     }, []);
 
+    // store game on every change
+    useEffect(() => {
+        if (gameData !== null && !testMode) saveGameInDb(gameData);
+    }, [gameData]);
+
+    // retrieve game on first render if it is a thing
+    useEffect(
+        () => {
+            if (testMode) return;
+            setLoading(true);
+            getGameFromDb()
+                .then((game) => {
+                    console.log("game found", game);
+                    setGameData(game);
+                    setLoading(false);
+                })
+                .catch(() => {
+                    console.log("no game found");
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
+
     useKeyboard(keyboardCallback);
 
     useLayoutEffect(() => {
@@ -159,6 +187,8 @@ const Game = () => {
 
         return () => {};
     }, [gameData]);
+
+    console.log({ gameData, loading });
 
     const activeTimers = useRef<NodeJS.Timeout[]>([]);
     const abortTimers = () => {
@@ -229,6 +259,18 @@ const Game = () => {
         setGameState(State.idle);
     };
 
+    const endGame = () => {
+        if (
+            !confirm(
+                "Do you really want to reset the game? This action cannot be undone!"
+            )
+        )
+            return;
+
+        setGameData(null);
+        deleteGameFromDb();
+    };
+
     if (loading) return <Spinner />;
 
     if (gameData === null)
@@ -278,14 +320,7 @@ const Game = () => {
                             end test
                         </button>
                     ) : (
-                        <button
-                            className="end"
-                            onClick={() =>
-                                confirm(
-                                    "Do you really want to reset the game? This action cannot be undone!"
-                                ) && setGameData(null)
-                            }
-                        >
+                        <button className="end" onClick={endGame}>
                             end game
                         </button>
                     )}
