@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Resource } from "$types/categoryTypes";
 import AudioPlayer from "./AudioPlayer";
 import VideoPlayer from "./VideoPlayer";
@@ -6,13 +7,18 @@ const ResourceRenderer = ({
     resource,
     autoplay = false,
     small = false,
+    onVolumeChange,
 }: {
     resource: Resource;
     autoplay?: boolean;
     small?: boolean;
+    onVolumeChange?: (value: number) => void;
 }) => {
     if (resource.type === "image") {
-        const url = URL.createObjectURL(resource.content);
+        const url = useMemo(
+            () => URL.createObjectURL(resource.content),
+            [resource.content]
+        );
         return (
             <div className="image">
                 <img src={url} alt="" />
@@ -35,6 +41,7 @@ const ResourceRenderer = ({
                 initialVolume={resource.volume}
                 autoplay={autoplay}
                 small={small}
+                onVolumeChange={onVolumeChange}
             />
         );
     else if (resource.type === "text")
