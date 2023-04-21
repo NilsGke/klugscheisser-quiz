@@ -31,7 +31,7 @@ Object.freeze(emptyCategory);
 
 export interface Category {
     name: string;
-    description: string;
+    description: string | Image;
     answerTime: number;
     fields: [Field, Field, Field, Field, Field];
 }
