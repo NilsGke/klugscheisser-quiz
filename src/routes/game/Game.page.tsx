@@ -537,7 +537,17 @@ const Field = ({
                                                 : 0,
                                     }}
                                 >
-                                    {category.description}
+                                    {typeof category.description ===
+                                    "string" ? (
+                                        category.description
+                                    ) : (
+                                        <ResourceDisplay
+                                            resource={{
+                                                type: "image",
+                                                content: category.description,
+                                            }}
+                                        />
+                                    )}
                                     {gameState === State.showDescription ? (
                                         <TimeBar time={4000} />
                                     ) : null}

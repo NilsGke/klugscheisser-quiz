@@ -195,13 +195,33 @@
                             justify-content: center;
                         }
                         .description {
+                            height: 80%;
+                            // width: 80%;
+
+                            position: absolute;
+
                             padding: 50px;
                             display: flex;
                             align-items: center;
                             justify-content: center;
                             flex-direction: column;
+
                             .timeBarContainer {
+                                position: absolute;
+                                bottom: 10px;
                                 margin-top: 5px;
+                                width: 80%;
+                            }
+
+                            .image {
+                                height: 80%;
+                                max-height: calc(100% - 10px);
+                                width: 100%;
+                                img {
+                                    height: 100%;
+                                    width: 100%;
+                                    object-fit: contain;
+                                }
                             }
                         }
                         .question,
