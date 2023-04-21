@@ -110,44 +110,54 @@ const Game = () => {
     const { pathname } = useLocation();
 
     // load testgame if specified in url
-    const { dbIndex } = useParams();
-    const [loading, setLoading] = useState(false);
-    const [testMode, setTestMode] = useState(false);
-    useEffect(() => {
-        if (dbIndex === undefined) return;
-        const index = parseInt(dbIndex);
-        if (isNaN(index)) return;
-        setLoading(true);
-        setTestMode(true);
-        getStoredCategory(index).then((category) => {
-            setGameData({
-                teams: [
-                    {
-                        name: "Team 1",
-                        color: TeamColors[0],
-                        members: ["player 1", "player 2"],
-                        score: 0,
-                    },
-                    {
-                        name: "Team 2",
-                        color: TeamColors[1],
-                        members: ["player 3", "player 4"],
-                        score: 0,
-                    },
-                    {
-                        name: "Team 3",
-                        color: TeamColors[2],
-                        members: ["player 5", "player 6"],
-                        score: 0,
-                    },
-                ],
-                categories: [categoryToGameCategory(category)],
-            });
+    const { dbIndex: urlDbIndex } = useParams();
+    const dbIndex = parseInt(urlDbIndex || "");
+    const testMode = !isNaN(dbIndex);
 
-            // remove category from db if url is .../test/:dbIndex/destroy
-            if (pathname.includes("/destroy")) removeCategoryFromDb(index);
-            setLoading(false);
-        });
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    useEffect(() => {
+        if (!testMode) return;
+        setLoading(true);
+        getStoredCategory(dbIndex)
+            .then((category) => {
+                setGameData({
+                    teams: [
+                        {
+                            name: "Team 1",
+                            color: TeamColors[0],
+                            members: ["player 1", "player 2"],
+                            score: 0,
+                        },
+                        {
+                            name: "Team 2",
+                            color: TeamColors[1],
+                            members: ["player 3", "player 4"],
+                            score: 0,
+                        },
+                        {
+                            name: "Team 3",
+                            color: TeamColors[2],
+                            members: ["player 5", "player 6"],
+                            score: 0,
+                        },
+                    ],
+                    categories: [categoryToGameCategory(category)],
+                });
+
+                // remove category from db if url is .../test/:dbIndex/destroy
+                if (pathname.includes("/destroy"))
+                    removeCategoryFromDb(dbIndex);
+                setLoading(false);
+            })
+            .catch((error) => {
+                setErrorMessage("category not found");
+                console.log("error", error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // store game on every change
@@ -272,6 +282,13 @@ const Game = () => {
     };
 
     if (loading) return <Spinner />;
+
+    if (errorMessage !== "")
+        return (
+            <div id="gamePage">
+                <p className="error">{errorMessage}</p>
+            </div>
+        );
 
     if (gameData === null)
         return (
