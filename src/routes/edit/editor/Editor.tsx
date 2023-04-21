@@ -1,8 +1,9 @@
 import toast from "react-simple-toasts";
 import { JSZipMetadata } from "jszip";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
     Category,
+    Image,
     PartialCategory,
     indexCategory,
     isCategory,
@@ -13,8 +14,10 @@ import CategoryEditor from "../CategoryEditor/CategoryEditor";
 import { generateZipFromCategory } from "$helpers/zip";
 import { Indexed } from "$db/indexeddb";
 import { storeCategoryInDB, updateCategoryInDB } from "$db/categories";
-import testIcon from "$assets/test.svg";
 import BackButton from "$components/BackButton";
+import testIcon from "$assets/test.svg";
+import imageIcon from "$assets/image.svg";
+import { confirmAlert } from "react-confirm-alert";
 
 const Edit = ({
     initialCategory,
@@ -117,6 +120,15 @@ const Edit = ({
         return () => window.removeEventListener("beforeunload", unloadHandler);
     }, [exporting]);
 
+    // description file input
+    const descriptionImageInputRef = useRef<HTMLInputElement>(null);
+    const [descriptionImageUrl, setDescriptionImageUrl] = useState("");
+
+    useEffect(() => {
+        if (typeof description === "string") return;
+        setDescriptionImageUrl(URL.createObjectURL(description));
+    }, [description]);
+
     const test = async () => {
         const wholeCategory: Category = {
             answerTime,
@@ -147,14 +159,87 @@ const Edit = ({
                     onChange={(e) => setName(e.target.value)}
                     title="name for this category"
                 />
-                <input
-                    type="text"
-                    id="descriptionInput"
-                    value={description}
-                    placeholder="description / question / task"
-                    onChange={(e) => setDescription(e.target.value)}
-                    title="question or description for this category"
-                />
+                <div className="description">
+                    {typeof description === "string" ? (
+                        <>
+                            <input
+                                type="text"
+                                id="descriptionInput"
+                                value={description}
+                                placeholder="description / question / task"
+                                onChange={(e) => setDescription(e.target.value)}
+                                title="question or description for this category"
+                            />
+                            <label className="image">
+                                <img src={imageIcon} alt="image icon" />
+                                <input
+                                    type="file"
+                                    style={{ display: "none" }}
+                                    accept="image/*"
+                                    name="descriptionImage"
+                                    id="descriptionImageInput"
+                                    onInput={() => {
+                                        if (
+                                            descriptionImageInputRef.current ===
+                                            null
+                                        )
+                                            return;
+                                        const files =
+                                            descriptionImageInputRef.current
+                                                .files;
+                                        if (
+                                            files === null ||
+                                            files.length === 0
+                                        )
+                                            return;
+                                        const image = files[0] as Image;
+                                        setDescription(image);
+                                    }}
+                                    ref={descriptionImageInputRef}
+                                />
+                            </label>
+                        </>
+                    ) : (
+                        <button
+                            onClick={() =>
+                                confirmAlert({
+                                    title: "Your description image",
+                                    message:
+                                        "This image is shown before every question of this category",
+                                    childrenElement: () => (
+                                        <img
+                                            src={descriptionImageUrl}
+                                            alt="image, you set as description"
+                                            draggable="false"
+                                        />
+                                    ),
+                                    buttons: [
+                                        {
+                                            label: "Remove",
+                                            onClick: () => {
+                                                URL.revokeObjectURL(
+                                                    descriptionImageUrl
+                                                );
+                                                setDescription("");
+                                            },
+                                        },
+                                        {
+                                            label: "Keep",
+                                        },
+                                    ],
+                                    overlayClassName: "popupOverlay",
+                                    closeOnEscape: true,
+                                    closeOnClickOutside: true,
+                                })
+                            }
+                        >
+                            <img
+                                src={URL.createObjectURL(description)}
+                                alt="category description image"
+                            />
+                        </button>
+                    )}
+                </div>
                 <input
                     type="number"
                     name="answerTime"
