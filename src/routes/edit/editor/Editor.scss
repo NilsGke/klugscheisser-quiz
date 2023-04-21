@@ -132,6 +132,24 @@
         grid-area: 2 / 2 / 3 / 4;
         margin: 5px;
         max-width: 1000px;
+        .category {
+            .field {
+                h3 {
+                }
+                .content {
+                    .question,
+                    .answer {
+                        .mediaElement {
+                            .text,
+                            .video,
+                            .audio,
+                            .image {
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     .exportPopupContainer {
