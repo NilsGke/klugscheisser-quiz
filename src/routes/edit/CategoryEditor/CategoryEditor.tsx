@@ -8,8 +8,7 @@ import {
 import "./Category.scss";
 import { getStoredFile } from "$db/media";
 import removeIcon from "$assets/close.svg";
-import AudioPlayer from "$components/AudioPlayer";
-import VideoPlayer from "$components/VideoPlayer";
+import ResourceRenderer from "$components/ResourceRenderer";
 
 type props = {
     category: PartialCategory;
@@ -77,35 +76,6 @@ const MediaElement = ({
     setCategory: (newCategory: PartialCategory) => void;
 }) => {
     const resource = category.fields[fieldIndex][type];
-
-    // generate url for media
-    const [url, setUrl] = useState<string>();
-    useEffect(() => {
-        if (
-            resource === undefined ||
-            resource.type === undefined ||
-            resource.type === "text" ||
-            resource.type === "imageCollection"
-        )
-            return;
-        var reader = new FileReader();
-        reader.onload = function () {
-            if (reader.result === null) return;
-
-            if (typeof reader.result === "string") setUrl(reader.result);
-            else {
-                // result is ArrayBuffer
-                console.info("%c" + "url is buffer", "background:orange;");
-                let textDecoder = new TextDecoder();
-                let uintArray = new Uint8Array(reader.result);
-                setUrl(textDecoder.decode(uintArray));
-            }
-        };
-
-        reader.readAsDataURL(resource.content);
-
-        return () => {};
-    }, [resource]);
 
     // handle text input
     const [text, setText] = useState(
@@ -227,6 +197,7 @@ const MediaElement = ({
             <div className="text">
                 <textarea
                     ref={textAreaRef}
+                    placeholder="enter text..."
                     onChange={(e) => setText(e.target.value)}
                     value={text}
                 />
@@ -242,78 +213,23 @@ const MediaElement = ({
                 </button>
             </div>
         );
-
-    if (resource.type === "image")
+    else
         content = (
-            <div className="image">
-                <img src={url} alt="image" />
-                <button
-                    className="remove"
-                    onClick={() => {
-                        const newCategory = category;
-                        newCategory.fields[fieldIndex][type] = undefined;
-                        setCategory(newCategory);
-                    }}
-                >
-                    <img src={removeIcon} alt="remove" />
-                </button>
-            </div>
-        );
+            <ResourceRenderer
+                resource={resource}
+                onVolumeChange={(value) => {
+                    if (resource.type === "image") return;
 
-    if (resource.type === "audio")
-        content = (
-            <div className="audio">
-                <AudioPlayer
-                    file={resource.content}
-                    initialVolume={resource.volume}
-                    onVolumeChange={(value) => {
-                        const newCategory = category;
-                        newCategory.fields[fieldIndex][type] = Object.assign(
-                            resource,
-                            { volume: value }
-                        );
-                        setCategory(newCategory);
-                    }}
-                />
-                <button
-                    className="remove"
-                    onClick={() => {
-                        const newCategory = category;
-                        newCategory.fields[fieldIndex][type] = undefined;
-                        setCategory(newCategory);
-                    }}
-                >
-                    <img src={removeIcon} alt="remove" />
-                </button>
-            </div>
-        );
-
-    if (resource.type === "video")
-        content = (
-            <div className="video">
-                <VideoPlayer
-                    file={resource.content}
-                    initialVolume={resource.volume}
-                    onVolumeChange={(value) => {
-                        const newCategory = category;
-                        newCategory.fields[fieldIndex][type] = Object.assign(
-                            resource,
-                            { volume: value }
-                        );
-                        setCategory(newCategory);
-                    }}
-                />
-                <button
-                    className="remove"
-                    onClick={() => {
-                        const newCategory = category;
-                        newCategory.fields[fieldIndex][type] = undefined;
-                        setCategory(newCategory);
-                    }}
-                >
-                    <img src={removeIcon} alt="remove" />
-                </button>
-            </div>
+                    const newCategory = category;
+                    newCategory.fields[fieldIndex][type] = Object.assign(
+                        resource,
+                        {
+                            volume: value,
+                        }
+                    );
+                    setCategory(newCategory);
+                }}
+            />
         );
 
     return (
