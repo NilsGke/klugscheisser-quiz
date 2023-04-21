@@ -10,7 +10,16 @@ import {
     Video,
 } from "$types/categoryTypes";
 
-interface CategoryConfig extends Omit<Category, "fields"> {
+interface CategoryConfig extends Omit<Category, "fields" | "description"> {
+    description:
+        | {
+              type: "text";
+              content: string;
+          }
+        | {
+              type: "image";
+              content: FileName;
+          };
     fields: [ConfigField, ConfigField, ConfigField, ConfigField, ConfigField];
 }
 type ConfigField = {
@@ -31,14 +40,23 @@ export const generateZipFromCategory = async (
 ) => {
     const zip = new JSZip();
 
-    const categoryInfo = {
+    const categoryInfo: CategoryConfig = {
         name: category.name,
-        description: category.description,
+        description:
+            typeof category.description === "string"
+                ? { type: "text", content: category.description }
+                : {
+                      type: "image",
+                      content: "0" + "_" + category.description.name,
+                  },
         answerTime: category.answerTime,
         fields: [] as any,
     };
 
     const media: AnyMedia[] = [];
+
+    if (typeof category.description !== "string")
+        media.push(category.description);
 
     category.fields.forEach((field, i) => {
         let questionMediaIndex: null | number = null;
@@ -110,9 +128,30 @@ export const importCategoryFromZip = (file: File) =>
 
             console.log(config);
 
+            let description: PartialCategory["description"];
+            if (config.description.type === "text") {
+                description = config.description.content;
+            } else {
+                console.log(zip.file(`media/${config.description.content}`));
+                const mediaBlob = await zip
+                    .file(`media/${config.description.content}`)
+                    ?.async("blob");
+                if (mediaBlob === undefined)
+                    throw new Error("media blob is undefined");
+
+                description = new File(
+                    [mediaBlob],
+                    config.description.content.split(/_(.*)/s)[1],
+                    {
+                        type: mediaBlob.type,
+                        lastModified: new Date().getTime(),
+                    }
+                );
+            }
+
             const category: PartialCategory = {
                 name: config.name,
-                description: config.description,
+                description,
                 answerTime: config.answerTime,
                 fields: [
                     { question: undefined, answer: undefined },

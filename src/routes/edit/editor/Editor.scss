@@ -64,9 +64,6 @@
             &#nameInput {
                 width: 20%;
             }
-            &#descriptionInput {
-                width: 70%;
-            }
             &#answerTime {
                 width: 10%;
 
@@ -74,6 +71,51 @@
                 &::-webkit-inner-spin-button {
                     -webkit-appearance: none;
                     margin: 0;
+                }
+            }
+        }
+
+        .description {
+            width: 50%;
+            position: relative;
+            display: flex;
+            input {
+                width: 100%;
+            }
+            label.image {
+                position: absolute;
+                right: 0;
+                top: 0;
+                border: none;
+                padding: 0;
+                height: 40px;
+                aspect-ratio: 1;
+                box-shadow: none;
+                cursor: pointer;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    transition: filter 0.2s ease-out;
+                    height: 70%;
+                    filter: invert(1);
+                }
+            }
+            > button {
+                border: none;
+                border-bottom: 1px solid $white;
+                border-radius: 0;
+                box-shadow: none;
+                height: 35px;
+                width: 100%;
+                padding: 0;
+                &:hover {
+                    background: transparent;
+                }
+                img {
+                    height: 100%;
                 }
             }
         }
