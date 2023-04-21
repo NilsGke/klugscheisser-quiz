@@ -49,7 +49,7 @@ const Edit = ({
     // exporting
     const [exporting, setExporting] = useState<boolean>(false);
     const [exportData, setExportData] = useState<JSZipMetadata | null>(null);
-    const exportCategory = useCallback(async () => {
+    const exportCategory = async () => {
         if (
             !category.fields.every(
                 (field) =>
@@ -105,7 +105,7 @@ const Edit = ({
                 });
             }
         );
-    }, [category, name]);
+    };
 
     // ask user to confirm unload
     useEffect(() => {
