@@ -67,9 +67,10 @@ const CategoryBrowser: FC<props> = ({
                 category.name
                     .toLowerCase()
                     .includes(searchTerm.toLowerCase()) ||
-                category.description
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase())
+                (typeof category.description === "string" &&
+                    category.description
+                        .toLowerCase()
+                        .includes(searchTerm.toLowerCase()))
         );
 
     const submitFun = () => {
@@ -201,7 +202,18 @@ const CategoryElement = ({
 
             <div className="content">
                 <h2>{category.name}</h2>
-                <p className="description">{category.description}</p>
+                <div className="description">
+                    {typeof category.description === "string" ? (
+                        <>
+                            <p>{category.description}</p>
+                        </>
+                    ) : (
+                        <img
+                            src={URL.createObjectURL(category.description)}
+                            alt="categor description image"
+                        />
+                    )}
+                </div>
             </div>
             <div className="buttons">
                 {!choosable ? (
