@@ -37,7 +37,13 @@ const Viewer = () => {
     return (
         <div id="viewerPage">
             <h2>{category.name}</h2>
-            <h3>{category.description}</h3>
+            {typeof category.description === "string" ? (
+                <h3>{category.description}</h3>
+            ) : (
+                <ResourceRenderer
+                    resource={{ type: "image", content: category.description }}
+                />
+            )}
             <div className="fields">
                 {category.fields.map((field) => (
                     <div className="field">
