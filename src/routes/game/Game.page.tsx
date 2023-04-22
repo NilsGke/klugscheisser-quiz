@@ -37,6 +37,7 @@ import closeIcon from "$assets/close.svg";
 import editIcon from "$assets/edit.svg";
 import checkIcon from "$assets/check.svg";
 import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
+import Diashow from "$components/Diashow";
 
 enum State {
     idle = "idle",
@@ -51,7 +52,6 @@ const jsConfetti = new JSConfetti();
 
 const Game = () => {
     const [gameData, setGameData] = useState<Game | null>(null);
-    // const [gameData, setGameData] = useState<Game | null>(testGame);
 
     const [selected, setSelected] = useState<null | {
         categoryIndex: number;
@@ -769,9 +769,10 @@ const ResourceDisplay = ({ resource }: { resource: Resource }) => {
         );
     else if (resource.type === "text")
         return <div className="text">{resource.content}</div>;
-    // else if(resource.type === "imageCollection")
-    // return <Diashow />
-    return <div className="resource">unknwon content type?</div>;
+    else if (resource.type === "imageCollection")
+        return <Diashow images={resource.content} show />;
+
+    return <div className="resource">unknown content type?</div>;
 };
 
 const Team = ({
