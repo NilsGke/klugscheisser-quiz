@@ -1,0 +1,51 @@
+@import "../colors.scss";
+
+.diashow {
+    height: 80%;
+    width: 80%;
+    // background-color: $grey;
+    position: relative;
+
+    .info {
+        position: absolute;
+        color: $white;
+        opacity: 0.4;
+    }
+
+    .images {
+        height: calc(100% - 60px);
+        max-height: calc(100% - 60px);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .imageContainer {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            .image {
+                height: 100%;
+                width: 100%;
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+    .all {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        $pad: 5px;
+        padding: $pad;
+        .image {
+            padding: $pad;
+        }
+    }
+    .progress {
+        width: 100%;
+    }
+}
