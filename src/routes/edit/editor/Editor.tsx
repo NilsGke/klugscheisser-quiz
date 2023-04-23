@@ -1,6 +1,6 @@
 import toast from "react-simple-toasts";
 import { JSZipMetadata } from "jszip";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
     Category,
     Image,
@@ -26,25 +26,12 @@ const Edit = ({
     initialCategory: PartialCategory;
     dbIndex?: Indexed<Category>["dbIndex"];
 }) => {
-    const [category, setCategory] = useState(initialCategory);
+    const [category, setCategory] = useState<PartialCategory>(initialCategory);
     const [name, setName] = useState(initialCategory.name);
     const [description, setDescription] = useState(initialCategory.description);
     const [answerTime, setAnswerTime] = useState(initialCategory.answerTime);
 
     const mediaPoolRendered = useMemo(() => <MediaPool />, []); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
-
-    useEffect(() => {
-        console.log("category changed", category);
-    }, [category]);
-    useEffect(() => {
-        console.log("name changed", name);
-    }, [name]);
-    useEffect(() => {
-        console.log("description changed", description);
-    }, [description]);
-    useEffect(() => {
-        console.log("answer-time changed", answerTime);
-    }, [answerTime]);
 
     // exporting
     const [exporting, setExporting] = useState<boolean>(false);
@@ -150,6 +137,7 @@ const Edit = ({
     return (
         <div id="edit">
             <BackButton confirm to="/categories" />
+
             <div id="topRow">
                 <input
                     type="text"
@@ -262,7 +250,9 @@ const Edit = ({
                     save & export
                 </button>
             </div>
+
             <div className="mediaPoolWrapper">{mediaPoolRendered}</div>
+
             <div id="categoryWrapper">
                 <CategoryEditor
                     category={category}
@@ -272,6 +262,7 @@ const Edit = ({
                     }}
                 />
             </div>
+
             <div
                 className={
                     "exportPopupContainer" +
