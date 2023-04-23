@@ -125,7 +125,7 @@ const MediaPool = () => {
                 </div>
             </div>
             <div className="media" ref={mediaRef}>
-                <div className="file addMedia" key="addMore">
+                <div className="file addMedia" key={mediaType + "addMore"}>
                     <label htmlFor="fileInput">
                         <img
                             draggable="false"
