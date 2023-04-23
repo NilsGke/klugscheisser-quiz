@@ -519,9 +519,13 @@ const Field = ({
                 className={
                     "field" +
                     (selected ? " selected" : "") +
-                    (field.answered ? " answered" : "")
+                    (typeof field.answered === "string" ? " answered" : "")
                 }
-                onClick={!field.answered && !selected ? onClick : undefined}
+                onClick={
+                    typeof field.answered !== "string" && !selected
+                        ? onClick
+                        : undefined
+                }
                 ref={fieldRef}
             >
                 <div className="contentContainer">
@@ -570,8 +574,7 @@ const Field = ({
                                     ) : null}
                                 </div>
 
-                                {gameState === State.showDescription ||
-                                gameState === State.showQuestion ? (
+                                {gameState === State.showQuestion ? (
                                     <div
                                         className="question"
                                         style={{
@@ -588,6 +591,9 @@ const Field = ({
                                         ) : (
                                             <ResourceDisplay
                                                 resource={field.question}
+                                                stop={
+                                                    buzzeredTeamIndex !== null
+                                                }
                                             />
                                         )}
                                         <button
@@ -741,7 +747,13 @@ const Field = ({
     );
 };
 
-const ResourceDisplay = ({ resource }: { resource: Resource }) => {
+const ResourceDisplay = ({
+    resource,
+    stop = false,
+}: {
+    resource: Resource;
+    stop?: boolean;
+}) => {
     if (resource.type === "image") {
         const url = URL.createObjectURL(resource.content);
         return (
@@ -770,7 +782,7 @@ const ResourceDisplay = ({ resource }: { resource: Resource }) => {
     else if (resource.type === "text")
         return <div className="text">{resource.content}</div>;
     else if (resource.type === "imageCollection")
-        return <Diashow images={resource.content} show />;
+        return <Diashow images={resource.content} stop={stop} show />;
 
     return <div className="resource">unknown content type?</div>;
 };
