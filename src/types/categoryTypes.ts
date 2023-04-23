@@ -148,3 +148,21 @@ export const addVolumeToVideoResource = (
 export const addVolumeToAudioResource = (
     resource: Omit<AudioResource, "volume"> | AudioResource
 ): AudioResource => Object.assign(resource, { volume: 50 });
+
+const convertDataUrlToBlob = (dataUrl: string): Blob => {
+    const arr = dataUrl.split(",");
+    if (arr[0] === null) throw new Error("arr[0] from file url is null");
+
+    const temp = arr[0].match(/:(.*?);/);
+    if (temp === null) throw new Error("mime is null");
+    const mime = temp[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new Blob([u8arr], { type: mime });
+};

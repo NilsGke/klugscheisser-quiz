@@ -4,11 +4,13 @@ import {
     MediaType,
     MediaTypes,
     PartialCategory,
+    PartialResource,
 } from "$types/categoryTypes";
 import "./Category.scss";
 import { getStoredFile } from "$db/media";
 import removeIcon from "$assets/close.svg";
 import ResourceRenderer from "$components/ResourceRenderer";
+import Diashow from "$components/Diashow";
 
 type props = {
     category: PartialCategory;
@@ -128,31 +130,64 @@ const MediaElement = ({
             e.preventDefault();
             const id = e.dataTransfer.getData("text/plain");
 
-            const [newRessourceType, dbIndexString] = id.split("_") as [
+            const [newResourceType, dbIndexString] = id.split("_") as [
                 MediaType,
                 string
             ];
             const dbIndex = parseInt(dbIndexString);
 
-            if (!MediaTypes.includes(newRessourceType))
+            if (!MediaTypes.includes(newResourceType))
                 throw new Error(
-                    `new media type (${newRessourceType}) is not in MediaTypes`
+                    `new media type (${newResourceType}) is not in MediaTypes`
                 );
             if (isNaN(dbIndex))
                 throw new Error("db index is not a number: " + dbIndexString);
 
             const newFile = (await getStoredFile(
-                newRessourceType,
+                newResourceType,
                 dbIndex
             )) as AnyIndexedMedia;
 
             newFile.dbIndex = dbIndex;
 
-            const newCategory = category;
-            newCategory.fields[fieldIndex][type] = {
-                type: newRessourceType as any,
-                content: newFile,
-            };
+            const oldResource = category.fields[fieldIndex][type];
+            const newCategory: PartialCategory = Object.assign(category, {});
+            let newResource: PartialResource;
+
+            if (oldResource?.type === "image" && newResourceType === "image") {
+                //FIXME no duplicates!
+                if (
+                    oldResource.content.size === newFile.size &&
+                    oldResource.content.name === newFile.name
+                )
+                    return;
+                newResource = {
+                    type: "imageCollection",
+                    content: [oldResource.content, newFile],
+                };
+            } else if (
+                oldResource?.type === "imageCollection" &&
+                newResourceType === "image"
+            ) {
+                if (
+                    oldResource.content.some(
+                        (file) =>
+                            file.size === newFile.size &&
+                            file.name === newFile.name
+                    )
+                )
+                    return;
+                newResource = {
+                    type: "imageCollection",
+                    content: [...oldResource.content, newFile],
+                };
+            } else
+                newResource = {
+                    type: newResourceType as any,
+                    content: newFile,
+                };
+
+            newCategory.fields[fieldIndex][type] = newResource;
 
             setCategory(newCategory);
         };
@@ -162,16 +197,29 @@ const MediaElement = ({
 
         return () => {
             if (mediaElementRef.current === null) return;
-            mediaElementRef.current.addEventListener(
+            mediaElementRef.current.removeEventListener(
                 "dragover",
                 dragOverHandler
             );
-            mediaElementRef.current.addEventListener("drop", dropHandler);
+            mediaElementRef.current.removeEventListener("drop", dropHandler);
         };
     }, [mediaElementRef.current, fieldIndex]);
 
     // generate content
     let content: JSX.Element = <></>;
+
+    const RemoveButton = (
+        <button
+            className="remove"
+            onClick={() => {
+                const newCategory = category;
+                newCategory.fields[fieldIndex][type] = undefined;
+                setCategory(newCategory);
+            }}
+        >
+            <img src={removeIcon} alt="remove" />
+        </button>
+    );
 
     if (resource === undefined || resource.type === undefined)
         return (
@@ -201,35 +249,46 @@ const MediaElement = ({
                     onChange={(e) => setText(e.target.value)}
                     value={text}
                 />
-                <button
-                    className="remove"
-                    onClick={() => {
-                        const newCategory = category;
-                        newCategory.fields[fieldIndex][type] = undefined;
-                        setCategory(newCategory);
-                    }}
-                >
-                    <img src={removeIcon} alt="remove" />
-                </button>
+                {RemoveButton}
             </div>
+        );
+    else if (resource.type === "imageCollection")
+        content = (
+            <>
+                <Diashow
+                    images={resource.content}
+                    setImages={(newImages) => {
+                        category.fields[fieldIndex][type] = {
+                            type: "imageCollection",
+                            content: newImages,
+                        };
+                        setCategory(category);
+                    }}
+                    edit
+                />
+                {RemoveButton}
+            </>
         );
     else
         content = (
-            <ResourceRenderer
-                resource={resource}
-                onVolumeChange={(value) => {
-                    if (resource.type === "image") return;
+            <>
+                <ResourceRenderer
+                    resource={resource}
+                    onVolumeChange={(value) => {
+                        if (resource.type === "image") return;
 
-                    const newCategory = category;
-                    newCategory.fields[fieldIndex][type] = Object.assign(
-                        resource,
-                        {
-                            volume: value,
-                        }
-                    );
-                    setCategory(newCategory);
-                }}
-            />
+                        const newCategory = Object.assign(category, {});
+                        newCategory.fields[fieldIndex][type] = Object.assign(
+                            resource,
+                            {
+                                volume: value,
+                            }
+                        );
+                        setCategory(newCategory);
+                    }}
+                />
+                {RemoveButton}
+            </>
         );
 
     return (

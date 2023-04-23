@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { CSSProperties, FC, useEffect, useMemo, useRef, useState } from "react";
 import getTimeFromSeconds from "$helpers/timeFromSeconds";
 
 // styles
@@ -19,6 +19,7 @@ type props = {
     onVolumeChange?: (value: number) => void;
     small?: boolean;
     autoplay?: boolean;
+    style?: CSSProperties;
 };
 
 const VideoPlayer: FC<props> = ({
@@ -27,6 +28,7 @@ const VideoPlayer: FC<props> = ({
     onVolumeChange,
     small = false,
     autoplay = false,
+    style,
 }) => {
     const videoUrl = useMemo(() => URL.createObjectURL(file), [file]);
     const [playing, setPlaying] = useState(autoplay);
@@ -119,6 +121,7 @@ const VideoPlayer: FC<props> = ({
                 (playing ? " playing " : " paused ") +
                 (small ? " small " : "")
             }
+            style={style}
         >
             <div className="volume">
                 <Slider

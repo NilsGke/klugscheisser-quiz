@@ -1,0 +1,142 @@
+@import "../colors.scss";
+
+.diashow {
+    height: 80%;
+    width: 80%;
+    // background-color: $grey;
+    position: relative;
+
+    .info {
+        position: absolute;
+        color: $white;
+        opacity: 0.4;
+    }
+
+    .images {
+        height: calc(100% - 60px);
+        max-height: calc(100% - 60px);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .imageContainer {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            .image {
+                height: 100%;
+                width: 100%;
+
+                img {
+                    height: 100%;
+                    width: 100%;
+                    object-fit: contain;
+                }
+            }
+        }
+    }
+    .all {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        $pad: 5px;
+        padding: $pad;
+        .image {
+            padding: $pad;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    .progress {
+        width: 100%;
+    }
+    .editorWrapper {
+        position: fixed;
+        height: 100svh;
+        width: 100svw;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px) brightness(0.4);
+
+        .editor {
+            height: 70%;
+            width: 80%;
+            background-color: $dark;
+            border-radius: 30px;
+            padding: 50px;
+            position: relative;
+
+            .close {
+                height: 35px;
+                aspect-ratio: 1;
+                background-color: transparent;
+                border: none;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                cursor: pointer;
+                img {
+                    height: 70%;
+                }
+            }
+
+            .images {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 20px;
+                .image {
+                    padding: 10px;
+                    border-radius: 10px;
+                    background-color: $lighterDark;
+                    flex: 1;
+                    width: 100%;
+                    height: 80%;
+
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+
+                    .controls {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 10%;
+                        margin-top: 10px;
+                        button {
+                            background-color: transparent;
+                            height: 30px;
+                            aspect-ratio: 1;
+                            border: none;
+                            cursor: pointer;
+
+                            &.left img {
+                                rotate: 90deg;
+                                filter: invert(1);
+                            }
+                            &.right img {
+                                rotate: -90deg;
+                                filter: invert(1);
+                            }
+                            img {
+                                height: 80%;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

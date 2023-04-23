@@ -29,7 +29,7 @@ type ConfigField = {
 type ConfigResource = {
     type: MediaType;
     volume?: number;
-    content: string | FileName;
+    content: string | FileName | FileName[];
 };
 
 interface FileName extends String {}
@@ -58,46 +58,66 @@ export const generateZipFromCategory = async (
     if (typeof category.description !== "string")
         media.push(category.description);
 
-    category.fields.forEach((field, i) => {
-        let questionMediaIndex: null | number = null;
-        let answerMediaIndex: null | number = null;
+    let questionContent: ConfigResource["content"];
+    let answerContent: ConfigResource["content"];
 
-        if (field.question.type !== "text") {
-            if (field.question.type === "imageCollection") return; // TODO implement this
-            questionMediaIndex = media.length;
+    category.fields.forEach((field, i) => {
+        //#region question
+
+        if (field.question.type === "text") {
+            questionContent = field.question.content;
+        } else if (field.question.type === "imageCollection") {
+            const names: FileName[] = [];
+            field.question.content.forEach((image) => {
+                names.push(media.length + "_" + image.name);
+                media.push(image);
+            });
+            questionContent = names;
+        } else {
+            questionContent = media.length + "_" + field.question.content.name;
             media.push(field.question.content);
         }
-        if (field.answer.type !== "text") {
-            if (field.answer.type === "imageCollection") return; // TODO implement this
-            answerMediaIndex = media.length;
+
+        const question: ConfigResource = {
+            type: field.question.type,
+            content: questionContent,
+        };
+
+        if (field.question.type === "audio" || field.question.type === "video")
+            question.volume = field.question.volume;
+
+        //#endregion question
+
+        //#region answer
+
+        if (field.answer.type === "text") {
+            answerContent = field.answer.content;
+        } else if (field.answer.type === "imageCollection") {
+            const names: FileName[] = [];
+            field.answer.content.forEach((image) => {
+                names.push(media.length + "_" + image.name);
+                media.push(image);
+            });
+            answerContent = names;
+        } else {
+            answerContent = media.length + "_" + field.answer.content.name;
             media.push(field.answer.content);
         }
 
-        const question = {
-            type: field.question.type,
-            content:
-                field.question.type === "text"
-                    ? field.question.content
-                    : questionMediaIndex + "_" + field.question.content.name,
-        } as any;
-        if (field.question.type === "audio" || field.question.type === "video")
-            question.volume = field.question.volume;
-
-        const answer = {
+        const answer: ConfigResource = {
             type: field.answer.type,
-            content:
-                field.answer.type === "text"
-                    ? field.answer.content
-                    : answerMediaIndex + "_" + field.answer.content.name,
-        } as any;
-        if (field.question.type === "audio" || field.question.type === "video")
-            question.volume = field.question.volume;
+            content: answerContent,
+        };
+
+        if (field.answer.type === "audio" || field.answer.type === "video")
+            answer.volume = field.answer.volume;
+
+        //#endregion answer
 
         categoryInfo.fields.push({
             question,
             answer,
         });
-        if (field.question.type === "text") return;
     });
 
     console.log(categoryInfo, media);
@@ -167,14 +187,14 @@ export const importCategoryFromZip = (file: File) =>
                     applyMediaFromZipFile(
                         zip,
                         "question",
-                        configField,
+                        configField["question"],
                         category,
                         index
                     ),
                     applyMediaFromZipFile(
                         zip,
                         "answer",
-                        configField,
+                        configField["answer"],
                         category,
                         index
                     ),
@@ -189,49 +209,84 @@ export const importCategoryFromZip = (file: File) =>
 const applyMediaFromZipFile = (
     zip: JSZip,
     fieldType: "question" | "answer",
-    configField: ConfigField,
+    configResource: ConfigResource,
     category: PartialCategory,
-    index: number
+    fieldIndex: number
 ) =>
     new Promise<void>(async (resolve, reject) => {
-        if (configField[fieldType].type === "text")
-            category.fields[index][fieldType] = configField[
-                fieldType
-            ] as TextResource;
+        if (configResource.type === "text")
+            category.fields[fieldIndex][fieldType] =
+                configResource as TextResource;
         else {
-            const mediaBlob = await zip
-                .file(`media/${configField[fieldType].content}`)
-                ?.async("blob");
-            if (mediaBlob === undefined)
-                throw new Error("media blob is undefined");
-
-            const file: AnyMedia = new File(
-                [mediaBlob],
-                configField[fieldType].content.split(/_(.*)/s)[1],
-                {
-                    type: mediaBlob.type,
-                    lastModified: new Date().getTime(),
-                }
-            );
-
-            if (configField[fieldType].type === "audio")
-                category.fields[index][fieldType] = {
-                    type: "audio",
-                    volume: configField[fieldType].volume || 50,
-                    content: file as Audio,
+            // image collection
+            if (
+                configResource.type === "imageCollection" &&
+                Array.isArray(configResource.content)
+            ) {
+                category.fields[fieldIndex][fieldType] = {
+                    type: "imageCollection",
+                    content: [],
                 };
-            else if (configField[fieldType].type === "image")
-                category.fields[index][fieldType] = {
-                    type: "image",
-                    content: file as Image,
-                };
-            else if (configField[fieldType].type === "video")
-                category.fields[index][fieldType] = {
-                    type: "video",
-                    volume: configField[fieldType].volume || 50,
+                await Promise.all(
+                    configResource.content.map(async (fileName) => {
+                        const mediaBlob = await zip
+                            .file(`media/${fileName}`)
+                            ?.async("blob");
+                        if (mediaBlob === undefined)
+                            throw new Error("media blob is undefined");
 
-                    content: file as Video,
-                };
+                        const file: AnyMedia = new File(
+                            [mediaBlob],
+                            fileName.split(/_(.*)/s)[1],
+                            {
+                                type: mediaBlob.type,
+                                lastModified: new Date().getTime(),
+                            }
+                        );
+
+                        (
+                            category.fields[fieldIndex][fieldType]
+                                ?.content as Image[]
+                        ).push(file as Image);
+                    })
+                );
+
+                // every other media type (image, audio, video)
+            } else if (!Array.isArray(configResource.content)) {
+                const mediaBlob = await zip
+                    .file(`media/${configResource.content}`)
+                    ?.async("blob");
+                if (mediaBlob === undefined)
+                    throw new Error("media blob is undefined");
+
+                const file: AnyMedia = new File(
+                    [mediaBlob],
+                    configResource.content.split(/_(.*)/s)[1],
+                    {
+                        type: mediaBlob.type,
+                        lastModified: new Date().getTime(),
+                    }
+                );
+
+                if (configResource.type === "audio")
+                    category.fields[fieldIndex][fieldType] = {
+                        type: "audio",
+                        volume: configResource.volume || 50,
+                        content: file as Audio,
+                    };
+                else if (configResource.type === "image")
+                    category.fields[fieldIndex][fieldType] = {
+                        type: "image",
+                        content: file as Image,
+                    };
+                else if (configResource.type === "video")
+                    category.fields[fieldIndex][fieldType] = {
+                        type: "video",
+                        volume: configResource.volume || 50,
+
+                        content: file as Video,
+                    };
+            }
         }
         resolve();
     });
