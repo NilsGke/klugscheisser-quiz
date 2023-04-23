@@ -7,6 +7,7 @@ import Spinner from "$components/Spinner";
 import ResourceRenderer from "$components/ResourceRenderer";
 
 import "./View.page.scss";
+import Diashow from "$components/Diashow";
 
 const Viewer = () => {
     const [category, setCategory] = useState<Indexed<Category> | null | false>(
@@ -48,10 +49,18 @@ const Viewer = () => {
                 {category.fields.map((field) => (
                     <div className="field">
                         <div className="question">
-                            <ResourceRenderer resource={field.question} />
+                            {field.question.type === "imageCollection" ? (
+                                <Diashow images={field.question.content} view />
+                            ) : (
+                                <ResourceRenderer resource={field.question} />
+                            )}
                         </div>
                         <div className="answer">
-                            <ResourceRenderer resource={field.answer} />
+                            {field.answer.type === "imageCollection" ? (
+                                <Diashow images={field.answer.content} view />
+                            ) : (
+                                <ResourceRenderer resource={field.answer} />
+                            )}
                         </div>
                     </div>
                 ))}
