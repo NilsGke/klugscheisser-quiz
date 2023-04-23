@@ -768,6 +768,7 @@ const ResourceDisplay = ({
                     file={resource.content}
                     initialVolume={resource.volume}
                     autoplay
+                    show
                 />
             </div>
         );
