@@ -10,6 +10,7 @@ import volume0 from "$assets/volume0.svg";
 import volume1 from "$assets/volume1.svg";
 import volume2 from "$assets/volume2.svg";
 import volume3 from "$assets/volume3.svg";
+import speakerIcon from "$assets/speaker.svg";
 // styles
 import "./AudioPlayer.scss";
 
@@ -18,17 +19,17 @@ type props = {
     initialVolume?: number;
     onVolumeChange?: (value: number) => void;
     autoplay?: boolean;
-    fileName?: string;
+    show?: boolean;
 };
 
 // TODO add album art
 
 const AudioPlayer: FC<props> = ({
     file,
-    fileName,
     onVolumeChange,
     initialVolume = 50,
     autoplay = false,
+    show,
 }) => {
     const audioUrl = useMemo(() => URL.createObjectURL(file), [file]);
 
@@ -128,10 +129,34 @@ const AudioPlayer: FC<props> = ({
                 autoPlay={autoplay}
             ></audio>
             <div className="top">
-                <button className="playPause" onClick={() => play(!playing)}>
-                    <img src={playing ? pauseIcon : playIcon} alt="" />
-                </button>
-                <div className="title">{name}</div>
+                {show ? (
+                    <>
+                        <img
+                            src={speakerIcon}
+                            className="speakerIcon"
+                            alt="speaker icon"
+                        />
+                        <button
+                            className="playPause"
+                            onClick={() => play(!playing)}
+                        >
+                            <img
+                                src={playing ? pauseIcon : playIcon}
+                                alt="play/pause"
+                            />
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className="playPause"
+                            onClick={() => play(!playing)}
+                        >
+                            <img src={playing ? pauseIcon : playIcon} alt="" />
+                        </button>
+                        <div className="title">{name}</div>
+                    </>
+                )}
             </div>
 
             <div className="time">

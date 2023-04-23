@@ -27,6 +27,10 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        img.speakerIcon {
+            filter: invert(1);
+            height: 40vh;
+        }
         button.playPause {
             background-color: transparent;
             filter: invert(1);
