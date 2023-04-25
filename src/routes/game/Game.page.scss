@@ -422,4 +422,235 @@
             }
         }
     }
+
+    .doneWrapper {
+        position: fixed;
+        height: 100svh;
+        width: 100svw;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(10px) brightness(0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .done {
+            position: relative;
+            padding: 50px;
+            border-radius: 30px;
+            background-color: $dark;
+            display: grid;
+            place-items: center;
+            grid-template-rows: 1fr 50px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 50px;
+
+            .close {
+                background-color: transparent;
+                border: none;
+                height: 40px;
+                aspect-ratio: 1;
+                cursor: pointer;
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                img {
+                    height: 80%;
+                }
+            }
+
+            .winners {
+                display: flex;
+                align-items: end;
+                justify-content: center;
+                gap: 10px;
+                .team {
+                    background: $lighterDark;
+                    padding: 15px;
+                    border-radius: 10px;
+                    width: 150px;
+
+                    display: grid;
+                    grid-template-rows: auto 60px 30px;
+                    justify-items: center;
+
+                    &.first {
+                        height: 330px;
+                    }
+                    &.second {
+                        height: 260px;
+                    }
+                    &.third {
+                        height: 200px;
+                    }
+                    .place {
+                        font-size: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+            }
+            .leaderboard {
+                table.leaderboard {
+                    border-collapse: collapse;
+                    thead {
+                    }
+                    tbody {
+                    }
+                    tr {
+                        td,
+                        th {
+                            padding: 10px;
+                            text-align: center;
+                            vertical-align: middle;
+
+                            button {
+                                background-color: transparent;
+                                border: none;
+                                height: 100%;
+                                display: inline-block;
+                                margin-left: 5px;
+                                cursor: pointer;
+                                img {
+                                    translate: 0 2px;
+                                    filter: invert(1);
+                                }
+                            }
+                        }
+                    }
+                }
+                // online inside border
+                table td,
+                table th {
+                    border: 1px solid $grey;
+                }
+                table tr:first-child th {
+                    border-top: 0;
+                }
+                table tr:last-child td {
+                    border-bottom: 0;
+                }
+                table tr td:first-child,
+                table tr th:first-child {
+                    border-left: 0;
+                }
+                table tr td:last-child,
+                table tr th:last-child {
+                    border-right: 0;
+                }
+            }
+            .chart {
+                height: 100%;
+                aspect-ratio: 1;
+                svg {
+                    height: 100%;
+                    aspect-ratio: 1;
+                }
+            }
+
+            button.closeGame {
+                grid-column: 1 / 4;
+                background-color: $lighterDark;
+                padding: 15px;
+                border-radius: 15px;
+                border: 1px solid $grey;
+                font-size: 16px;
+                color: $white;
+                cursor: pointer;
+
+                transition: all 0.2s ease-out;
+                &:hover {
+                    border-color: $white;
+                    background-color: $white;
+                    color: $dark;
+                    box-shadow: 0 0 30px $grey;
+                }
+            }
+        }
+    }
+}
+
+#react-confirm-alert {
+    .react-confirm-alert-overlay.answeredQuestions {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100svh;
+        width: 100svw;
+        backdrop-filter: blur(10px) brightness(0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .react-confirm-alert {
+            background-color: $dark;
+            border-radius: 30px;
+            padding: 30px;
+            .react-confirm-alert-body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 30px;
+                max-height: 90vh;
+                overflow-y: scroll;
+
+                hr {
+                    width: 90%;
+                    border: 1px solid $grey;
+                }
+
+                .answeredQuestion {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 30px;
+                    > div {
+                        flex: 1;
+                        width: 40vw;
+                        img,
+                        video {
+                            border-radius: 10px;
+                            max-width: 100%;
+                        }
+                        > * {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                    }
+                }
+
+                .react-confirm-alert-button-group {
+                    margin-top: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+
+                    button {
+                        position: fixed;
+                        bottom: 30px;
+                        font-size: 20px;
+                        cursor: pointer;
+                        background: transparent;
+                        color: $white;
+                        padding: 10px;
+                        border-radius: 10px;
+                        border: none;
+                        &:last-child {
+                            background-color: $lighterDark;
+                            border: 1px solid $grey;
+                        }
+                        transition: transform 0.2s ease-in;
+                        &:hover {
+                            transform: scale(1.03);
+                        }
+                    }
+                    background-color: transparent;
+                }
+            }
+        }
+    }
 }

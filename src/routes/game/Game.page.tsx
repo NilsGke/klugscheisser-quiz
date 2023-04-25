@@ -9,6 +9,7 @@ import {
 } from "react";
 import Setup from "./setup/Setup";
 import JSConfetti from "js-confetti";
+import { confirmAlert } from "react-confirm-alert";
 
 // types
 import {
@@ -22,6 +23,7 @@ import {
 import { Category, Resource } from "$types/categoryTypes";
 // helpers
 import { getStoredCategory, removeCategoryFromDb } from "$db/categories";
+import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
 // hooks
 import useKeyboard from "$hooks/keyboard";
 import { useLocation, useParams } from "react-router-dom";
@@ -30,14 +32,15 @@ import AudioPlayer from "$components/AudioPlayer";
 import VideoPlayer from "$components/VideoPlayer";
 import Spinner from "$components/Spinner";
 import TimeBar from "$components/TimeBar";
+import Diashow from "$components/Diashow";
 // styles
 import "./Game.page.scss";
 //assets
 import closeIcon from "$assets/close.svg";
 import editIcon from "$assets/edit.svg";
 import checkIcon from "$assets/check.svg";
-import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
-import Diashow from "$components/Diashow";
+import eyeIcon from "$assets/eye.svg";
+import { PieChart } from "react-minimal-pie-chart";
 
 enum State {
     idle = "idle",
@@ -46,6 +49,7 @@ enum State {
     showQuestion = "showQuestion",
     showAnswer = "showAnswer",
     goingSmall = "goingSmall",
+    done = "done",
 }
 
 const jsConfetti = new JSConfetti();
@@ -218,7 +222,7 @@ const Game = () => {
         setGameState(State.goingBig);
         activeTimers.current = [
             setTimeout(() => setGameState(State.showDescription), 500),
-            setTimeout(() => setGameState(State.showQuestion), 4500),
+            setTimeout(() => setGameState(State.showQuestion), 550),
         ];
     };
 
@@ -258,6 +262,25 @@ const Game = () => {
                     emojiSize: 20,
                 });
 
+            console.log(
+                newCategories.map((cat) =>
+                    cat.fields.map(
+                        (field) => typeof field.answered === "string"
+                    )
+                )
+            );
+
+            if (
+                newCategories.every((cat) =>
+                    cat.fields.every(
+                        (field) => typeof field.answered === "string"
+                    )
+                )
+            ) {
+                setTimeout(() => setGameState(State.done), 650);
+                console.log("done");
+            } else setGameState(State.idle);
+
             return {
                 categories: newCategories,
                 teams: newTeams,
@@ -266,8 +289,8 @@ const Game = () => {
         abortTimers();
         setBuzzeredTeamIndex(null);
         setSelected(null);
-        setGameState(State.idle);
     };
+    console.log(gameState);
 
     const endGame = () => {
         if (
@@ -280,6 +303,43 @@ const Game = () => {
         setGameData(null);
         deleteGameFromDb();
     };
+
+    // confetti on win
+    useEffect(() => {
+        if (gameState === State.done) {
+            setTimeout(() => {
+                jsConfetti.addConfetti({
+                    confettiNumber: 150,
+                    emojis: ["👑", "🏁", "🏁", "🏁"],
+                    emojiSize: 30,
+                });
+                setTimeout(() => {
+                    let i = 0;
+                    const confetti = () => {
+                        i++;
+                        if (i === 3) clearInterval(intverval);
+
+                        setTimeout(() => {
+                            jsConfetti.addConfetti({
+                                confettiColors: winners.map((t) => t.color),
+                            });
+                        }, 0);
+                        setTimeout(() => {
+                            jsConfetti.addConfetti({
+                                confettiColors: winners.map((t) => t.color),
+                            });
+                        }, 250);
+                        setTimeout(() => {
+                            jsConfetti.addConfetti({
+                                confettiColors: winners.map((t) => t.color),
+                            });
+                        }, 500);
+                    };
+                    const intverval = setInterval(confetti, 1300);
+                }, 1000);
+            }, 600);
+        }
+    }, [gameState]);
 
     if (loading) return <Spinner />;
 
@@ -298,6 +358,14 @@ const Game = () => {
                 />
             </div>
         );
+
+    const sortedTeams = gameData.teams
+        .slice()
+        .sort((a, b) => b.score - a.score);
+
+    const winners = sortedTeams.filter(
+        (team) => team.score === sortedTeams[0].score
+    );
 
     return (
         <div id="gamePage" className={gameState}>
@@ -337,7 +405,10 @@ const Game = () => {
                             end test
                         </button>
                     ) : (
-                        <button className="end" onClick={endGame}>
+                        <button
+                            className="end"
+                            onClick={() => setGameState(State.done)}
+                        >
                             end game
                         </button>
                     )}
@@ -387,6 +458,184 @@ const Game = () => {
                     </Fragment>
                 ))}
             </div>
+
+            {gameState === State.done ? (
+                <div className="doneWrapper">
+                    <div className="done">
+                        <button
+                            className="close"
+                            onClick={() => setGameState(State.idle)}
+                        >
+                            <img src={closeIcon} alt="close icon" />
+                        </button>
+                        <div className="winners">
+                            {sortedTeams[1] !== undefined ? (
+                                <div className="team second">
+                                    <div className="place">2</div>
+                                    <h2
+                                        style={{
+                                            color: sortedTeams[1].color,
+                                        }}
+                                    >
+                                        {sortedTeams[1].name}
+                                    </h2>
+                                    <div className="points">
+                                        {sortedTeams[1].score}
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            {sortedTeams[0] !== undefined ? (
+                                <div className="team first">
+                                    <div className="place">1</div>
+                                    <h2
+                                        style={{
+                                            color: sortedTeams[0].color,
+                                        }}
+                                    >
+                                        {sortedTeams[0].name}
+                                    </h2>
+                                    <div className="points">
+                                        {sortedTeams[0].score}
+                                    </div>
+                                </div>
+                            ) : null}
+
+                            {sortedTeams[2] !== undefined ? (
+                                <div className="team third">
+                                    <div className="place">3</div>
+                                    <h2
+                                        style={{
+                                            color: sortedTeams[2].color,
+                                        }}
+                                    >
+                                        {sortedTeams[2].name}
+                                    </h2>
+                                    <div className="points">
+                                        {sortedTeams[2].score}
+                                    </div>
+                                </div>
+                            ) : null}
+                        </div>
+                        <div className="leaderboard">
+                            <table className="leaderboard">
+                                <thead>
+                                    <tr>
+                                        <th>Team</th>
+                                        <th>Score</th>
+                                        <th>Answered</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {sortedTeams.map((team, teamIndex) => {
+                                        const answeredFields = [
+                                            ...gameData.categories.map(
+                                                (category) =>
+                                                    category.fields.filter(
+                                                        (field) =>
+                                                            field.answered ===
+                                                            team.name
+                                                    )
+                                            ),
+                                        ].flat();
+
+                                        return (
+                                            <tr>
+                                                <td
+                                                    style={{
+                                                        color: team.color,
+                                                    }}
+                                                >
+                                                    {team.name}
+                                                </td>
+                                                <td>{team.score}</td>
+                                                <td>
+                                                    {answeredFields.length}
+                                                    <button
+                                                        className="viewAnsweredQuestion"
+                                                        onClick={() =>
+                                                            confirmAlert({
+                                                                title: "Answered Questions",
+                                                                childrenElement:
+                                                                    () =>
+                                                                        answeredFields.map(
+                                                                            (
+                                                                                field,
+                                                                                fieldIndex
+                                                                            ) => {
+                                                                                return (
+                                                                                    <>
+                                                                                        <div
+                                                                                            key={
+                                                                                                fieldIndex
+                                                                                            }
+                                                                                            className="answeredQuestion"
+                                                                                        >
+                                                                                            <div className="question">
+                                                                                                <ResourceDisplay
+                                                                                                    resource={
+                                                                                                        field.question
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
+                                                                                            <div className="answer">
+                                                                                                <ResourceDisplay
+                                                                                                    resource={
+                                                                                                        field.answer
+                                                                                                    }
+                                                                                                />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        {fieldIndex !==
+                                                                                        answeredFields.length -
+                                                                                            1 ? (
+                                                                                            <hr />
+                                                                                        ) : null}
+                                                                                    </>
+                                                                                );
+                                                                            }
+                                                                        ),
+                                                                buttons: [
+                                                                    {
+                                                                        label: "close",
+                                                                    },
+                                                                ],
+                                                                overlayClassName:
+                                                                    "answeredQuestions",
+                                                                closeOnEscape:
+                                                                    true,
+                                                                closeOnClickOutside:
+                                                                    true,
+                                                            })
+                                                        }
+                                                    >
+                                                        <img
+                                                            src={eyeIcon}
+                                                            alt="view icon"
+                                                        />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="chart">
+                            <PieChart
+                                data={sortedTeams.map((team) => ({
+                                    color: team.color,
+                                    value: team.score,
+                                    title: team.name,
+                                }))}
+                            />
+                        </div>
+                        <button className="closeGame" onClick={endGame}>
+                            finish (delete)
+                        </button>
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 };
