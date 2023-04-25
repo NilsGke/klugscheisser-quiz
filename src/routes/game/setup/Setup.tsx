@@ -42,6 +42,11 @@ const Setup: FC<props> = ({ setGameData }) => {
         if (teams.length === 0) return toast("please create at least one team");
         if (categories.length === 0)
             return toast("please add at least one category");
+
+        teams.forEach((team, index) =>
+            team.name.trim() === "" ? (team.name = `Team #${index + 1}`) : null
+        );
+
         console.log("finished building game", { teams, categories });
         setGameData({
             categories,
