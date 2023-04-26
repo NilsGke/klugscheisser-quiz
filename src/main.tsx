@@ -27,8 +27,13 @@ const App = () => {
     );
 
     const [indexedDbIsReady, setIndexedDbIsReady] = useState(false);
+    const [migrationsTotal, setMigrationsTotal] = useState(0);
+    const [migrationsLeft, setMigrationsLeft] = useState(0);
+
     useEffect(() => {
-        initIndexedDB().then(() => setIndexedDbIsReady(true));
+        initIndexedDB(setMigrationsTotal, setMigrationsLeft).then(() =>
+            setIndexedDbIsReady(true)
+        );
     }, []);
 
     // offline detection
@@ -124,7 +129,10 @@ const App = () => {
         return (
             <div className="loading">
                 <Spinner />
-                <div className="text">loading local database</div>
+                <div className="text">migrating local database</div>
+                <div className="info">
+                    {migrationsTotal - migrationsLeft}/{migrationsTotal}
+                </div>
             </div>
         );
 
@@ -140,9 +148,8 @@ const App = () => {
         </>
     );
 };
+console.log("%chool", "background:lime;");
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>
+    <App />
 );
