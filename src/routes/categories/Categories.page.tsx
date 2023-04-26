@@ -12,12 +12,11 @@ import "./Categories.page.scss";
 // assets
 import folderIcon from "$assets/folder.svg";
 import addIcon from "$assets/addRound.svg";
-import closeIcon from "$assets/close.svg";
 
 const Categories = () => {
-    const [importOpen, setImportOpen] = useState(false);
-    const [file, setFile] = useState<File>();
+    const [files, setFiles] = useState<File[]>();
     const [dragging, setDragging] = useState(false);
+    const [update, setUpdate] = useState(Date.now());
 
     const navigate = useNavigate();
 
@@ -53,7 +52,7 @@ const Categories = () => {
             if (e.target === null || e.dataTransfer === null) return;
             e.preventDefault();
 
-            setFile(e.dataTransfer?.files[0]);
+            setFiles(Array.from(e.dataTransfer.files));
 
             setDragging(false);
         };
@@ -76,19 +75,19 @@ const Categories = () => {
 
     // file stuff
     useEffect(() => {
-        if (file === undefined) return;
-        if (file.type !== "application/x-zip-compressed") {
-            toast("This file is not a zip file");
-            setFile(undefined);
-            return;
-        }
-
-        importCategoryFromZip(file).then((category) =>
-            storeCategoryInDB(category).then((dbIndex) =>
-                navigate(`/categories/editor/${dbIndex}`)
-            )
-        );
-    }, [file]);
+        if (files === undefined) return;
+        files.forEach((file) => {
+            if (file.type !== "application/x-zip-compressed") {
+                toast(`"${file.name}" is not a zip file`);
+            } else {
+                importCategoryFromZip(file).then((category) =>
+                    storeCategoryInDB(category).then((dbIndex) =>
+                        setUpdate(Date.now())
+                    )
+                );
+            }
+        });
+    }, [files]);
 
     return (
         <div id="editorPage">
@@ -96,31 +95,10 @@ const Categories = () => {
             <h1>Kategorie-Editor</h1>
             <div id="onboard">
                 <div className="decide">
-                    <CategoryBrowser />
+                    <CategoryBrowser refresh={update} />
                     <div className="actions">
-                        <button onClick={() => setImportOpen(true)}>
-                            <img src={folderIcon} alt="import logo" />
-                            <p>Import Category-File</p>
-                        </button>
-                        <button onClick={() => navigate("/categories/editor")}>
-                            <img src={addIcon} alt="create new logo" />
-                            <p>Create New Category</p>
-                        </button>
-                    </div>
-                </div>
-                <div
-                    id="popupContainer"
-                    className={importOpen ? "visible" : "hidden"}
-                >
-                    <div id="popup" className={dragging ? "drag" : ""}>
-                        <button
-                            className="close"
-                            onClick={() => setImportOpen(false)}
-                        >
-                            <img src={closeIcon} alt="" />
-                        </button>
-
                         <label
+                            className={dragging ? "dragging" : ""}
                             htmlFor="fileInput"
                             id="fileInputLabel"
                             ref={fileInputLabelRef}
@@ -129,17 +107,31 @@ const Categories = () => {
                                 type="file"
                                 name="category zip input"
                                 id="fileInput"
+                                accept=".ksq.zip"
+                                multiple
+                                tabIndex={1}
                                 onChange={(e) => {
-                                    const files = e.target.files;
-                                    if (files === null || files.length === 0)
+                                    const fileList = e.target.files;
+                                    if (
+                                        fileList === null ||
+                                        fileList.length === 0
+                                    )
                                         return;
-                                    setFile(files[0]);
+                                    setFiles(Array.from(fileList));
                                 }}
                             />
-                            <p className="text">
+                            <img src={folderIcon} alt="import logo" />
+                            <p>
                                 drag to import or click <u>here</u> to select
                             </p>
                         </label>
+                        <button
+                            tabIndex={2}
+                            onClick={() => navigate("/categories/editor")}
+                        >
+                            <img src={addIcon} alt="create new logo" />
+                            <p>Create New Category</p>
+                        </button>
                     </div>
                 </div>
             </div>

@@ -113,7 +113,8 @@
             gap: 10px;
             max-height: 100%;
 
-            > button {
+            > button,
+            label {
                 height: 50%;
                 width: 100%;
                 background-color: transparent;
@@ -126,6 +127,21 @@
                 padding: 10px;
                 cursor: pointer;
                 transition: transform 0.3s ease-out;
+                position: relative;
+                &.dragging {
+                    outline: 1px solid $darkBlue;
+                }
+                &:has(:focus) {
+                    outline: 1px solid white;
+                }
+                input {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    top: 0;
+                    left: 0;
+                    opacity: 0;
+                }
                 &:hover {
                     transform: scale(1.02);
                 }
