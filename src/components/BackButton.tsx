@@ -16,7 +16,7 @@ const BackButton: FC<props> = ({ confirm, to }) => {
             to={to ?? "./../"}
             onClick={(e) =>
                 confirm &&
-                !window.confirm("Are you sure? Unsafed Progress will be lost!")
+                !window.confirm("Are you sure? Unsaved Progress will be lost!")
                     ? e.preventDefault()
                     : null
             }
