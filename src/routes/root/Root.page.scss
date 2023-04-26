@@ -120,7 +120,7 @@
         bottom: 30px;
         right: 30px;
         height: 60px;
-        aspect-ratio: 1;
+        aspect-ratio: 0.5; // wtf, 1 does not work on my ipad but .5 works on all devices
         display: flex;
         border-radius: 100%;
         border: 1px solid $white;
