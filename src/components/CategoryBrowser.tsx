@@ -7,9 +7,10 @@ import editIcon from "$assets/edit.svg";
 import testIcon from "$assets/test.svg";
 import checkIcon from "$assets/check.svg";
 import removeIcon from "$assets/close.svg";
-import eyeIcon from "$assets/eye.svg";
+import trashIcon from "$assets/trash.svg";
 import autoAnimate from "@formkit/auto-animate";
-import { getStoredCategories } from "$db/categories";
+import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
+import { confirmAlert } from "react-confirm-alert";
 
 type props = {
     refresh: any;
@@ -111,6 +112,19 @@ const CategoryBrowser: FC<props> = ({
                                     );
                             }}
                             selected={selected?.includes(category)}
+                            deletable
+                            delete={() =>
+                                removeCategoryFromDb(category.dbIndex).then(
+                                    () =>
+                                        setCategories((prev) =>
+                                            prev.filter(
+                                                (prevCategory) =>
+                                                    prevCategory.dbIndex !==
+                                                    category.dbIndex
+                                            )
+                                        )
+                                )
+                            }
                         />
                     ))}
 
@@ -166,6 +180,9 @@ const CategoryElement = ({
 
     choosable = false,
     choose,
+
+    deletable = false,
+    delete: deleteFun,
 }: {
     category: Indexed<Category>;
 
@@ -178,6 +195,9 @@ const CategoryElement = ({
 
     choosable?: boolean;
     choose?: () => void;
+
+    deletable?: boolean;
+    delete?: () => void;
 }) => {
     return (
         <div
@@ -231,18 +251,34 @@ const CategoryElement = ({
                         <img src={editIcon} alt="edit icon" />
                     </button>
                 ) : null}
-                <button
-                    className="view"
-                    title="view category"
-                    onClick={() =>
-                        window.open(
-                            `/categories/view/${category.dbIndex}`,
-                            "_blank"
-                        )
-                    }
-                >
-                    <img src={eyeIcon} alt="view icon" />
-                </button>
+
+                {deletable ? (
+                    <button
+                        className="delete"
+                        title="delete category"
+                        onClick={() =>
+                            confirmAlert({
+                                title: `delete  "${category.name}"?`,
+                                overlayClassName: "delete",
+                                childrenElement: () => (
+                                    <p>deleting cannot be undone</p>
+                                ),
+                                buttons: [
+                                    {
+                                        label: "delete",
+                                        onClick: deleteFun,
+                                    },
+                                    {
+                                        label: "keep",
+                                    },
+                                ],
+                            })
+                        }
+                    >
+                        <img src={trashIcon} alt="trash icon" />
+                    </button>
+                ) : null}
+
                 <button
                     className="test"
                     title="test category in a game"
