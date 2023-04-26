@@ -4,7 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
     Category,
     Image,
+    ImageResource,
     PartialCategory,
+    Resource,
     indexCategory,
     isCategory,
 } from "$types/categoryTypes";
@@ -31,7 +33,14 @@ const Edit = ({
     const [description, setDescription] = useState(initialCategory.description);
     const [answerTime, setAnswerTime] = useState(initialCategory.answerTime);
 
-    const mediaPoolRendered = useMemo(() => <MediaPool />, []); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
+    // resource added by media pool (dot menu)
+    const [addResource, setAddResource] = useState<Resource | null>(null);
+    const mediaPoolRendered = useMemo(
+        () => (
+            <MediaPool addToCateogry={(resource) => setAddResource(resource)} />
+        ),
+        []
+    ); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
 
     // exporting
     const [exporting, setExporting] = useState<boolean>(false);
@@ -133,6 +142,8 @@ const Edit = ({
         const dbIndex = await storeCategoryInDB(wholeCategory);
         window.open(`/categories/test/${dbIndex}/destroy`);
     };
+
+    console.log(addResource);
 
     return (
         <div id="edit">
@@ -256,6 +267,72 @@ const Edit = ({
             <div id="categoryWrapper">
                 <CategoryEditor
                     category={category}
+                    chooseField={
+                        addResource
+                            ? (index, fieldType) => {
+                                  const newCategory = Object.assign(
+                                      {},
+                                      category
+                                  );
+
+                                  if (addResource.type === "image") {
+                                      if (
+                                          newCategory.fields[index][fieldType]
+                                              ?.type === "image" &&
+                                          (
+                                              newCategory.fields[index][
+                                                  fieldType
+                                              ]?.content as Image
+                                          ).name !== addResource.content.name
+                                      )
+                                          newCategory.fields[index][fieldType] =
+                                              {
+                                                  type: "imageCollection",
+                                                  content: [
+                                                      newCategory.fields[index][
+                                                          fieldType
+                                                      ]?.content as Image,
+                                                      addResource.content as Image,
+                                                  ],
+                                              };
+                                      else if (
+                                          newCategory.fields[index][fieldType]
+                                              ?.type === "imageCollection" &&
+                                          (
+                                              newCategory.fields[index][
+                                                  fieldType
+                                              ]?.content as File[]
+                                          ).find(
+                                              (img) =>
+                                                  img.name ===
+                                                  addResource.content.name
+                                          ) === undefined
+                                      )
+                                          newCategory.fields[index][fieldType] =
+                                              {
+                                                  type: "imageCollection",
+                                                  content: [
+                                                      ...(newCategory.fields[
+                                                          index
+                                                      ][fieldType]
+                                                          ?.content as Image[]),
+                                                      addResource.content,
+                                                  ],
+                                              };
+                                      else {
+                                          newCategory.fields[index][fieldType] =
+                                              addResource;
+                                      }
+                                  } else {
+                                      newCategory.fields[index][fieldType] =
+                                          addResource;
+                                  }
+
+                                  setCategory(newCategory);
+                                  setAddResource(null);
+                              }
+                            : undefined
+                    }
                     setCategory={(newCategory: PartialCategory) => {
                         // need to copy the old Category in order for the state to update
                         setCategory(Object.assign({}, newCategory));
