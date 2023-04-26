@@ -64,3 +64,13 @@ body {
     border-radius: 10px;
     border: 0px solid #ffffff;
 }
+
+#root > .loading {
+    height: 100svh;
+    width: 100svw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 60px;
+}
