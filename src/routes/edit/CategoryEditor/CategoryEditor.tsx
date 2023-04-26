@@ -4,6 +4,7 @@ import {
     MediaType,
     MediaTypes,
     PartialCategory,
+    PartialField,
     PartialResource,
 } from "$types/categoryTypes";
 import "./Category.scss";
@@ -15,9 +16,12 @@ import Diashow from "$components/Diashow";
 type props = {
     category: PartialCategory;
     setCategory: (newCategory: PartialCategory) => void;
+    chooseField:
+        | ((fieldIndex: number, type: keyof PartialField) => void)
+        | undefined;
 };
 
-const CategoryEditor: FC<props> = ({ category, setCategory }) => {
+const CategoryEditor: FC<props> = ({ category, setCategory, chooseField }) => {
     return (
         <div className="category">
             {category.fields.map((field, fieldIndex) => (
@@ -26,6 +30,11 @@ const CategoryEditor: FC<props> = ({ category, setCategory }) => {
                     fieldIndex={fieldIndex}
                     category={category}
                     setCategory={setCategory}
+                    choose={
+                        chooseField
+                            ? (type) => chooseField(fieldIndex, type)
+                            : undefined
+                    }
                 />
             ))}
         </div>
@@ -36,16 +45,26 @@ const Field = ({
     fieldIndex,
     category,
     setCategory,
+    choose,
 }: {
     fieldIndex: number;
     category: PartialCategory;
     setCategory: (newCategory: PartialCategory) => void;
+    choose: ((type: keyof PartialField) => void) | undefined;
 }) => {
     return (
         <div className="field">
             <h3>{(fieldIndex + 1) * 100}</h3>
             <div className="content">
                 <div className="question">
+                    {choose ? (
+                        <div
+                            className="choose"
+                            onClick={() => choose("question")}
+                        >
+                            click here to add
+                        </div>
+                    ) : null}
                     <MediaElement
                         fieldIndex={fieldIndex}
                         type="question"
@@ -54,6 +73,14 @@ const Field = ({
                     />
                 </div>
                 <div className="answer">
+                    {choose ? (
+                        <div
+                            className="choose"
+                            onClick={() => choose("answer")}
+                        >
+                            click here to add
+                        </div>
+                    ) : null}
                     <MediaElement
                         fieldIndex={fieldIndex}
                         type="answer"

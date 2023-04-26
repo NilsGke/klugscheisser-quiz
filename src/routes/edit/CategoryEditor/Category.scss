@@ -58,6 +58,22 @@
                     background: $dark;
                 }
 
+                > .choose {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    z-index: 1;
+                    top: 0;
+                    left: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    backdrop-filter: blur(3px) brightness(0.7);
+                    cursor: pointer;
+                    outline: 2px solid $darkBlue;
+                    border-radius: 10px;
+                }
+
                 .mediaElement {
                     display: flex;
                     align-items: center;
