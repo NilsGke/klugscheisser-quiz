@@ -13,7 +13,7 @@ import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
 import { confirmAlert } from "react-confirm-alert";
 
 type props = {
-    refresh: any;
+    refresh?: any;
 
     selecting?: boolean;
     submit?: (categories: Indexed<Category>[]) => void;
