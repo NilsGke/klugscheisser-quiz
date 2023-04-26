@@ -11,7 +11,7 @@ import {
  * @version 4 added category store
  * @version 5 added volume to audio and video
  * @version 6 added board store
- *
+ * @version 7 added game store
  */
 export let db: IDBDatabase;
 
