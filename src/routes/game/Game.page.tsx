@@ -222,7 +222,7 @@ const Game = () => {
         setGameState(State.goingBig);
         activeTimers.current = [
             setTimeout(() => setGameState(State.showDescription), 500),
-            setTimeout(() => setGameState(State.showQuestion), 550),
+            setTimeout(() => setGameState(State.showQuestion), 4500),
         ];
     };
 

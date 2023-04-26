@@ -1,5 +1,5 @@
 import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
-import { IndexedFile, MediaType } from "$types/categoryTypes";
+import { IndexedFile, MediaType, Resource } from "$types/categoryTypes";
 import "./MediaPool.scss";
 import {
     deleteStoredFile,
@@ -15,12 +15,23 @@ import audioIcon from "$assets/audioFile.svg";
 import imageIcon from "$assets/image.svg";
 import videoIcon from "$assets/videoCam.svg";
 import trashIcon from "$assets/delete.svg";
+import arrowIcon from "$assets/arrow.svg";
+import dotsIcon from "$assets/dots.svg";
+import fullscreenIcon from "$assets/fullscreen.svg";
+
 import { confirmAlert } from "react-confirm-alert";
 import autoAnimate from "@formkit/auto-animate";
 import AudioPlayer from "$components/AudioPlayer";
 import VideoPlayer from "$components/VideoPlayer";
+import { Indexed } from "$db/indexeddb";
+import useOutsideClick from "$hooks/useOutsideClick";
+import ResourceRenderer from "$components/ResourceRenderer";
 
-const MediaPool = () => {
+const MediaPool = ({
+    addToCateogry,
+}: {
+    addToCateogry: (resource: Resource) => void;
+}) => {
     const [mediaType, setMediaType] = useState<MediaType>("image");
 
     const [files, setFiles] = useState<IndexedFile[]>([]);
@@ -81,16 +92,6 @@ const MediaPool = () => {
                 listRef.current.removeEventListener("scroll", scrollHandler);
         };
     }, [bottomRef, listRef]);
-
-    // drag 'n drop
-    const dragStart = (event: DragEvent<HTMLDivElement>, mediaUrl: string) => {
-        event.dataTransfer.setData(
-            "text/plain",
-            (event.target as HTMLElement).id
-        );
-        event.dataTransfer.setData("text/uri-list", mediaUrl);
-        event.dataTransfer.dropEffect = "copy";
-    };
 
     const changeMediaType = (mediaType: MediaType) => {
         setFiles([]);
@@ -182,211 +183,33 @@ const MediaPool = () => {
                     </label>
                 </div>
 
-                {files.map((file) => {
-                    const mediaURL = URL.createObjectURL(file);
-                    if (mediaType === "image")
-                        return (
-                            <div
-                                className="file"
-                                key={file.name + file.size}
-                                id={mediaType + "_" + file.dbIndex}
-                                onDragStart={(e) => dragStart(e, mediaURL)}
-                                draggable
-                            >
-                                <img
-                                    src={mediaURL}
-                                    alt={file.name}
-                                    draggable="false"
-                                />
-                                <button
-                                    className="delete"
-                                    onClick={() =>
-                                        confirmAlert({
-                                            title: "Delete Image from Cache?",
-                                            message: "This cannot be undone",
-                                            childrenElement: () => (
-                                                <img
-                                                    src={mediaURL}
-                                                    alt="image, you want to delete"
-                                                    draggable="false"
-                                                />
-                                            ),
-                                            buttons: [
-                                                {
-                                                    label: "Delete",
-                                                    onClick: () =>
-                                                        deleteStoredFile(
-                                                            mediaType,
-                                                            file.dbIndex
-                                                        ).then(() => {
-                                                            setFiles((prev) =>
-                                                                prev.filter(
-                                                                    (f) =>
-                                                                        f.dbIndex !==
-                                                                        file.dbIndex
-                                                                )
-                                                            );
-                                                            setLength(
-                                                                (prev) =>
-                                                                    prev - 1
-                                                            );
-                                                            checkScroll();
-                                                        }),
-                                                },
-                                                {
-                                                    label: "Cancel",
-                                                },
-                                            ],
-                                            overlayClassName: "popupOverlay",
-                                            closeOnEscape: true,
-                                            closeOnClickOutside: true,
-                                        })
-                                    }
-                                >
-                                    <img
-                                        src={trashIcon}
-                                        alt="delete icon"
-                                        draggable="false"
-                                    />
-                                </button>
-                            </div>
-                        );
-                    else if (mediaType === "video")
-                        return (
-                            <div
-                                className="file"
-                                key={file.name + file.size}
-                                id={mediaType + "_" + file.dbIndex}
-                                onDragStart={(e) => dragStart(e, mediaURL)}
-                                draggable
-                            >
-                                <VideoPlayer file={file} small={true} />
-                                <button
-                                    className="delete"
-                                    onClick={() =>
-                                        confirmAlert({
-                                            title: "Delete Image from Cache?",
-                                            message: "This cannot be undone",
-                                            childrenElement: () => (
-                                                <video
-                                                    controls
-                                                    autoPlay={false}
-                                                    muted={true}
-                                                >
-                                                    <source
-                                                        type="video/mp4"
-                                                        src={mediaURL}
-                                                    />
-                                                </video>
-                                            ),
-                                            buttons: [
-                                                {
-                                                    label: "Delete",
-                                                    onClick: () =>
-                                                        deleteStoredFile(
-                                                            mediaType,
-                                                            file.dbIndex
-                                                        ).then(() => {
-                                                            setFiles((prev) =>
-                                                                prev.filter(
-                                                                    (f) =>
-                                                                        f.dbIndex !==
-                                                                        file.dbIndex
-                                                                )
-                                                            );
-                                                            setLength(
-                                                                (prev) =>
-                                                                    prev - 1
-                                                            );
-                                                            checkScroll();
-                                                        }),
-                                                },
-                                                {
-                                                    label: "Cancel",
-                                                },
-                                            ],
-                                            overlayClassName: "popupOverlay",
-                                            closeOnEscape: true,
-                                            closeOnClickOutside: true,
-                                        })
-                                    }
-                                >
-                                    <img
-                                        src={trashIcon}
-                                        alt="delete icon"
-                                        draggable="false"
-                                    />
-                                </button>
-                            </div>
-                        );
-                    else if (mediaType === "audio")
-                        return (
-                            <div
-                                className="file"
-                                key={file.name + file.size}
-                                id={mediaType + "_" + file.dbIndex}
-                                onDragStart={(e) => dragStart(e, mediaURL)}
-                                draggable
-                            >
-                                <AudioPlayer file={file} />
-                                <button
-                                    className="delete"
-                                    onClick={() =>
-                                        confirmAlert({
-                                            title: "Delete Image from Cache?",
-                                            message: "This cannot be undone",
-                                            childrenElement: () => (
-                                                <audio
-                                                    controls
-                                                    autoPlay={false}
-                                                >
-                                                    <source
-                                                        type="audio/mp3"
-                                                        src={mediaURL}
-                                                    />
-                                                </audio>
-                                            ),
-                                            buttons: [
-                                                {
-                                                    label: "Delete",
-                                                    onClick: () =>
-                                                        deleteStoredFile(
-                                                            mediaType,
-                                                            file.dbIndex
-                                                        ).then(() => {
-                                                            setFiles((prev) =>
-                                                                prev.filter(
-                                                                    (f) =>
-                                                                        f.dbIndex !==
-                                                                        file.dbIndex
-                                                                )
-                                                            );
-                                                            setLength(
-                                                                (prev) =>
-                                                                    prev - 1
-                                                            );
-                                                            checkScroll();
-                                                        }),
-                                                },
-                                                {
-                                                    label: "Cancel",
-                                                },
-                                            ],
-                                            overlayClassName: "popupOverlay",
-                                            closeOnEscape: true,
-                                            closeOnClickOutside: true,
-                                        })
-                                    }
-                                >
-                                    <img
-                                        src={trashIcon}
-                                        alt="delete icon"
-                                        draggable="false"
-                                    />
-                                </button>
-                            </div>
-                        );
-                })}
+                {files.map((file) => (
+                    <File
+                        key={file.name + file.size}
+                        file={file}
+                        mediaType={mediaType}
+                        addToCateogry={() => {
+                            addToCateogry({
+                                type: mediaType,
+                                content: file,
+                            } as Resource);
+                            console.log("asdf");
+                        }}
+                        deleteFile={() =>
+                            deleteStoredFile(mediaType, file.dbIndex).then(
+                                () => {
+                                    setFiles((prev) =>
+                                        prev.filter(
+                                            (f) => f.dbIndex !== file.dbIndex
+                                        )
+                                    );
+                                    setLength((prev) => prev - 1);
+                                    checkScroll();
+                                }
+                            )
+                        }
+                    />
+                ))}
 
                 {!gotAllFiles ? (
                     <div
@@ -405,3 +228,162 @@ const MediaPool = () => {
 };
 
 export default MediaPool;
+
+const File = ({
+    file,
+    mediaType,
+    deleteFile,
+    addToCateogry,
+}: {
+    file: Indexed<File>;
+    mediaType: MediaType;
+    deleteFile: () => void;
+    addToCateogry: () => void;
+}) => {
+    const [popoverOpen, setPopoverOpen] = useState(false);
+    const url = useRef("");
+
+    // drag 'n drop
+    const dragStart = (event: DragEvent<HTMLDivElement>) => {
+        event.dataTransfer.setData(
+            "text/plain",
+            (event.target as HTMLElement).id
+        );
+
+        const objectUrl = URL.createObjectURL(file);
+        url.current = objectUrl;
+        event.dataTransfer.setData("text/uri-list", objectUrl);
+
+        event.dataTransfer.dropEffect = "copy";
+    };
+    const dragEnd = () =>
+        setTimeout(() => {
+            URL.revokeObjectURL(url.current);
+            url.current = "";
+        }, 1000);
+
+    let MediaElement = <div>no player found for this media element</div>;
+
+    if (mediaType === "image") {
+        const url = URL.createObjectURL(file);
+        MediaElement = (
+            <img
+                src={url}
+                alt={file.name}
+                draggable="false"
+                onLoad={() => URL.revokeObjectURL(url)}
+            />
+        );
+    } else if (mediaType === "video")
+        MediaElement = <VideoPlayer file={file} small={true} />;
+    else if (mediaType === "audio") MediaElement = <AudioPlayer file={file} />;
+
+    const deleteFun = () => {
+        confirmAlert({
+            title: `Delete ${mediaType} from Cache?`,
+            message: "This cannot be undone",
+            childrenElement: () => (
+                <ResourceRenderer
+                    resource={{ type: mediaType, content: file } as Resource}
+                />
+            ),
+            buttons: [
+                {
+                    label: "Delete",
+                    onClick: () => {
+                        deleteFile();
+                        setPopoverOpen(false);
+                    },
+                },
+                {
+                    label: "Cancel",
+                },
+            ],
+            overlayClassName: "popupOverlay",
+            closeOnEscape: true,
+            closeOnClickOutside: true,
+        });
+    };
+
+    return (
+        <div
+            className="file"
+            id={mediaType + "_" + file.dbIndex}
+            onDragStart={(e) => dragStart(e)}
+            onDragEnd={dragEnd}
+            draggable
+        >
+            {MediaElement}
+            <button
+                className="dots"
+                onClick={() => setPopoverOpen((prev) => !prev)}
+            >
+                <img src={dotsIcon} alt="dot menu icon" />
+            </button>
+
+            {popoverOpen ? (
+                <Popover
+                    close={() => setPopoverOpen(false)}
+                    delete={deleteFun}
+                    add={addToCateogry}
+                    view={() => {
+                        const url = URL.createObjectURL(file);
+                        const newWindow = window.open(url);
+                        if (newWindow)
+                            newWindow.onload = () => URL.revokeObjectURL(url);
+                    }}
+                    rename={
+                        mediaType === "audio"
+                            ? () => {
+                                  console.log("rename");
+                                  //TODO add Renaming
+                              }
+                            : undefined
+                    }
+                />
+            ) : null}
+        </div>
+    );
+};
+
+const Popover = ({
+    rename,
+    close,
+    add,
+    view,
+    delete: deleteFun,
+}: {
+    close: () => void;
+    delete: () => void;
+    add: () => void;
+    view: () => void;
+    rename?: () => void;
+}) => {
+    // this is to prevent instant closing
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const popoverRef = useOutsideClick(close);
+
+    return (
+        <div className="popover" ref={mounted ? popoverRef : undefined}>
+            <button className="add" onClick={add}>
+                add <img src={arrowIcon} alt="arrow right" />
+            </button>
+            {/* TODO: renaming files */}
+            {/* {rename ? (
+                <button className="rename">
+                    rename <img src={editIcon} alt="edit icon" />
+                </button>
+            ) : null} */}
+            <button onClick={view}>
+                view <img src={fullscreenIcon} alt="fullscreen icon" />
+            </button>
+            <button className="delete" onClick={deleteFun}>
+                delete <img src={trashIcon} alt="trash icon" />
+            </button>
+        </div>
+    );
+};
