@@ -12,6 +12,8 @@ import autoAnimate from "@formkit/auto-animate";
 import { getStoredCategories } from "$db/categories";
 
 type props = {
+    refresh: any;
+
     selecting?: boolean;
     submit?: (categories: Indexed<Category>[]) => void;
     finish?: boolean;
@@ -32,6 +34,8 @@ enum Purpose {
 
 /** adding `selected` prop makes this component controlled by its parent */
 const CategoryBrowser: FC<props> = ({
+    refresh,
+
     submit,
     finish = false,
 
@@ -51,7 +55,7 @@ const CategoryBrowser: FC<props> = ({
     const [categories, setCategories] = useState<Indexed<Category>[]>([]);
     useEffect(() => {
         getStoredCategories(Infinity, Infinity).then(setCategories);
-    }, []);
+    }, [refresh]);
 
     const [searchTerm, setSearchTerm] = useState("");
 
