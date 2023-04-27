@@ -139,4 +139,44 @@
             }
         }
     }
+
+    > button {
+        height: 100%;
+        width: 300px;
+        z-index: 1;
+        background: transparent;
+        border: none;
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        border-radius: 20px;
+        outline: 0px solid transparent;
+
+        img {
+            filter: invert(1);
+            width: 50px;
+            aspect-ratio: 1;
+        }
+
+        transition: all 0.2s ease-out, outline 0.2s ease-in;
+        &:hover {
+            scale: 1.07;
+        }
+        &:focus-visible {
+            outline: 1px solid $grey;
+        }
+
+        &.prev {
+            left: -10%;
+            img {
+                rotate: 90deg;
+            }
+        }
+        &.next {
+            right: -10%;
+            img {
+                rotate: -90deg;
+            }
+        }
+    }
 }
