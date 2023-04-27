@@ -16,7 +16,7 @@ export default defineConfig({
             },
             manifest: {
                 short_name: "Klugscheißer-Quiz",
-                name: "Klugscheiißer Quiz",
+                name: "Klugscheißer Quiz",
                 icons: [
                     {
                         src: "/icons/maskable_icon.png",
