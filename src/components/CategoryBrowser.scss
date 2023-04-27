@@ -199,6 +199,9 @@
             padding: 30px;
             .react-confirm-alert-body {
                 text-align: center;
+                p {
+                    margin-top: 14px;
+                }
                 .react-confirm-alert-button-group {
                     margin-top: 20px;
                     display: flex;
