@@ -1,11 +1,13 @@
 import { FC, useEffect, useRef, useState } from "react";
 import {
     AnyIndexedMedia,
+    ImageResourceCollection,
     MediaType,
     MediaTypes,
     PartialCategory,
     PartialField,
     PartialResource,
+    Resource,
 } from "$types/categoryTypes";
 import "./Category.scss";
 import { getStoredFile } from "$db/media";
@@ -190,6 +192,7 @@ const MediaElement = ({
                     return;
                 newResource = {
                     type: "imageCollection",
+                    autoSkip: false,
                     content: [oldResource.content, newFile],
                 };
             } else if (
@@ -206,13 +209,14 @@ const MediaElement = ({
                     return;
                 newResource = {
                     type: "imageCollection",
+                    autoSkip: oldResource.autoSkip,
                     content: [...oldResource.content, newFile],
                 };
             } else
                 newResource = {
-                    type: newResourceType as any,
+                    type: newResourceType,
                     content: newFile,
-                };
+                } as Resource;
 
             newCategory.fields[fieldIndex][type] = newResource;
 
@@ -287,7 +291,22 @@ const MediaElement = ({
                     setImages={(newImages) => {
                         category.fields[fieldIndex][type] = {
                             type: "imageCollection",
+                            autoSkip: resource.autoSkip,
                             content: newImages,
+                        };
+                        setCategory(category);
+                    }}
+                    autoSkip={
+                        (
+                            category.fields[fieldIndex][
+                                type
+                            ] as ImageResourceCollection
+                        ).autoSkip
+                    }
+                    setAutoSkip={(auto) => {
+                        category.fields[fieldIndex][type] = {
+                            ...resource,
+                            autoSkip: auto,
                         };
                         setCategory(category);
                     }}

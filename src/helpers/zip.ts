@@ -29,6 +29,7 @@ type ConfigField = {
 type ConfigResource = {
     type: MediaType;
     volume?: number;
+    autoSkip?: boolean;
     content: string | FileName | FileName[];
 };
 
@@ -85,6 +86,8 @@ export const generateZipFromCategory = async (
 
         if (field.question.type === "audio" || field.question.type === "video")
             question.volume = field.question.volume;
+        else if (field.question.type === "imageCollection")
+            question.autoSkip = field.question.autoSkip;
 
         //#endregion question
 
@@ -111,6 +114,8 @@ export const generateZipFromCategory = async (
 
         if (field.answer.type === "audio" || field.answer.type === "video")
             answer.volume = field.answer.volume;
+        else if (field.question.type === "imageCollection")
+            question.autoSkip = field.question.autoSkip;
 
         //#endregion answer
 
@@ -225,6 +230,10 @@ const applyMediaFromZipFile = (
             ) {
                 category.fields[fieldIndex][fieldType] = {
                     type: "imageCollection",
+                    autoSkip:
+                        configResource.autoSkip === undefined
+                            ? false
+                            : configResource.autoSkip,
                     content: [],
                 };
                 await Promise.all(
