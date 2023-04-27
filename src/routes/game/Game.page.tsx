@@ -1032,7 +1032,14 @@ const ResourceDisplay = ({
     else if (resource.type === "text")
         return <div className="text">{resource.content}</div>;
     else if (resource.type === "imageCollection")
-        return <Diashow images={resource.content} stop={stop} show />;
+        return (
+            <Diashow
+                images={resource.content}
+                autoSkip={resource.autoSkip}
+                stop={stop}
+                show
+            />
+        );
 
     return <div className="resource">unknown content type?</div>;
 };

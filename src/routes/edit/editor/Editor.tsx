@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
     Category,
     Image,
-    ImageResource,
+    ImageResourceCollection,
     PartialCategory,
     Resource,
     indexCategory,
@@ -288,6 +288,7 @@ const Edit = ({
                                           newCategory.fields[index][fieldType] =
                                               {
                                                   type: "imageCollection",
+                                                  autoSkip: false,
                                                   content: [
                                                       newCategory.fields[index][
                                                           fieldType
@@ -311,6 +312,11 @@ const Edit = ({
                                           newCategory.fields[index][fieldType] =
                                               {
                                                   type: "imageCollection",
+                                                  autoSkip: (
+                                                      newCategory.fields[index][
+                                                          fieldType
+                                                      ] as ImageResourceCollection
+                                                  ).autoSkip,
                                                   content: [
                                                       ...(newCategory.fields[
                                                           index
