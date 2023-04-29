@@ -41,7 +41,7 @@
             width: 100%;
             position: absolute;
             background-color: transparent;
-            filter: invert(1);
+            filter: $invert;
             border: none;
             aspect-ratio: 1;
             cursor: pointer;
@@ -66,7 +66,7 @@
             justify-content: flex-end;
             cursor: pointer;
             > img {
-                filter: invert(1);
+                filter: $invert;
                 height: 80%;
             }
         }
@@ -113,7 +113,7 @@
         }
         button.mute {
             background-color: transparent;
-            filter: invert(1);
+            filter: $invert;
             border: none;
             height: 30px;
             aspect-ratio: 1;

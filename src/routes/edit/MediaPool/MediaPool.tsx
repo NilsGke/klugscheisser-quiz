@@ -272,6 +272,7 @@ const File = ({
                 alt={file.name}
                 draggable="false"
                 onLoad={() => URL.revokeObjectURL(url)}
+                loading="lazy"
             />
         );
     } else if (mediaType === "video")

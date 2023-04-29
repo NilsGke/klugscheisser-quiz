@@ -84,7 +84,7 @@
             box-shadow: 0 0 0px transparent;
             transition: box-shadow 0.2s ease-out;
             &:hover {
-                box-shadow: 0 0 50px shade($white, 70%);
+                box-shadow: 0 0 50px $lighterDark;
             }
 
             img,
@@ -105,8 +105,9 @@
                     border-color: $white;
                 }
                 img {
-                    filter: invert(0.3);
+                    filter: $invert;
                     width: 100%;
+                    opacity: 0.2;
                 }
                 label {
                     cursor: pointer;
@@ -147,7 +148,7 @@
                 img {
                     height: 70%;
                     width: 70%;
-                    filter: invert(1);
+                    filter: $invert;
                 }
             }
 
@@ -164,7 +165,7 @@
                 button {
                     background-color: transparent;
                     border: 1px solid $white;
-                    color: white;
+                    color: $white;
                     border-radius: 10px;
                     padding: 10px;
                     white-space: nowrap;
@@ -186,13 +187,10 @@
                     }
 
                     img {
-                        filter: invert(1);
+                        filter: $invert;
                     }
                     &.rename img {
                         height: 15px;
-                    }
-                    &.delete img {
-                        filter: none;
                     }
                     &.add img {
                         rotate: -90deg;

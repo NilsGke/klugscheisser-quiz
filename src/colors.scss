@@ -1,18 +1,54 @@
-$dark: #151516;
-$lighterDark: #262626;
-$grey: #4c4c4c;
-$orange: #ff9674;
-$darkBlue: #5a41ff;
-$lightBlue: #7cfdff;
-$green: #7bff9c;
-$yellow: #fedc5c;
-$white: #fefbf5;
-$pink: #ff90e1;
-$red: #ff6464;
-
-@function shade($color, $percentage) {
-    @return mix(black, $color, $percentage);
+:root {
+    --invert: invert(0);
 }
+
+body {
+    background: var(--dark);
+    color: var(--white);
+
+    &.dark {
+        --dark: #151516;
+        --lighterDark: #262626;
+        --grey: #939393;
+        --white: #fefbf5;
+        --pink: #ff90e1;
+        --red: #ff6464;
+        --orange: #ff9674;
+        --yellow: #fedc5c;
+        --lightBlue: #7cfdff;
+        --darkBlue: #5a41ff;
+        --green: #7bff9c;
+        --invert: invert(1);
+    }
+
+    &.light {
+        --dark: #ededed;
+        --lighterDark: #dadada;
+        --grey: #7e7e7e;
+        --white: #000000;
+        --pink: #ff81dd;
+        --red: #ff6464;
+        --orange: #ff8d67;
+        --yellow: #fedc5c;
+        --lightBlue: #00d2d5;
+        --darkBlue: #5a41ff;
+        --green: #7bff9c;
+        --invert: invert(0);
+    }
+}
+
+$dark: var(--dark);
+$lighterDark: var(--lighterDark);
+$grey: var(--grey);
+$orange: var(--orange);
+$darkBlue: var(--darkBlue);
+$lightBlue: var(--lightBlue);
+$green: var(--green);
+$yellow: var(--yellow);
+$white: var(--white);
+$pink: var(--pink);
+$red: var(--red);
+$invert: var(--invert);
 
 @property --gradient-angle {
     syntax: "<angle>";

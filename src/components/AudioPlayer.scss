@@ -28,12 +28,12 @@
         justify-content: center;
         flex-direction: column;
         img.speakerIcon {
-            filter: invert(1);
+            filter: $invert;
             height: 40vh;
         }
         button.playPause {
             background-color: transparent;
-            filter: invert(1);
+            filter: $invert;
             border: none;
             height: 40px;
             aspect-ratio: 1;
@@ -63,7 +63,7 @@
         }
         button.mute {
             background-color: transparent;
-            filter: invert(1);
+            filter: $invert;
             border: none;
             height: 30px;
             aspect-ratio: 1;

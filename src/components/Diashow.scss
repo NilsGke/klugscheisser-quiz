@@ -124,11 +124,11 @@
 
                             &.left img {
                                 rotate: 90deg;
-                                filter: invert(1);
+                                filter: $invert;
                             }
                             &.right img {
                                 rotate: -90deg;
-                                filter: invert(1);
+                                filter: $invert;
                             }
                             img {
                                 height: 80%;
@@ -153,7 +153,7 @@
         outline: 0px solid transparent;
 
         img {
-            filter: invert(1);
+            filter: $invert;
             width: 50px;
             aspect-ratio: 1;
         }

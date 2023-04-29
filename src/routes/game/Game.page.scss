@@ -289,7 +289,6 @@
                     animation: spinningBackground 3s linear infinite;
                     padding: 2px;
                     border: none;
-                    box-shadow: 0 0 50px shade($white, 90%);
                     > div {
                     }
                     .contentContainer {
@@ -329,7 +328,7 @@
                                         font-size: 24px;
                                         img {
                                             height: 100%;
-                                            filter: invert(1);
+                                            filter: $invert;
                                         }
                                         &[type="number"] {
                                             width: 85px;
@@ -514,7 +513,7 @@
                                 cursor: pointer;
                                 img {
                                     translate: 0 2px;
-                                    filter: invert(1);
+                                    filter: $invert;
                                 }
                             }
                         }

@@ -142,7 +142,7 @@
                         }
                         &.move {
                             img {
-                                filter: invert(1);
+                                filter: $invert;
                             }
                             &.left {
                                 rotate: 90deg;
@@ -165,7 +165,7 @@
                         border: none;
                         img {
                             height: 70px;
-                            filter: invert(0.3);
+                            filter: $invert;
                         }
                     }
                 }

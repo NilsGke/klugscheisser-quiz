@@ -1,23 +1,47 @@
 // @import "scss:color";
 @import "../../colors.scss";
 
-@function shade($color, $percentage) {
-    @return mix(black, $color, $percentage);
-}
-
 .root {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     height: 100svh;
+    background: $dark;
+    color: $white;
+
+    &,
+    * {
+        transition: all 0.2s ease-out !important;
+    }
+
+    button.themeSwitch {
+        background: transparent;
+        transition: filter 0.2s ease-out;
+        border: none;
+        height: 40px;
+        aspect-ratio: 1;
+        cursor: pointer;
+        position: fixed;
+        top: 30px;
+        right: 30px;
+        img {
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            &.dark {
+                filter: invert(1);
+            }
+        }
+    }
 
     #background {
         position: absolute;
         height: 100svh;
         width: 100svw;
-        filter: invert(1) opacity(0.2) blur(2.5px);
-        z-index: -1;
+        filter: $invert opacity(0.2) blur(2.5px);
+        pointer-events: none;
         animation: backgroundShift 30s linear infinite;
         @keyframes backgroundShift {
             from {
@@ -53,19 +77,19 @@
                 border-color: $orange;
                 white-space: pre-wrap;
                 &::before {
-                    box-shadow: 0px 0px 200px shade($orange, 20%);
+                    box-shadow: 0px 0px 200px $orange;
                 }
             }
             &:nth-child(2) {
                 border-color: $lightBlue;
                 &::before {
-                    box-shadow: 0px 0px 200px shade($lightBlue, 20%);
+                    box-shadow: 0px 0px 200px $lightBlue;
                 }
             }
             &:nth-child(3) {
                 border-color: $pink;
                 &::before {
-                    box-shadow: 0px 0px 200px shade($pink, 20%);
+                    box-shadow: 0px 0px 200px $pink;
                 }
             }
 
@@ -111,7 +135,7 @@
             img {
                 height: 80px;
                 aspect-ratio: 1;
-                filter: invert(1);
+                filter: $invert;
             }
         }
     }
@@ -128,7 +152,7 @@
         background: $lighterDark;
         box-shadow: 0 0 30px shade($white, 50%);
         img {
-            filter: invert(1);
+            filter: $invert;
         }
     }
 }

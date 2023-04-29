@@ -147,7 +147,8 @@
                 }
                 img {
                     height: 60%;
-                    filter: invert(0.4);
+                    filter: $invert;
+                    opacity: 0.2;
                 }
                 p {
                     margin-bottom: 10%;
@@ -289,7 +290,7 @@
                                 justify-content: center;
                                 flex-direction: column;
                                 img {
-                                    filter: invert(1);
+                                    filter: $invert;
                                     opacity: 0.8;
                                     height: 30px;
                                 }

@@ -6,10 +6,27 @@ import helpIcon from "$assets/help.svg";
 import boardIcon from "$assets/board.svg";
 import categoryIcon from "$assets/category.svg";
 import backgroundImage from "$assets/background.excalidraw.svg";
+import { Theme } from "main";
 
-const Root = () => {
+import lightIcon from "$assets/sun.svg";
+import darkIcon from "$assets/moon.svg";
+import colorfulIcon from "$assets/colorPalette.svg";
+
+const Root = ({
+    setTheme,
+    theme,
+}: {
+    setTheme: (theme: Theme) => void;
+    theme: Theme;
+}) => {
     return (
         <div className="root">
+            <div
+                id="background"
+                style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                }}
+            ></div>
             <h1>Klugscheißer Quiz</h1>
             <div className="pages">
                 <Link to={"/boards"}>
@@ -25,15 +42,43 @@ const Root = () => {
                     <img src={categoryIcon} alt="category icon" />
                 </Link>
             </div>
+
+            <button
+                className="themeSwitch"
+                onClick={(e) => {
+                    if (e.shiftKey) setTheme("senior");
+                    else setTheme(theme === "light" ? "dark" : "light");
+                }}
+            >
+                <img
+                    className="light"
+                    style={{
+                        opacity: theme === "light" ? 1 : 0,
+                    }}
+                    src={lightIcon}
+                    alt=""
+                />
+                <img
+                    className="dark"
+                    style={{
+                        opacity: theme === "dark" ? 1 : 0,
+                    }}
+                    src={darkIcon}
+                    alt=""
+                />
+                <img
+                    className="colorful"
+                    style={{
+                        opacity: theme === "senior" ? 1 : 0,
+                    }}
+                    src={colorfulIcon}
+                    alt=""
+                />
+            </button>
+
             <Link to={"/help"} className="helpIcon">
                 <img src={helpIcon} alt="question mark icon" />
             </Link>
-            <div
-                id="background"
-                style={{
-                    backgroundImage: `url(${backgroundImage})`,
-                }}
-            ></div>
         </div>
     );
 };

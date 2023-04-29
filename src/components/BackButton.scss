@@ -13,11 +13,11 @@ a.backButton {
     justify-content: center;
     border-radius: 100%;
     padding: 10px;
-    box-shadow: 0 0 40px -10px shade($white, 70%);
+    box-shadow: 0 0 40px -10px $grey;
     img {
         height: 70%;
         width: 70%;
-        filter: invert(1);
+        filter: $invert;
         rotate: 90deg;
     }
 }

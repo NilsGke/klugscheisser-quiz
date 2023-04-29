@@ -87,7 +87,7 @@
                         }
                         &.play,
                         &.edit {
-                            filter: invert(1);
+                            filter: $invert;
                         }
                         &.select {
                             width: 90px;

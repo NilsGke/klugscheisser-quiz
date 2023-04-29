@@ -8,40 +8,6 @@
     font-family: "Golos Text", sans-serif;
 }
 
-:root {
-    --primary: ;
-    --dark: #022249;
-    --lighterDark: #0d3b74;
-    --orange: #f07c41;
-    --darkBlue: #55bdca;
-    --green: #95ffff;
-    --white: #c7eef5;
-    --pink: #ff3333;
-
-    --dark: #000000;
-
-    --lighterDark: #323232;
-
-    --orange: #ff906e;
-
-    --darkBlue: #1e05c8;
-
-    --lightBlue: #50cfd2;
-
-    --green: #72c38e;
-
-    --yellow: #fedc5c;
-
-    --white: #fefbf5;
-
-    --pink: #e254d6;
-}
-
-body {
-    background: $dark;
-    color: $white;
-}
-
 /* scrollbars */
 /* Firefox */
 * {
@@ -73,4 +39,12 @@ body {
     justify-content: center;
     flex-direction: column;
     gap: 60px;
+}
+
+code {
+    background: $grey;
+    padding: 2px 5px;
+    margin: 0 2px;
+    border-radius: 5px;
+    color: $red;
 }

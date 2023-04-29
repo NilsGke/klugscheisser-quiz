@@ -33,20 +33,20 @@
             cursor: pointer;
             border-radius: 20px;
             padding: 10px;
-            box-shadow: 0 0 20px shade($white, 50%);
+            box-shadow: 0 0 20px $grey;
             white-space: nowrap;
 
             transition: all 0.2s ease-out;
             &:hover {
                 background-color: $white;
                 color: $dark;
-                box-shadow: 0 0 30px shade($white, 0%);
+                box-shadow: 0 0 30px $white;
             }
             &.test {
                 aspect-ratio: 1;
                 img {
                     transition: filter 0.2s ease-in-out;
-                    filter: invert(1);
+                    filter: $invert;
                 }
                 &:hover img {
                     filter: invert(0);
@@ -100,7 +100,7 @@
                 img {
                     transition: filter 0.2s ease-out;
                     height: 70%;
-                    filter: invert(1);
+                    filter: $invert;
                 }
             }
             > button {
@@ -184,7 +184,7 @@
 
                                         img {
                                             height: 80%;
-                                            filter: invert(1);
+                                            filter: $invert;
                                             border-radius: 0px;
                                         }
                                     }

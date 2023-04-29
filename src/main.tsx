@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root/Root.page";
@@ -20,6 +20,9 @@ enum NetworkStatus {
     OFFLINE = "offline",
 }
 
+const themes = ["light", "dark", "senior"] as const;
+export type Theme = (typeof themes)[number];
+
 const App = () => {
     const [network, setNetwork] = useState<NetworkStatus>(
         navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE
@@ -34,6 +37,17 @@ const App = () => {
             setIndexedDbIsReady(true)
         );
     }, []);
+
+    // theme
+    const [theme, setTheme] = useState<Theme>(
+        themes.find((theme) => theme === localStorage.getItem("theme")) ||
+            "dark"
+    );
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+        document.body.classList.remove(...themes);
+        document.body.classList.add(theme);
+    }, [theme]);
 
     // offline detection
     useEffect(() => {
@@ -74,7 +88,7 @@ const App = () => {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Root />,
+            element: <Root theme={theme} setTheme={setTheme} />,
         },
         {
             path: "/help",
