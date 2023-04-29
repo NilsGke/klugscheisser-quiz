@@ -1,9 +1,7 @@
-import { CSSProperties, useEffect, useState } from "react";
+import { CSSProperties, useRef } from "react";
 import { Resource } from "$types/categoryTypes";
 import AudioPlayer from "./AudioPlayer";
 import VideoPlayer from "./VideoPlayer";
-import Spinner from "./Spinner";
-import getFileUrl from "$helpers/getFileUrl";
 
 const ResourceRenderer = ({
     resource,
@@ -19,18 +17,20 @@ const ResourceRenderer = ({
     style?: CSSProperties;
 }) => {
     if (resource.type === "image") {
-        const [loading, setLoading] = useState(true);
-        const [url, setUrl] = useState("");
-        useEffect(() => {
-            getFileUrl(resource.content).then((url) => {
-                setUrl(url);
-                setLoading(false);
-            });
-        }, []);
-
+        const url = useRef(URL.createObjectURL(resource.content));
         return (
             <div className="image" style={style}>
-                {loading ? <Spinner /> : <img src={url} alt="" />}
+                <img
+                    loading="lazy"
+                    src={url.current}
+                    alt=""
+                    onDragStart={(e) => {
+                        url.current = URL.createObjectURL(resource.content);
+                        e.dataTransfer.setData("text/uri-list", url.current);
+                    }}
+                    onLoad={() => URL.revokeObjectURL(url.current)}
+                    onDragEnd={() => URL.revokeObjectURL(url.current)}
+                />
             </div>
         );
     } else if (resource.type === "audio")
@@ -60,8 +60,11 @@ const ResourceRenderer = ({
                 {resource.content}
             </div>
         );
-    // else if(resource.type === "imageCollection")
-    // return <Diashow />
+    else if (resource.type === "imageCollection")
+        <p>
+            Resource Renderer is not supposed to render an ImageCollection. Use
+            the <code>&lt;Diashow /&gt; component instead!</code>
+        </p>;
 
     return <div className="resource">unknwon content type?</div>;
 };
