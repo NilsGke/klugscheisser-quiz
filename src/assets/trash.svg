@@ -1,62 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
+<svg xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   stroke="currentColor"
-   fill="none"
-   stroke-width="1.5"
-   viewBox="0 0 24 24"
-   aria-hidden="true"
-   height="1em"
-   width="1em"
-   version="1.1"
-   id="svg4"
-   sodipodi:docname="trash.svg"
-   inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
-  <metadata
-     id="metadata10">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <defs
-     id="defs8" />
-  <sodipodi:namedview
-     pagecolor="#434343"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1031"
-     id="namedview6"
-     showgrid="false"
-     inkscape:zoom="22.185475"
-     inkscape:cx="10.461964"
-     inkscape:cy="10.034389"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="svg4" />
-  <path
-     stroke-linecap="round"
-     stroke="#ffffff"
-     stroke-linejoin="round"
-     d="m 15.069336,8.639444 -0.387587,10.081762 m -5.3634977,0 L 8.9306636,8.639444 M 20.096775,5.0436155 c 0.383107,0.05825 0.763974,0.119861 1.14484,0.1859525 M 20.096775,5.0447357 18.900406,20.595294 A 2.5204405,2.5204405 0 0 1 16.386687,22.92194 H 7.6133133 A 2.5204405,2.5204405 0 0 1 5.099594,20.595294 L 3.9032249,5.0436155 m 16.1935501,0 A 53.890378,53.890378 0 0 0 16.200734,4.5988978 M 2.7583848,5.2284478 C 3.1392514,5.1623563 3.520118,5.1007455 3.9032249,5.0436155 m 0,0 A 53.892619,53.892619 0 0 1 7.7992658,4.5988978 m 8.4014682,0 V 3.5727985 c 0,-1.321831 -1.019378,-2.4241037 -2.341209,-2.4655509 a 58.209853,58.209853 0 0 0 -3.71905,0 C 8.818644,1.1486948 7.7992658,2.2520877 7.7992658,3.5727985 v 1.0260993 m 8.4014682,0 a 54.516568,54.516568 0 0 0 -8.4014682,0"
-     id="path2"
-     style="stroke-width:1.68029" />
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" stroke="currentColor" fill="none" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true" height="1em" width="1em" version="1.1" id="svg4" sodipodi:docname="trash.svg" inkscape:version="1.0.1 (3bc2e813f5, 2020-09-07)">
+   <metadata id="metadata10">
+      <rdf:RDF>
+         <cc:Work rdf:about="">
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+            <dc:title></dc:title>
+         </cc:Work>
+      </rdf:RDF>
+   </metadata>
+   <defs id="defs8" />
+   <path stroke-linecap="round" stroke-linejoin="round" d="m 15.069336,8.639444 -0.387587,10.081762 m -5.3634977,0 L 8.9306636,8.639444 M 20.096775,5.0436155 c 0.383107,0.05825 0.763974,0.119861 1.14484,0.1859525 M 20.096775,5.0447357 18.900406,20.595294 A 2.5204405,2.5204405 0 0 1 16.386687,22.92194 H 7.6133133 A 2.5204405,2.5204405 0 0 1 5.099594,20.595294 L 3.9032249,5.0436155 m 16.1935501,0 A 53.890378,53.890378 0 0 0 16.200734,4.5988978 M 2.7583848,5.2284478 C 3.1392514,5.1623563 3.520118,5.1007455 3.9032249,5.0436155 m 0,0 A 53.892619,53.892619 0 0 1 7.7992658,4.5988978 m 8.4014682,0 V 3.5727985 c 0,-1.321831 -1.019378,-2.4241037 -2.341209,-2.4655509 a 58.209853,58.209853 0 0 0 -3.71905,0 C 8.818644,1.1486948 7.7992658,2.2520877 7.7992658,3.5727985 v 1.0260993 m 8.4014682,0 a 54.516568,54.516568 0 0 0 -8.4014682,0" id="path2" style="stroke-width:1.68029" />
 </svg>
