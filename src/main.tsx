@@ -47,6 +47,12 @@ const App = () => {
         localStorage.setItem("theme", theme);
         document.body.classList.remove(...themes);
         document.body.classList.add(theme);
+        document
+            .querySelector('meta[name="theme-color"]')
+            ?.setAttribute(
+                "content",
+                theme === "light" ? "#dadada" : "#262626"
+            );
     }, [theme]);
 
     // offline detection
