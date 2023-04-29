@@ -10,7 +10,6 @@ import CategoryEditor from "./routes/edit/Editor.page";
 import Game from "./routes/game/Game.page";
 import { initIndexedDB } from "./db/indexeddb";
 import Spinner from "./components/Spinner";
-import Viewer from "./routes/viewer/View.page";
 import { registerSW } from "virtual:pwa-register";
 import NewVersionbanner from "./components/NewVersionbanner";
 import Boards from "./routes/boards/Boards.page";
@@ -97,10 +96,6 @@ const App = () => {
         {
             path: "/categories/test/:dbIndex",
             element: <Game />,
-        },
-        {
-            path: "/categories/view/:dbIndex",
-            element: <Viewer />,
         },
         {
             path: "/categories/test/:dbIndex/destroy",
