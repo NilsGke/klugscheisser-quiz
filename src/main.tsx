@@ -148,7 +148,6 @@ const App = () => {
         </>
     );
 };
-console.log("%chool", "background:lime;");
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <App />
