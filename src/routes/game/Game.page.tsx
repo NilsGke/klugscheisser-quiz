@@ -1016,6 +1016,7 @@ const ResourceDisplay = ({
                 <AudioPlayer
                     file={resource.content}
                     initialVolume={resource.volume}
+                    stop={stop}
                     autoplay
                     show
                 />
@@ -1026,6 +1027,7 @@ const ResourceDisplay = ({
             <VideoPlayer
                 file={resource.content}
                 initialVolume={resource.volume}
+                stop={stop}
                 autoplay
             />
         );

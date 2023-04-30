@@ -20,6 +20,7 @@ type props = {
     onVolumeChange?: (value: number) => void;
     autoplay?: boolean;
     show?: boolean;
+    stop?: boolean;
 };
 
 // TODO add album art
@@ -30,6 +31,7 @@ const AudioPlayer: FC<props> = ({
     initialVolume = 50,
     autoplay = false,
     show,
+    stop,
 }) => {
     const audioUrl = useMemo(() => URL.createObjectURL(file), [file]);
 
@@ -106,6 +108,10 @@ const AudioPlayer: FC<props> = ({
 
         setPlaying((prev) => !prev);
     };
+
+    useEffect(() => {
+        if (stop) play(false);
+    }, [stop]);
 
     const changeTime = (currentTime: number) => {
         if (audioElementRef.current === null)

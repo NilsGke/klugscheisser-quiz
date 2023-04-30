@@ -20,6 +20,7 @@ type props = {
     small?: boolean;
     autoplay?: boolean;
     style?: CSSProperties;
+    stop?: boolean;
 };
 
 const VideoPlayer: FC<props> = ({
@@ -29,6 +30,7 @@ const VideoPlayer: FC<props> = ({
     small = false,
     autoplay = false,
     style,
+    stop,
 }) => {
     const videoUrl = useMemo(() => URL.createObjectURL(file), [file]);
     const [playing, setPlaying] = useState(autoplay);
@@ -104,6 +106,10 @@ const VideoPlayer: FC<props> = ({
 
         setPlaying((prev) => !prev);
     };
+
+    useEffect(() => {
+        if (stop) play(false);
+    }, [stop]);
 
     const changeTime = (currentTime: number) => {
         if (videoElementRef.current === null)
