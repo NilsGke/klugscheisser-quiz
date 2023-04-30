@@ -107,7 +107,7 @@
                         background: $lighterDark;
                         img {
                             height: 70%;
-                            filter: none;
+                            filter: $invert;
                         }
                     }
                 }
