@@ -26,6 +26,10 @@ type props = {
 
     setSelected?: (selected: Indexed<Category>[]) => void;
     selected?: Indexed<Category>[];
+
+    testable?: boolean;
+    editable?: boolean;
+    deletable?: boolean;
 };
 enum Purpose {
     VIEWING,
@@ -48,6 +52,10 @@ const CategoryBrowser: FC<props> = ({
     selecting = false,
     selected,
     setSelected,
+
+    testable,
+    deletable,
+    editable,
 }) => {
     const purpose: Purpose = selecting
         ? Purpose.SELECTING_MULTIPLE
@@ -102,6 +110,7 @@ const CategoryBrowser: FC<props> = ({
                             selectable={purpose === Purpose.SELECTING_MULTIPLE}
                             choosable={chooseOne}
                             choose={choose ? () => choose(category) : undefined}
+                            testable={testable}
                             toggle={() => {
                                 if (!selected || !setSelected) return;
                                 if (!selected.includes(category))
@@ -112,7 +121,8 @@ const CategoryBrowser: FC<props> = ({
                                     );
                             }}
                             selected={selected?.includes(category)}
-                            deletable
+                            deletable={deletable}
+                            editable={editable}
                             delete={() =>
                                 removeCategoryFromDb(category.dbIndex).then(
                                     () =>
@@ -183,6 +193,9 @@ const CategoryElement = ({
 
     deletable = false,
     delete: deleteFun,
+
+    testable = false,
+    editable = false,
 }: {
     category: Indexed<Category>;
 
@@ -198,6 +211,9 @@ const CategoryElement = ({
 
     deletable?: boolean;
     delete?: () => void;
+
+    testable?: boolean;
+    editable?: boolean;
 }) => {
     return (
         <div
@@ -240,7 +256,7 @@ const CategoryElement = ({
                 </div>
             </div>
             <div className="buttons">
-                {!choosable ? (
+                {editable ? (
                     <button
                         className="edit"
                         title="edit category"
@@ -279,18 +295,20 @@ const CategoryElement = ({
                     </button>
                 ) : null}
 
-                <button
-                    className="test"
-                    title="test category in a game"
-                    onClick={() =>
-                        window.open(
-                            `/categories/test/${category.dbIndex}`,
-                            "_blank"
-                        )
-                    }
-                >
-                    <img src={testIcon} alt="test in new Tab icon" />
-                </button>
+                {testable ? (
+                    <button
+                        className="test"
+                        title="test category in a game"
+                        onClick={() =>
+                            window.open(
+                                `/categories/test/${category.dbIndex}`,
+                                "_blank"
+                            )
+                        }
+                    >
+                        <img src={testIcon} alt="test in new Tab icon" />
+                    </button>
+                ) : null}
             </div>
         </div>
     );
