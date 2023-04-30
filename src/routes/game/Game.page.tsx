@@ -299,45 +299,50 @@ const Game = () => {
             )
         )
             return;
-
-        setGameData(null);
+        abortTimers();
+        jsConfetti.clearCanvas();
         deleteGameFromDb();
+        window.location.href = "/";
     };
 
     // confetti on win
     useEffect(() => {
         if (gameState === State.done) {
-            setTimeout(() => {
+            const confettiTimer = setTimeout(() => {
                 jsConfetti.addConfetti({
                     confettiNumber: 150,
                     emojis: ["👑", "🏁", "🏁", "🏁"],
                     emojiSize: 30,
                 });
-                setTimeout(() => {
+                const trippleConfetti = setTimeout(() => {
                     let i = 0;
                     const confetti = () => {
                         i++;
                         if (i === 3) clearInterval(intverval);
 
-                        setTimeout(() => {
-                            jsConfetti.addConfetti({
-                                confettiColors: winners.map((t) => t.color),
-                            });
-                        }, 0);
-                        setTimeout(() => {
-                            jsConfetti.addConfetti({
-                                confettiColors: winners.map((t) => t.color),
-                            });
-                        }, 250);
-                        setTimeout(() => {
-                            jsConfetti.addConfetti({
-                                confettiColors: winners.map((t) => t.color),
-                            });
-                        }, 500);
+                        activeTimers.current.push(
+                            setTimeout(() => {
+                                jsConfetti.addConfetti({
+                                    confettiColors: winners.map((t) => t.color),
+                                });
+                            }, 0),
+                            setTimeout(() => {
+                                jsConfetti.addConfetti({
+                                    confettiColors: winners.map((t) => t.color),
+                                });
+                            }, 250),
+                            setTimeout(() => {
+                                jsConfetti.addConfetti({
+                                    confettiColors: winners.map((t) => t.color),
+                                });
+                            }, 500)
+                        );
                     };
                     const intverval = setInterval(confetti, 1300);
                 }, 1000);
+                activeTimers.current.push(trippleConfetti);
             }, 600);
+            activeTimers.current.push(confettiTimer);
         }
     }, [gameState]);
 
@@ -407,7 +412,11 @@ const Game = () => {
                     ) : (
                         <button
                             className="end"
-                            onClick={() => setGameState(State.done)}
+                            onClick={() => {
+                                abortTimers();
+                                setSelected(null);
+                                setGameState(State.done);
+                            }}
                         >
                             end game
                         </button>
@@ -671,12 +680,22 @@ const Field = ({
 
     const activeTimer = useRef<NodeJS.Timeout | null>(null);
 
-    // going big animation
+    // animations
     useEffect(() => {
         if (fieldRef.current === null) throw new Error("fieldRef is null");
         if (containerRef.current === null)
             throw new Error("containerRef is null");
-        if (!selected) return;
+
+        if (selected) goBig();
+        else goSmall();
+    }, [selected]);
+
+    const fieldContainerRef = useRef<HTMLDivElement>(null);
+
+    const goBig = () => {
+        if (fieldRef.current === null) throw new Error("fieldRef is null");
+        if (containerRef.current === null)
+            throw new Error("containerRef is null");
 
         const height = fieldRef.current.clientHeight;
         const width = fieldRef.current.clientWidth;
@@ -708,12 +727,10 @@ const Field = ({
             if (fieldRef.current !== null)
                 fieldRef.current.classList.add("transitioned");
         }, 500);
-    }, [selected]);
-
-    const fieldContainerRef = useRef<HTMLDivElement>(null);
+    };
 
     // going small animation
-    const close = () => {
+    const goSmall = () => {
         if (fieldRef.current === null) throw new Error("fieldRef is null");
         if (fieldContainerRef.current === null)
             throw new Error("fieldContainerRef is null");
@@ -729,8 +746,6 @@ const Field = ({
         const containerWidth = containerRef.current.clientWidth;
 
         clearTimeout(activeTimer.current || undefined);
-
-        setGameState(State.idle);
 
         fieldRef.current.classList.remove("transitioned");
 
@@ -754,10 +769,11 @@ const Field = ({
         );
 
         setTimeout(() => {
-            unselect();
             if (fieldRef.current) fieldRef.current.style.position = "relative";
         }, 500);
     };
+
+    const close = () => unselect();
 
     const [showCustomPoints, setShowCustomPoints] = useState(false);
     const [customPoints, setCustomPoints] = useState<number | "">("");
