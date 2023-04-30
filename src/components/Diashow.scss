@@ -82,6 +82,7 @@
                 cursor: pointer;
                 img {
                     height: 70%;
+                    filter: $invert;
                 }
             }
 
@@ -132,6 +133,7 @@
                             }
                             img {
                                 height: 80%;
+                                filter: $invert;
                             }
                         }
                     }

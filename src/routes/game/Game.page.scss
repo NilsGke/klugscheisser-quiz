@@ -168,7 +168,8 @@
                         cursor: pointer;
 
                         > img {
-                            height: 60%;
+                            height: 80%;
+                            filter: $invert;
                         }
                     }
 
@@ -455,6 +456,7 @@
                 right: 20px;
                 img {
                     height: 80%;
+                    filter: $invert;
                 }
             }
 
