@@ -95,7 +95,12 @@ const Categories = () => {
             <h1>Kategorie-Editor</h1>
             <div id="onboard">
                 <div className="decide">
-                    <CategoryBrowser refresh={update} />
+                    <CategoryBrowser
+                        refresh={update}
+                        testable
+                        editable
+                        deletable
+                    />
                     <div className="actions">
                         <label
                             className={dragging ? "dragging" : ""}
