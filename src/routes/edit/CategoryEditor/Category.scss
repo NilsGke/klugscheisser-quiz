@@ -115,6 +115,7 @@
                             img {
                                 height: 50%;
                                 aspect-ratio: 1;
+                                filter: $invert;
                             }
                         }
                     }
