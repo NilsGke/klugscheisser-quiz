@@ -96,27 +96,27 @@
                         align-items: center;
                         justify-content: center;
                         position: relative;
+                    }
 
-                        > button.remove {
-                            height: 25px;
+                    > button.remove {
+                        height: 30px;
+                        aspect-ratio: 1;
+                        position: absolute;
+                        top: 5px;
+                        right: 5px;
+                        background-color: transparent;
+                        border: none;
+                        cursor: pointer;
+                        border-radius: 100%;
+                        backdrop-filter: blur(14px) brightness(75%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        img {
+                            height: 50%;
                             aspect-ratio: 1;
-                            position: absolute;
-                            top: 2px;
-                            right: 2px;
-                            background-color: transparent;
-                            border: none;
-                            cursor: pointer;
-                            border-radius: 100%;
-                            backdrop-filter: blur(14px) brightness(75%);
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            img {
-                                height: 50%;
-                                aspect-ratio: 1;
-                                filter: $invert;
-                            }
+                            filter: $invert;
                         }
                     }
 

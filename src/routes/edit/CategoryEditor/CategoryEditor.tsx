@@ -273,15 +273,17 @@ const MediaElement = ({
 
     if (resource.type === "text")
         content = (
-            <div className="text">
-                <textarea
-                    ref={textAreaRef}
-                    placeholder="enter text..."
-                    onChange={(e) => setText(e.target.value)}
-                    value={text}
-                />
+            <>
+                <div className="text">
+                    <textarea
+                        ref={textAreaRef}
+                        placeholder="enter text..."
+                        onChange={(e) => setText(e.target.value)}
+                        value={text}
+                    />
+                </div>
                 {RemoveButton}
-            </div>
+            </>
         );
     else if (resource.type === "imageCollection")
         content = (
