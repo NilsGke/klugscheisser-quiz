@@ -50,7 +50,7 @@ const MediaPool = ({
             getStoredFiles(
                 mediaType,
                 (files.at(-1)?.dbIndex || 999999999999) - 1,
-                2
+                10
             )
                 .then((newFiles) => setFiles((prev) => [...prev, ...newFiles]))
                 .then(() => setLoadMore(false));
