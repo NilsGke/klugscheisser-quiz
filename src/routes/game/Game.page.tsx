@@ -794,9 +794,12 @@ const Field = ({
                 ref={fieldRef}
             >
                 <div className="contentContainer">
-                    <button className="close" onClick={close}>
-                        <img src={closeIcon} alt="close icon" />
-                    </button>
+                    {selected ? (
+                        <button className="close" onClick={close}>
+                            <img src={closeIcon} alt="close icon" />
+                        </button>
+                    ) : null}
+
                     <div className="content">
                         <div
                             className="points"

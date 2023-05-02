@@ -120,14 +120,8 @@ const Diashow = ({
                                 {current + 1}/{images.length}
                             </div>
 
-                            {!autoSkip ? (
-                                <button
-                                    className="prev"
-                                    onClick={prevImage}
-                                    style={{
-                                        opacity: current === 0 ? 0 : 1,
-                                    }}
-                                >
+                            {!autoSkip && current !== 0 ? (
+                                <button className="prev" onClick={prevImage}>
                                     <img src={arrowIcon} alt="arrow left" />
                                 </button>
                             ) : null}
@@ -142,15 +136,8 @@ const Diashow = ({
                                 />
                             </div>
 
-                            {!autoSkip ? (
-                                <button
-                                    className="next"
-                                    onClick={nextImage}
-                                    style={{
-                                        opacity:
-                                            current < images.length - 1 ? 1 : 0,
-                                    }}
-                                >
+                            {!autoSkip && current < images.length - 1 ? (
+                                <button className="next" onClick={nextImage}>
                                     <img src={arrowIcon} alt="arrow right" />
                                 </button>
                             ) : null}
