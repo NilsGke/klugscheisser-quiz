@@ -78,6 +78,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 10px;
 
             width: 100%;
             height: 80px;
@@ -96,8 +97,9 @@
                 padding: 10px;
                 height: 40px;
                 cursor: pointer;
+                transition: background 0.2s ease-out;
                 &:hover {
-                    scale: 1.01;
+                    background: $lighterDark;
                 }
             }
         }
@@ -196,7 +198,7 @@
                             justify-content: center;
                         }
                         .description {
-                            height: 80%;
+                            height: 100%;
                             // width: 80%;
 
                             position: absolute;
@@ -222,6 +224,24 @@
                                     height: 100%;
                                     width: 100%;
                                     object-fit: contain;
+                                }
+                            }
+
+                            button.next {
+                                position: absolute;
+                                bottom: 20px;
+                                font-size: 20px;
+                                border: 1px solid $white;
+                                background: transparent;
+                                color: $white;
+                                border-radius: 10px;
+                                padding: 10px;
+                                cursor: pointer;
+                                transition: all 0.2s ease-in-out;
+                                &:hover {
+                                    box-shadow: 0 0 20px -3px $white;
+                                    background: $white;
+                                    color: $dark;
                                 }
                             }
                         }
@@ -283,13 +303,13 @@
                     color: $grey;
                 }
                 &:not(.selected) {
-                    border-color: $lighterDark;
+                    border-color: $grey;
                 }
 
                 &.selected {
                     animation: spinningBackground 3s linear infinite;
                     padding: 2px;
-                    border: none;
+                    border-color: $grey;
                     > div {
                     }
                     .contentContainer {
@@ -403,12 +423,12 @@
                             }
                         }
                     }
-                    background: conic-gradient(
-                        from var(--gradient-angle),
-                        $lighterDark,
-                        $lighterDark,
-                        $white
-                    );
+                    // background: conic-gradient(
+                    //     from var(--gradient-angle),
+                    //     $lighterDark,
+                    //     $lighterDark,
+                    //     $white
+                    // );
                     animation: rotation 4s linear infinite;
                     z-index: 2;
                     &.transitioned {
