@@ -53,8 +53,6 @@ export const changeSetting = (settings: Partial<SettingsType>) => {
     storeSettings(newSettings);
 };
 
-changeSetting({ theme: "dark" });
-
 export const upgradeSettings = () => {
     const stored = getSettings() as keyValueSettingsType;
     const defSettings = defaultSettings as keyValueSettingsType;
