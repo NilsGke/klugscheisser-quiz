@@ -9,8 +9,6 @@ import editIcon from "$assets/edit.svg";
 import closeIcon from "$assets/close.svg";
 import moveIcon from "$assets/arrow.svg";
 import removeIcon from "$assets/trash.svg";
-import cursorClickIcon from "$assets/cursorClick.svg";
-import cycleIcon from "$assets/cycle.svg";
 import arrowIcon from "$assets/arrow.svg";
 import useKeyboard from "$hooks/keyboard";
 
@@ -21,7 +19,6 @@ type props = {
     view?: boolean;
     setImages?: (images: Image[]) => void;
     autoSkip?: boolean;
-    setAutoSkip?: (auto: boolean) => void;
     stop?: boolean;
 };
 
@@ -34,7 +31,6 @@ const Diashow = ({
     view,
     setImages,
     autoSkip,
-    setAutoSkip,
     stop,
 }: props) => {
     const [current, setCurrent] = useState(0);
@@ -212,26 +208,6 @@ const Diashow = ({
                                         />
                                     ))}
                             </div>
-                            <button
-                                className="auto"
-                                onClick={() =>
-                                    setAutoSkip && setAutoSkip(!autoSkip)
-                                }
-                            >
-                                {autoSkip ? (
-                                    <img
-                                        src={cycleIcon}
-                                        alt="cycle icon"
-                                        title="auto cycle between images"
-                                    />
-                                ) : (
-                                    <img
-                                        src={cursorClickIcon}
-                                        alt="click icon"
-                                        title="click to reveal next image"
-                                    />
-                                )}
-                            </button>
                         </div>
 
                         <div

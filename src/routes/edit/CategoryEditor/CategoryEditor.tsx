@@ -192,7 +192,6 @@ const MediaElement = ({
                     return;
                 newResource = {
                     type: "imageCollection",
-                    autoSkip: false,
                     content: [oldResource.content, newFile],
                 };
             } else if (
@@ -209,7 +208,6 @@ const MediaElement = ({
                     return;
                 newResource = {
                     type: "imageCollection",
-                    autoSkip: oldResource.autoSkip,
                     content: [...oldResource.content, newFile],
                 };
             } else
@@ -293,22 +291,7 @@ const MediaElement = ({
                     setImages={(newImages) => {
                         category.fields[fieldIndex][type] = {
                             type: "imageCollection",
-                            autoSkip: resource.autoSkip,
                             content: newImages,
-                        };
-                        setCategory(category);
-                    }}
-                    autoSkip={
-                        (
-                            category.fields[fieldIndex][
-                                type
-                            ] as ImageResourceCollection
-                        ).autoSkip
-                    }
-                    setAutoSkip={(auto) => {
-                        category.fields[fieldIndex][type] = {
-                            ...resource,
-                            autoSkip: auto,
                         };
                         setCategory(category);
                     }}

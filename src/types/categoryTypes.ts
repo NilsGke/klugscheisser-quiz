@@ -58,7 +58,6 @@ export interface ImageResource {
 }
 export interface ImageResourceCollection {
     type: "imageCollection";
-    autoSkip: boolean;
     content: Image[];
 }
 export interface VideoResource extends Volume {
