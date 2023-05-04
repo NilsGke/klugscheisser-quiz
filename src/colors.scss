@@ -11,17 +11,18 @@ body {
         --lighterDark: #262626;
         --grey: #939393;
         --white: #fefbf5;
-        --pink: #ff90e1;
+        --pink: #f96ad2;
         --red: #ff6464;
-        --orange: #ff9674;
+        --orange: #ff8b65;
         --yellow: #fedc5c;
-        --lightBlue: #7cfdff;
+        --lightBlue: #00dce1;
         --darkBlue: #5a41ff;
         --green: #7bff9c;
         --invert: invert(1);
     }
 
-    &.light {
+    &.light,
+    &.senior {
         --dark: #ededed;
         --lighterDark: #dadada;
         --grey: #7e7e7e;

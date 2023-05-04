@@ -24,18 +24,17 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            gap: 10px;
+            gap: 20px;
             flex-wrap: wrap;
 
             .board {
-                height: 300px;
-                width: 200px;
-                border: 1px solid $lighterDark;
-                padding: 10px;
+                width: 400px;
+                border: 1px solid $orange;
+                padding: 15px;
                 border-radius: 20px;
 
                 h2 {
-                    height: 30px;
+                    text-align: center;
                     margin-bottom: 10px;
                     display: flex;
                     align-items: center;
@@ -43,8 +42,9 @@
                 }
                 .categoriesWrapper {
                     height: calc(100% - 30px - 10px - 40px - 10px);
-                    overflow-y: scroll;
-                    border: 1px solid $lighterDark;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    border: 1px solid $grey;
                     border-radius: 20px;
                     padding: 10px;
                     .categories {
@@ -69,7 +69,7 @@
                 }
                 .actions {
                     margin-top: 10px;
-                    height: 30px;
+                    height: 40px;
                     width: 100%;
                     display: flex;
                     align-items: center;
@@ -81,14 +81,18 @@
                         background: transparent;
                         border: none;
                         cursor: pointer;
+                        border-radius: 4px;
+                        padding: 5px;
+                        transition: background 0.2s ease-out;
                         img {
                             height: 70%;
                             width: 70%;
-                        }
-                        &.play,
-                        &.edit {
                             filter: $invert;
                         }
+                        &:hover {
+                            background: $lighterDark;
+                        }
+
                         &.select {
                             width: 90px;
                             background-color: $lighterDark;
