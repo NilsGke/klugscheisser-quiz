@@ -14,6 +14,7 @@ import { registerSW } from "virtual:pwa-register";
 import NewVersionbanner from "./components/NewVersionbanner";
 import Boards from "./routes/boards/Boards.page";
 import BoardEditor from "./routes/boards/editor/BoardEditor.page";
+import { getSettings } from "$helpers/settings";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -39,10 +40,7 @@ const App = () => {
     }, []);
 
     // theme
-    const [theme, setTheme] = useState<Theme>(
-        themes.find((theme) => theme === localStorage.getItem("theme")) ||
-            "dark"
-    );
+    const [theme, setTheme] = useState<Theme>(getSettings().theme);
     useEffect(() => {
         localStorage.setItem("theme", theme);
         document.body.classList.remove(...themes);
@@ -97,7 +95,12 @@ const App = () => {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Root theme={theme} setTheme={setTheme} />,
+            element: (
+                <Root
+                    theme={theme}
+                    themeChange={() => setTheme(getSettings().theme)}
+                />
+            ),
         },
         {
             path: "/help",
@@ -118,11 +121,11 @@ const App = () => {
         },
         {
             path: "/categories/test/:dbIndex",
-            element: <Game />,
+            element: <Game themeChange={() => setTheme(getSettings().theme)} />,
         },
         {
             path: "/categories/test/:dbIndex/destroy",
-            element: <Game />,
+            element: <Game themeChange={() => setTheme(getSettings().theme)} />,
         },
         // boards
         {
@@ -139,7 +142,7 @@ const App = () => {
         },
         {
             path: "/game",
-            element: <Game />,
+            element: <Game themeChange={() => setTheme(getSettings().theme)} />,
         },
     ]);
 

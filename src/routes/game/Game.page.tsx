@@ -41,6 +41,8 @@ import editIcon from "$assets/edit.svg";
 import checkIcon from "$assets/check.svg";
 import eyeIcon from "$assets/eye.svg";
 import { PieChart } from "react-minimal-pie-chart";
+import Settings from "$components/SettingsPane";
+import { SettingsType, getSettings } from "$helpers/settings";
 
 enum State {
     idle = "idle",
@@ -54,7 +56,7 @@ enum State {
 
 const jsConfetti = new JSConfetti();
 
-const Game = () => {
+const Game = ({ themeChange }: { themeChange: () => void }) => {
     const [gameData, setGameData] = useState<Game | null>(null);
 
     const [selected, setSelected] = useState<null | {
@@ -220,10 +222,15 @@ const Game = () => {
             fieldIndex,
         });
         setGameState(State.goingBig);
-        activeTimers.current = [
-            setTimeout(() => setGameState(State.showDescription), 500),
-            setTimeout(() => setGameState(State.showQuestion), 4500),
-        ];
+
+        activeTimers.current.push(
+            setTimeout(() => setGameState(State.showDescription), 500)
+        );
+
+        if (settings.descriptionNext === "auto")
+            activeTimers.current.push(
+                setTimeout(() => setGameState(State.showQuestion), 4500)
+            );
     };
 
     const grantPoints = (points: number) => {
@@ -346,6 +353,9 @@ const Game = () => {
         }
     }, [gameState]);
 
+    const [settingsOpen, setSettingsOpen] = useState(false);
+    const [settings, setSettings] = useState(getSettings());
+
     if (loading) return <Spinner />;
 
     if (errorMessage !== "")
@@ -399,6 +409,13 @@ const Game = () => {
                     ))}
                 </div>
                 <div id="gameControls">
+                    <button
+                        className="settings"
+                        onClick={() => setSettingsOpen(true)}
+                    >
+                        settings
+                    </button>
+
                     {testMode ? (
                         <button
                             className="endTest"
@@ -431,7 +448,15 @@ const Game = () => {
                             {category.fields.map((field, fieldIndex) => (
                                 <Field
                                     key={fieldIndex}
-                                    field={field}
+                                    {...{
+                                        settings,
+                                        testMode,
+                                        buzzeredTeamIndex,
+                                        category,
+                                        gameState,
+                                        categoriesRef,
+                                        field,
+                                    }}
                                     points={(fieldIndex + 1) * 100}
                                     grantPoints={(points) =>
                                         grantPoints(points)
@@ -457,10 +482,6 @@ const Game = () => {
                                         setGameState(newState)
                                     }
                                     containerRef={categoriesRef}
-                                    gameState={gameState}
-                                    category={category}
-                                    buzzeredTeamIndex={buzzeredTeamIndex}
-                                    testMode={testMode}
                                 />
                             ))}
                         </>
@@ -582,6 +603,9 @@ const Game = () => {
                                                                                         >
                                                                                             <div className="question">
                                                                                                 <ResourceDisplay
+                                                                                                    settings={
+                                                                                                        settings
+                                                                                                    }
                                                                                                     resource={
                                                                                                         field.question
                                                                                                     }
@@ -589,6 +613,9 @@ const Game = () => {
                                                                                             </div>
                                                                                             <div className="answer">
                                                                                                 <ResourceDisplay
+                                                                                                    settings={
+                                                                                                        settings
+                                                                                                    }
                                                                                                     resource={
                                                                                                         field.answer
                                                                                                     }
@@ -645,6 +672,16 @@ const Game = () => {
                     </div>
                 </div>
             ) : null}
+
+            {settingsOpen ? (
+                <Settings
+                    close={() => setSettingsOpen(false)}
+                    onChange={() => {
+                        setSettings(getSettings);
+                        themeChange();
+                    }}
+                />
+            ) : null}
         </div>
     );
 };
@@ -662,6 +699,7 @@ const Field = ({
     category,
     buzzeredTeamIndex,
     testMode,
+    settings,
 }: {
     field: GameField;
     points: number;
@@ -675,6 +713,7 @@ const Field = ({
     category: Category;
     buzzeredTeamIndex: number | null;
     testMode: boolean;
+    settings: SettingsType;
 }) => {
     const fieldRef = useRef<HTMLDivElement>(null);
 
@@ -831,15 +870,26 @@ const Field = ({
                                         category.description
                                     ) : (
                                         <ResourceDisplay
+                                            settings={settings}
                                             resource={{
                                                 type: "image",
                                                 content: category.description,
                                             }}
                                         />
                                     )}
-                                    {gameState === State.showDescription ? (
+                                    {gameState === State.showDescription &&
+                                    settings.descriptionNext === "auto" ? (
                                         <TimeBar time={4000} />
-                                    ) : null}
+                                    ) : (
+                                        <button
+                                            className="next"
+                                            onClick={() =>
+                                                setGameState(State.showQuestion)
+                                            }
+                                        >
+                                            next
+                                        </button>
+                                    )}
                                 </div>
 
                                 {gameState === State.showQuestion ? (
@@ -858,6 +908,7 @@ const Field = ({
                                             </div>
                                         ) : (
                                             <ResourceDisplay
+                                                settings={settings}
                                                 resource={field.question}
                                                 stop={
                                                     buzzeredTeamIndex !== null
@@ -893,6 +944,7 @@ const Field = ({
                                         }}
                                     >
                                         <ResourceDisplay
+                                            settings={settings}
                                             resource={field.answer}
                                         />
                                         {buzzeredTeamIndex !== null ? (
@@ -1018,9 +1070,11 @@ const Field = ({
 const ResourceDisplay = ({
     resource,
     stop = false,
+    settings,
 }: {
     resource: Resource;
     stop?: boolean;
+    settings: SettingsType;
 }) => {
     if (resource.type === "image") {
         const url = URL.createObjectURL(resource.content);
@@ -1056,7 +1110,7 @@ const ResourceDisplay = ({
         return (
             <Diashow
                 images={resource.content}
-                autoSkip={resource.autoSkip}
+                autoSkip={settings.diashowNext === "auto"}
                 stop={stop}
                 show
             />

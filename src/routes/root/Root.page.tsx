@@ -11,13 +11,14 @@ import { Theme } from "main";
 import lightIcon from "$assets/sun.svg";
 import darkIcon from "$assets/moon.svg";
 import colorfulIcon from "$assets/colorPalette.svg";
+import { changeSetting } from "$helpers/settings";
 
 const Root = ({
-    setTheme,
     theme,
+    themeChange,
 }: {
-    setTheme: (theme: Theme) => void;
     theme: Theme;
+    themeChange: () => void;
 }) => {
     return (
         <div className="root">
@@ -46,8 +47,12 @@ const Root = ({
             <button
                 className="themeSwitch"
                 onClick={(e) => {
-                    if (e.shiftKey) setTheme("senior");
-                    else setTheme(theme === "light" ? "dark" : "light");
+                    if (e.shiftKey) changeSetting({ theme: "senior" });
+                    else
+                        changeSetting({
+                            theme: theme === "light" ? "dark" : "light",
+                        });
+                    themeChange();
                 }}
             >
                 <img

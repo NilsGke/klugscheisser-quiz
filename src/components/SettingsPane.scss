@@ -1,0 +1,75 @@
+@import "../colors.scss";
+
+.settingsWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100svh;
+    width: 100svw;
+    backdrop-filter: blur(5px) brightness(0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    &,
+    * {
+        transition: all 0.2s ease-out;
+        color: $white;
+    }
+
+    .settings {
+        padding: 40px;
+        background-color: $lighterDark;
+        border-radius: 20px;
+        position: relative;
+        button.close {
+            position: absolute;
+            background: transparent;
+            border: none;
+            height: 35px;
+            aspect-ratio: 1;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            img {
+                filter: $invert;
+                height: 70%;
+            }
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .content {
+            .setting {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+
+                &:not(:last-child) {
+                    margin-bottom: 15px;
+                }
+                p.description {
+                }
+                > div {
+                    .react-switch-bg {
+                        > div {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            img {
+                                filter: invert(1);
+                            }
+                        }
+                    }
+                }
+                &:first-child > div > .react-switch-bg > div:first-child > img {
+                    filter: none;
+                }
+            }
+        }
+    }
+}
