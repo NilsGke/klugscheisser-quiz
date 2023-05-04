@@ -19,7 +19,8 @@
     "react-dom": "^18.2.0",
     "react-minimal-pie-chart": "^8.4.0",
     "react-router-dom": "^6.9.0",
-    "react-simple-toasts": "^3.2.5"
+    "react-simple-toasts": "^3.2.5",
+    "react-switch": "^7.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
