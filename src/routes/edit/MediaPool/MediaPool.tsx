@@ -2,7 +2,9 @@ import { DragEvent, useCallback, useEffect, useRef, useState } from "react";
 import { IndexedFile, MediaType, Resource } from "$types/categoryTypes";
 import "./MediaPool.scss";
 import {
+    clearMediaStore,
     deleteStoredFile,
+    getMediaStoreSize,
     getStoredFiles,
     getStoredFilesLength,
     storeFileInIndexedDB,
@@ -26,6 +28,7 @@ import VideoPlayer from "$components/VideoPlayer";
 import { Indexed } from "$db/indexeddb";
 import useOutsideClick from "$hooks/useOutsideClick";
 import ResourceRenderer from "$components/ResourceRenderer";
+import { humanFileSize } from "$helpers/readableFileSizeFormat";
 
 const MediaPool = ({
     addToCateogry,
@@ -93,6 +96,12 @@ const MediaPool = ({
         };
     }, [bottomRef, listRef]);
 
+    // storage size
+    const [storageSize, setStorageSize] = useState(0);
+    useEffect(() => {
+        getMediaStoreSize(mediaType).then(setStorageSize);
+    }, [mediaType]);
+
     const changeMediaType = (mediaType: MediaType) => {
         setFiles([]);
         setGotAllFiles(false);
@@ -122,6 +131,26 @@ const MediaPool = ({
                         onClick={() => changeMediaType("audio")}
                     >
                         Audio
+                    </button>
+                </div>
+                <div className="storage">
+                    <div className="info">
+                        {humanFileSize(storageSize, true)}
+                    </div>
+                    <button
+                        className="clear"
+                        onClick={() =>
+                            confirm(
+                                `are you sure you want to remove all ${mediaType}s from the editor?`
+                            ) &&
+                            clearMediaStore(mediaType).then(() => {
+                                toast(`${mediaType}s cleared`);
+                                setFiles([]);
+                                setStorageSize(0);
+                            })
+                        }
+                    >
+                        delete {mediaType}s
                     </button>
                 </div>
             </div>
@@ -165,7 +194,7 @@ const MediaPool = ({
                                         await storeFileInIndexedDB(
                                             file,
                                             mediaType
-                                        ).then((dbIndex) => {
+                                        ).then(async (dbIndex) => {
                                             const indexedFile =
                                                 file as IndexedFile;
                                             indexedFile.dbIndex = dbIndex;
@@ -174,6 +203,11 @@ const MediaPool = ({
                                                 ...prev,
                                             ]);
                                             setLength((prev) => prev + 1);
+
+                                            getMediaStoreSize(mediaType).then(
+                                                setStorageSize
+                                            );
+
                                             toast(`added ${mediaType}`);
                                         });
                                     }

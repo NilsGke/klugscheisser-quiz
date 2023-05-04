@@ -14,6 +14,13 @@
     max-height: 99%;
 
     .header {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        gap: 10px;
+        flex-wrap: wrap;
+
         .toggle {
             display: flex;
             align-items: center;
@@ -30,6 +37,30 @@
                 &.selected {
                     background-color: $white;
                     color: $dark;
+                }
+            }
+        }
+        .storage {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100px;
+            * {
+                color: $grey;
+                font-size: 12px;
+            }
+            .info {
+            }
+            button {
+                background-color: transparent;
+                border: 1px solid $grey;
+                border-radius: 5px;
+                padding: 3px;
+                cursor: pointer;
+                transition: color 0.2s ease-out;
+                &:hover {
+                    color: $red;
                 }
             }
         }
