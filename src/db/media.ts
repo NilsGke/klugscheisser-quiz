@@ -86,3 +86,33 @@ export const deleteStoredFile = (mediaType: MediaType, index: number) =>
         request.onsuccess = resolve;
         request.onerror = reject;
     });
+
+export const getMediaStoreSize = (mediaType: MediaType) =>
+    new Promise<number>((resolve, reject) => {
+        const request = db
+            .transaction(mediaType, "readonly")
+            .objectStore(mediaType)
+            .openCursor();
+
+        let size = 0;
+
+        request.onsuccess = () => {
+            const cursor = request.result;
+            if (cursor === null) return resolve(size);
+            size += cursor.value.size;
+            cursor.continue();
+        };
+
+        request.onerror = reject;
+    });
+
+export const clearMediaStore = (mediaType: MediaType) =>
+    new Promise<Event>((resolve, reject) => {
+        const request = db
+            .transaction(mediaType, "readwrite")
+            .objectStore(mediaType)
+            .clear();
+
+        request.onsuccess = resolve;
+        request.onerror = reject;
+    });
