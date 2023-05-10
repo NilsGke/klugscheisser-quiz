@@ -1,8 +1,8 @@
 @import "../colors.scss";
 
 .diashow {
-    height: 80%;
-    width: 80%;
+    height: 100%;
+    width: 100%;
     // background-color: $grey;
     position: relative;
 
@@ -10,28 +10,29 @@
         position: absolute;
         color: $white;
         opacity: 0.4;
+        top: -40px;
+        left: -40px;
     }
 
     .images {
-        height: calc(100% - 60px);
-        max-height: calc(100% - 60px);
+        height: 100%;
+        // max-height: calc(100% - 60px);
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        .imageContainer {
-            height: 100%;
+        .image {
+            height: 100% !important;
             width: 100%;
-            position: absolute;
-            .image {
-                height: 100%;
-                width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-                img {
-                    height: 100%;
-                    width: 100%;
-                    object-fit: contain;
-                }
+            img {
+                height: 100%;
+                // width: 100%;
+                object-fit: contain;
+                border-radius: 20px;
             }
         }
     }

@@ -12,6 +12,7 @@ import autoAnimate from "@formkit/auto-animate";
 import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
 import { confirmAlert } from "react-confirm-alert";
 import hashString from "$helpers/hashString";
+import stringToColorGradient from "$helpers/stringToColorGradient";
 
 type props = {
     refresh?: any;
@@ -74,6 +75,11 @@ const CategoryBrowser: FC<props> = ({
         if (listRef.current) autoAnimate(listRef.current);
     }, []);
 
+    const selectedRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (selectedRef.current) autoAnimate(selectedRef.current);
+    }, []);
+
     const filtered = categories
         .filter((category) => !exclude.includes(category.dbIndex))
         .filter(
@@ -92,6 +98,8 @@ const CategoryBrowser: FC<props> = ({
         const chosenCategories = categories.filter((c) => selected.includes(c));
         submit(chosenCategories);
     };
+
+    console.log("category browser: ", selected);
 
     return (
         <div className="categoryBrowser">
@@ -121,7 +129,9 @@ const CategoryBrowser: FC<props> = ({
                                         selected.filter((i) => i !== category)
                                     );
                             }}
-                            selected={selected?.includes(category)}
+                            selected={selected
+                                ?.map((c) => c.dbIndex)
+                                .includes(category.dbIndex)}
                             deletable={deletable}
                             editable={editable}
                             delete={() =>
@@ -150,17 +160,19 @@ const CategoryBrowser: FC<props> = ({
                     <div className="separator"></div>
                     <div className="selected">
                         <h2>Selected</h2>
-                        <div className="categories">
+                        <div className="categories" ref={selectedRef}>
                             {selected.map((category, i) => (
                                 <CategoryElement
-                                    key={i}
+                                    key={category.dbIndex}
                                     category={category}
                                     removable
                                     remove={() => {
                                         if (setSelected && selected)
                                             setSelected(
                                                 selected.filter(
-                                                    (c) => c !== category
+                                                    (c) =>
+                                                        c.dbIndex !==
+                                                        category.dbIndex
                                                 )
                                             );
                                     }}
@@ -222,69 +234,20 @@ const CategoryElement = ({
             : URL.createObjectURL(category.description)
     );
 
-    const bg = useMemo(() => {
-        if (typeof category.description === "string") {
-            const code1 = Math.abs(hashString(category.name.repeat(20)))
-                .toString()
-                .substring(0, 8);
+    const gradient = useMemo(() => stringToColorGradient(category.name), []);
 
-            const code2 = Math.abs(
-                hashString([...category.name].reverse().join("").repeat(20))
-            )
-                .toString()
-                .substring(0, 6);
+    const bgImgage =
+        typeof category.description === "string"
+            ? gradient
+            : `url("${imageUrl.current}")`;
 
-            return {
-                angle: Math.floor(
-                    (parseInt(code1.substring(6, 8)) / 100) * 255
-                ),
-                from: {
-                    red: Math.floor(
-                        (parseInt(code1.substring(0, 2)) / 100) * 255
-                    ),
-                    green: Math.floor(
-                        (parseInt(code1.substring(2, 4)) / 100) * 255
-                    ),
-                    blue: Math.floor(
-                        (parseInt(code1.substring(4, 6)) / 100) * 255
-                    ),
-                },
-                to: {
-                    red: Math.floor(
-                        (parseInt(code2.substring(0, 2)) / 100) * 255
-                    ),
-                    green: Math.floor(
-                        (parseInt(code2.substring(2, 4)) / 100) * 255
-                    ),
-                    blue: Math.floor(
-                        (parseInt(code2.substring(4, 6)) / 100) * 255
-                    ),
-                },
-            };
-        } else
-            return {
-                angle: 0,
-                from: {
-                    red: 0,
-                    green: 0,
-                    blue: 0,
-                },
-                to: {
-                    red: 0,
-                    green: 0,
-                    blue: 0,
-                },
-            };
-    }, []);
+    console.log(bgImgage);
 
     return (
         <div
             className="categoryWrapper"
             style={{
-                backgroundImage:
-                    typeof category.description === "string"
-                        ? `linear-gradient(${bg.angle}deg, rgb(${bg.from.red}, ${bg.from.green}, ${bg.from.blue}), rgb(${bg.to.red}, ${bg.to.green}, ${bg.to.blue}))`
-                        : `url("${imageUrl.current}")`,
+                backgroundImage: bgImgage,
             }}
         >
             <div

@@ -19,6 +19,8 @@ body {
         --darkBlue: #5a41ff;
         --green: #7bff9c;
         --invert: invert(1);
+        --oneIfDark: 1;
+        --oneIfLight: 0;
     }
 
     &.light,
@@ -35,6 +37,8 @@ body {
         --darkBlue: #5a41ff;
         --green: #7bff9c;
         --invert: invert(0);
+        --oneIfDark: 0;
+        --oneIfLight: 1;
     }
 }
 
@@ -50,6 +54,8 @@ $white: var(--white);
 $pink: var(--pink);
 $red: var(--red);
 $invert: var(--invert);
+$oneIfDark: var(--oneIfDark);
+$oneIfLight: var(--oneIfLight);
 
 @property --gradient-angle {
     syntax: "<angle>";

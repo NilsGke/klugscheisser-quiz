@@ -15,6 +15,7 @@ import NewVersionbanner from "./components/NewVersionbanner";
 import Boards from "./routes/boards/Boards.page";
 import BoardEditor from "./routes/boards/editor/BoardEditor.page";
 import { getSettings } from "$helpers/settings";
+import "light.scss";
 
 enum NetworkStatus {
     ONLINE = "online",

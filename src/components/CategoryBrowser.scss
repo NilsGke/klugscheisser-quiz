@@ -84,7 +84,7 @@
                 height: 100%;
                 padding: 10px;
                 border: none;
-                backdrop-filter: blur(10px) brightness(0.5);
+                backdrop-filter: blur(10px) brightness(0.6);
 
                 &.choosable {
                     cursor: pointer;
@@ -107,7 +107,7 @@
                     button.remove {
                         height: 30px;
                         aspect-ratio: 1;
-                        border: 1px solid $grey;
+                        border: 2px solid $grey;
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -135,6 +135,7 @@
                     max-height: 100%;
                     height: 100%;
                     width: 100%;
+                    color: $white;
                     h2 {
                         margin-bottom: 10px;
                         line-height: 30px;

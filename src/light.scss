@@ -1,0 +1,10 @@
+body.light {
+    .categoryBrowser {
+        > .browser .results,
+        > .selected .categories {
+            .categoryWrapper .category {
+                backdrop-filter: blur(10px) contrast(0.4) brightness(1.4);
+            }
+        }
+    }
+}

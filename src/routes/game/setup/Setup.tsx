@@ -393,7 +393,12 @@ const SelectCategories = ({
                             ) as Indexed<Category>[];
                             console.log(categories);
 
-                            setSelected([...selected, ...categories]);
+                            setSelected((prev) => [
+                                ...prev,
+                                ...categories.filter(
+                                    (category) => !prev.includes(category)
+                                ),
+                            ]);
                             setLoadBoardOpen(false);
                         }}
                     />
