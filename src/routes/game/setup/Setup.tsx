@@ -214,7 +214,12 @@ const Team = ({
     );
 
     return (
-        <div className="team">
+        <div
+            className="team"
+            style={{
+                borderColor: team.color,
+            }}
+        >
             <div className="head">
                 <div
                     className={
