@@ -4,15 +4,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import {
     Category,
     Image,
-    ImageResourceCollection,
     PartialCategory,
     Resource,
     indexCategory,
     isCategory,
 } from "$types/categoryTypes";
 import "./Editor.scss";
-import MediaPool from "../MediaPool/MediaPool";
-import CategoryEditor from "../CategoryEditor/CategoryEditor";
+import MediaPool from "./MediaPool";
+import CategoryEditor from "./CategoryEditor";
 import { generateZipFromCategory } from "$helpers/zip";
 import { Indexed } from "$db/indexeddb";
 import { storeCategoryInDB, updateCategoryInDB } from "$db/categories";

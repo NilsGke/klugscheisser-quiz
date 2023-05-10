@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import {
     AnyIndexedMedia,
-    ImageResourceCollection,
     MediaType,
     MediaTypes,
     PartialCategory,
@@ -9,7 +8,6 @@ import {
     PartialResource,
     Resource,
 } from "$types/categoryTypes";
-import "./Category.scss";
 import { getStoredFile } from "$db/media";
 import removeIcon from "$assets/close.svg";
 import ResourceRenderer from "$components/ResourceRenderer";
@@ -25,7 +23,7 @@ type props = {
 
 const CategoryEditor: FC<props> = ({ category, setCategory, chooseField }) => {
     return (
-        <div className="category">
+        <div className="EditorCategory">
             {category.fields.map((field, fieldIndex) => (
                 <Field
                     key={fieldIndex}

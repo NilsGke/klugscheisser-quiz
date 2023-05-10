@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import "./CategoryBrowser.scss";
 import { Category } from "$types/categoryTypes";
 import { Indexed } from "$db/indexeddb";
@@ -11,6 +11,7 @@ import trashIcon from "$assets/trash.svg";
 import autoAnimate from "@formkit/auto-animate";
 import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
 import { confirmAlert } from "react-confirm-alert";
+import hashString from "$helpers/hashString";
 
 type props = {
     refresh?: any;
@@ -215,100 +216,174 @@ const CategoryElement = ({
     testable?: boolean;
     editable?: boolean;
 }) => {
+    const imageUrl = useRef(
+        typeof category.description === "string"
+            ? ""
+            : URL.createObjectURL(category.description)
+    );
+
+    const bg = useMemo(() => {
+        if (typeof category.description === "string") {
+            const code1 = Math.abs(hashString(category.name.repeat(20)))
+                .toString()
+                .substring(0, 8);
+
+            const code2 = Math.abs(
+                hashString([...category.name].reverse().join("").repeat(20))
+            )
+                .toString()
+                .substring(0, 6);
+
+            return {
+                angle: Math.floor(
+                    (parseInt(code1.substring(6, 8)) / 100) * 255
+                ),
+                from: {
+                    red: Math.floor(
+                        (parseInt(code1.substring(0, 2)) / 100) * 255
+                    ),
+                    green: Math.floor(
+                        (parseInt(code1.substring(2, 4)) / 100) * 255
+                    ),
+                    blue: Math.floor(
+                        (parseInt(code1.substring(4, 6)) / 100) * 255
+                    ),
+                },
+                to: {
+                    red: Math.floor(
+                        (parseInt(code2.substring(0, 2)) / 100) * 255
+                    ),
+                    green: Math.floor(
+                        (parseInt(code2.substring(2, 4)) / 100) * 255
+                    ),
+                    blue: Math.floor(
+                        (parseInt(code2.substring(4, 6)) / 100) * 255
+                    ),
+                },
+            };
+        } else
+            return {
+                angle: 0,
+                from: {
+                    red: 0,
+                    green: 0,
+                    blue: 0,
+                },
+                to: {
+                    red: 0,
+                    green: 0,
+                    blue: 0,
+                },
+            };
+    }, []);
+
     return (
         <div
-            className={"category" + (choosable ? " choosable" : "")}
-            onClick={choose}
+            className="categoryWrapper"
+            style={{
+                backgroundImage:
+                    typeof category.description === "string"
+                        ? `linear-gradient(${bg.angle}deg, rgb(${bg.from.red}, ${bg.from.green}, ${bg.from.blue}), rgb(${bg.to.red}, ${bg.to.green}, ${bg.to.blue}))`
+                        : `url("${imageUrl.current}")`,
+            }}
         >
-            {selectable ? (
-                <div
-                    className={
-                        "selectContainer" + (selected ? " selected" : "")
-                    }
-                >
-                    <button className="select" onClick={toggle}>
-                        {selected ? <img src={checkIcon} alt="" /> : null}
-                    </button>
-                </div>
-            ) : null}
-
-            {removable ? (
-                <div className="selectContainer">
-                    <button className="remove" onClick={remove}>
-                        <img src={removeIcon} alt="" />
-                    </button>
-                </div>
-            ) : null}
-
-            <div className="content">
-                <h2>{category.name}</h2>
-                <div className="description">
-                    {typeof category.description === "string" ? (
-                        <>
-                            <p>{category.description}</p>
-                        </>
-                    ) : (
-                        <img
-                            src={URL.createObjectURL(category.description)}
-                            alt="categor description image"
-                        />
-                    )}
-                </div>
-            </div>
-            <div className="buttons">
-                {editable ? (
-                    <button
-                        className="edit"
-                        title="edit category"
-                        onClick={() =>
-                            (window.location.href = `/categories/editor/${category.dbIndex}`)
+            <div
+                className={"category" + (choosable ? " choosable" : "")}
+                onClick={choose}
+            >
+                {selectable ? (
+                    <div
+                        className={
+                            "selectContainer" + (selected ? " selected" : "")
                         }
                     >
-                        <img src={editIcon} alt="edit icon" />
-                    </button>
+                        <button className="select" onClick={toggle}>
+                            {selected ? <img src={checkIcon} alt="" /> : null}
+                        </button>
+                    </div>
                 ) : null}
 
-                {deletable ? (
-                    <button
-                        className="delete"
-                        title="delete category"
-                        onClick={() =>
-                            confirmAlert({
-                                title: `delete  "${category.name}"?`,
-                                overlayClassName: "delete",
-                                childrenElement: () => (
-                                    <p>deleting cannot be undone</p>
-                                ),
-                                buttons: [
-                                    {
-                                        label: "delete",
-                                        onClick: deleteFun,
-                                    },
-                                    {
-                                        label: "keep",
-                                    },
-                                ],
-                            })
-                        }
-                    >
-                        <img src={trashIcon} alt="trash icon" />
-                    </button>
+                {removable ? (
+                    <div className="selectContainer">
+                        <button className="remove" onClick={remove}>
+                            <img src={removeIcon} alt="" />
+                        </button>
+                    </div>
                 ) : null}
 
-                {testable ? (
-                    <button
-                        className="test"
-                        title="test category in a game"
-                        onClick={() =>
-                            window.open(
-                                `/categories/test/${category.dbIndex}`,
-                                "_blank"
-                            )
-                        }
-                    >
-                        <img src={testIcon} alt="test in new Tab icon" />
-                    </button>
-                ) : null}
+                <div className="content">
+                    <h2>{category.name}</h2>
+                    <div className="description">
+                        {typeof category.description === "string" ? (
+                            <>
+                                <p>{category.description}</p>
+                            </>
+                        ) : (
+                            <img
+                                src={imageUrl.current}
+                                alt="categor description image"
+                                onLoad={() =>
+                                    URL.revokeObjectURL(imageUrl.current)
+                                }
+                            />
+                        )}
+                    </div>
+                </div>
+                <div className="buttons">
+                    {editable ? (
+                        <button
+                            className="edit"
+                            title="edit category"
+                            onClick={() =>
+                                (window.location.href = `/categories/editor/${category.dbIndex}`)
+                            }
+                        >
+                            <img src={editIcon} alt="edit icon" />
+                        </button>
+                    ) : null}
+
+                    {deletable ? (
+                        <button
+                            className="delete"
+                            title="delete category"
+                            onClick={() =>
+                                confirmAlert({
+                                    title: `delete  "${category.name}"?`,
+                                    overlayClassName: "delete",
+                                    childrenElement: () => (
+                                        <p>deleting cannot be undone</p>
+                                    ),
+                                    buttons: [
+                                        {
+                                            label: "delete",
+                                            onClick: deleteFun,
+                                        },
+                                        {
+                                            label: "keep",
+                                        },
+                                    ],
+                                })
+                            }
+                        >
+                            <img src={trashIcon} alt="trash icon" />
+                        </button>
+                    ) : null}
+
+                    {testable ? (
+                        <button
+                            className="test"
+                            title="test category in a game"
+                            onClick={() =>
+                                window.open(
+                                    `/categories/test/${category.dbIndex}`,
+                                    "_blank"
+                                )
+                            }
+                        >
+                            <img src={testIcon} alt="test in new Tab icon" />
+                        </button>
+                    ) : null}
+                </div>
             </div>
         </div>
     );

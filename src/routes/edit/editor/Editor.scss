@@ -132,18 +132,111 @@
         grid-area: 2 / 2 / 3 / 4;
         margin: 5px;
         max-width: 1000px;
-        .category {
+        .EditorCategory {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+            border-radius: 20px;
+            border: 1px solid $white;
+            max-height: 99%;
+            padding: 10px;
+
             .field {
+                $gap: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 7px;
+                border-radius: 10px;
+                height: calc(100% / 5 - $gap);
+                width: 100%;
+
                 h3 {
+                    rotate: -90deg;
                 }
                 .content {
+                    height: 100%;
+                    width: 100%;
+                    gap: 7px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     .question,
                     .answer {
+                        $mediaPadding: 5px;
+                        width: 50%;
+                        height: 100%;
+                        display: inline-block;
+                        border: 1px solid $lighterDark;
+                        border-radius: 10px;
+                        padding: $mediaPadding;
+                        position: relative;
+
+                        &:not(:has(.addMedia)) {
+                            background: $dark;
+                        }
+
+                        > .choose {
+                            position: absolute;
+                            height: 100%;
+                            width: 100%;
+                            z-index: 1;
+                            top: 0;
+                            left: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            backdrop-filter: blur(3px) brightness(0.7);
+                            cursor: pointer;
+                            outline: 2px solid $darkBlue;
+                            border-radius: 10px;
+                        }
+
                         .mediaElement {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            height: 100%;
+
+                            > div {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                position: relative;
+                            }
+
                             .text,
                             .video,
                             .audio,
                             .image {
+                            }
+
+                            > button.addMedia {
+                                border: none;
+                                height: 100%;
+                                width: 100%;
+                                background: none;
+                                color: $white;
+                                cursor: pointer;
+                                opacity: 0.3;
+                            }
+
+                            > div:not(.text) {
+                                height: calc(100% - $mediaPadding);
+                                max-height: 100%;
+                                max-width: 100%;
+                                width: 100%;
+
+                                img,
+                                video,
+                                audio {
+                                    max-height: 100%;
+                                    max-width: 100%;
+                                    border-radius: 5px;
+                                }
                             }
 
                             .diashow {
@@ -190,6 +283,50 @@
                                             }
                                         }
                                     }
+                                }
+                            }
+
+                            .text {
+                                width: 95%;
+                                height: 95%;
+
+                                textarea {
+                                    resize: none;
+                                    width: 100%;
+                                    height: 100%;
+                                    background-color: transparent;
+                                    border: 1px solid $white;
+                                    border-radius: 10px;
+                                    color: $white;
+                                    padding: 10px;
+                                    border: none;
+
+                                    white-space: normal;
+                                    text-align: justify;
+                                    -moz-text-align-last: center; /* Firefox 12+ */
+                                    text-align-last: center;
+                                }
+                            }
+
+                            > button.remove {
+                                height: 30px;
+                                aspect-ratio: 1;
+                                position: absolute;
+                                top: 5px;
+                                right: 5px;
+                                background-color: transparent;
+                                border: none;
+                                cursor: pointer;
+                                border-radius: 100%;
+                                backdrop-filter: blur(14px) brightness(75%);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                img {
+                                    height: 50%;
+                                    aspect-ratio: 1;
+                                    filter: $invert;
                                 }
                             }
                         }
