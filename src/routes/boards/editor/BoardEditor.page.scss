@@ -33,13 +33,13 @@
                 box-shadow: 0 0 20px #7f7e7b;
                 white-space: nowrap;
                 transition: all 0.2s ease-out;
-                background-color: transparent;
-                border: 1px solid #fefbf5;
+                background-color: $dark;
+                border: 1px solid $white;
                 font-size: 20px;
-                color: #fefbf5;
+                color: $white;
                 &:hover {
-                    background-color: #fefbf5;
-                    color: #151516;
+                    background-color: $white;
+                    color: $dark;
                     box-shadow: 0 0 30px #fefbf5;
                 }
             }
