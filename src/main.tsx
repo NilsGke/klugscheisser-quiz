@@ -52,7 +52,7 @@ const App = () => {
                 .querySelector('meta[name="theme-color"]')
                 ?.setAttribute(
                     "content",
-                    theme === "light" ? "#dadada" : "#262626"
+                    theme === "dark" ? "#262626" : "#dadada"
                 );
         }, 100);
     }, [theme]);
