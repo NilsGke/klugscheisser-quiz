@@ -178,10 +178,9 @@ const Team = ({
                 [
                     {
                         boxShadow: `
-                                 inset 0 0 10px 0px ${team.color},
-                                 0 0 80px 10px ${team.color}
+                                 inset 0 0 20px 0px ${team.color},
+                                 0 0 150px 40px ${team.color}
                             `,
-                        border: `1px solid ${team.color}`,
                     },
                     {
                         boxShadow: "inset 0 0 0 transparent, 0 0 0 transparent",
