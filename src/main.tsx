@@ -122,11 +122,21 @@ const App = () => {
         },
         {
             path: "/categories/test/:dbIndex",
-            element: <Game themeChange={() => setTheme(getSettings().theme)} />,
+            element: (
+                <Game
+                    theme={theme}
+                    themeChange={() => setTheme(getSettings().theme)}
+                />
+            ),
         },
         {
             path: "/categories/test/:dbIndex/destroy",
-            element: <Game themeChange={() => setTheme(getSettings().theme)} />,
+            element: (
+                <Game
+                    theme={theme}
+                    themeChange={() => setTheme(getSettings().theme)}
+                />
+            ),
         },
         // boards
         {
@@ -143,7 +153,12 @@ const App = () => {
         },
         {
             path: "/game",
-            element: <Game themeChange={() => setTheme(getSettings().theme)} />,
+            element: (
+                <Game
+                    theme={theme}
+                    themeChange={() => setTheme(getSettings().theme)}
+                />
+            ),
         },
     ]);
 

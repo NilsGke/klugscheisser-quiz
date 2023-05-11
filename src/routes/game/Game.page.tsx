@@ -44,6 +44,8 @@ import { PieChart } from "react-minimal-pie-chart";
 import Settings from "$components/SettingsPane";
 import { SettingsType, getSettings } from "$helpers/settings";
 import useTitle from "$hooks/useTitle";
+import { Theme } from "main";
+import ResourceRenderer from "$components/ResourceRenderer";
 
 enum State {
     idle = "idle",
@@ -57,7 +59,13 @@ enum State {
 
 const jsConfetti = new JSConfetti();
 
-const Game = ({ themeChange }: { themeChange: () => void }) => {
+const Game = ({
+    theme,
+    themeChange,
+}: {
+    theme: Theme;
+    themeChange: () => void;
+}) => {
     const [gameData, setGameData] = useState<Game | null>(null);
 
     const [selected, setSelected] = useState<null | {
@@ -450,6 +458,7 @@ const Game = ({ themeChange }: { themeChange: () => void }) => {
                         <>
                             {category.fields.map((field, fieldIndex) => (
                                 <Field
+                                    theme={theme}
                                     key={fieldIndex}
                                     {...{
                                         settings,
@@ -703,6 +712,7 @@ const Field = ({
     buzzeredTeamIndex,
     testMode,
     settings,
+    theme,
 }: {
     field: GameField;
     points: number;
@@ -717,6 +727,7 @@ const Field = ({
     buzzeredTeamIndex: number | null;
     testMode: boolean;
     settings: SettingsType;
+    theme: Theme;
 }) => {
     const fieldRef = useRef<HTMLDivElement>(null);
 
@@ -843,19 +854,25 @@ const Field = ({
                     ) : null}
 
                     <div className="content">
-                        <div
-                            className="points"
-                            style={{
-                                opacity:
-                                    gameState === State.idle ||
-                                    gameState === State.goingBig ||
-                                    !selected
-                                        ? 1
-                                        : 0,
-                            }}
-                        >
-                            {points}
-                        </div>
+                        {theme !== "senior" || !field.answered ? (
+                            <div
+                                className="points"
+                                style={{
+                                    opacity:
+                                        gameState === State.idle ||
+                                        gameState === State.goingBig ||
+                                        !selected
+                                            ? 1
+                                            : 0,
+                                }}
+                            >
+                                {points}
+                            </div>
+                        ) : (
+                            <div className="resource">
+                                <ResourceRenderer resource={field.answer} />
+                            </div>
+                        )}
 
                         {selected ? (
                             <>
