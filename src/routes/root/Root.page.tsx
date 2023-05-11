@@ -12,6 +12,9 @@ import lightIcon from "$assets/sun.svg";
 import darkIcon from "$assets/moon.svg";
 import colorfulIcon from "$assets/colorPalette.svg";
 import { changeSetting } from "$helpers/settings";
+import fileToBase64 from "$helpers/fileToBase64";
+import { base64ToFile } from "$helpers/base64ToFile";
+import toast from "react-simple-toasts";
 
 const Root = ({
     theme,
@@ -84,6 +87,49 @@ const Root = ({
             <Link to={"/help"} className="helpIcon">
                 <img src={helpIcon} alt="question mark icon" />
             </Link>
+
+            {theme === "senior" ? (
+                <div className="extraOptions">
+                    <button>
+                        <label htmlFor="audioImageInput">
+                            change audio image
+                        </label>
+                    </button>
+                    <button
+                        onClick={() => {
+                            localStorage.removeItem("audioImage");
+                            toast("🚮image removed");
+                        }}
+                    >
+                        delete audio image
+                    </button>
+                    <input
+                        type="file"
+                        name="audioImageInput"
+                        id="audioImageInput"
+                        accept="image/*"
+                        onChange={async (e) => {
+                            const files = (e.target as HTMLInputElement).files;
+                            if (files === null) return;
+                            const file = files[0];
+                            if (file === undefined) return; // for ts seems redundent but it does not check if this is null
+                            if (!file.type.startsWith("image/"))
+                                return toast(
+                                    "❌File is not a standard image file"
+                                );
+
+                            const base64 = await fileToBase64(file);
+                            try {
+                                localStorage.setItem("audioImage", base64);
+                                toast("✅image saved");
+                            } catch (error) {
+                                console.error(error);
+                                toast("❌failed, File might be too big!");
+                            }
+                        }}
+                    />
+                </div>
+            ) : null}
         </div>
     );
 };

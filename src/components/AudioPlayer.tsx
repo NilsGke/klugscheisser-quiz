@@ -122,6 +122,8 @@ const AudioPlayer: FC<props> = ({
         audioElementRef.current.currentTime = currentTime;
     };
 
+    const base64Image = localStorage.getItem("audioImage");
+
     const name =
         file.name.length > 30 ? `${file.name.substring(0, 30)}...` : file.name;
 
@@ -138,7 +140,7 @@ const AudioPlayer: FC<props> = ({
                 {show ? (
                     <>
                         <img
-                            src={speakerIcon}
+                            src={base64Image ?? speakerIcon}
                             className="speakerIcon"
                             alt="speaker icon"
                         />

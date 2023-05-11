@@ -158,4 +158,22 @@
             filter: $invert;
         }
     }
+
+    .extraOptions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        button {
+            padding: 3px;
+            cursor: pointer;
+            label {
+                cursor: pointer;
+            }
+        }
+        input {
+            display: none;
+        }
+    }
 }
