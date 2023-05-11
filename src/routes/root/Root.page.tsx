@@ -15,6 +15,7 @@ import { changeSetting } from "$helpers/settings";
 import fileToBase64 from "$helpers/fileToBase64";
 import { base64ToFile } from "$helpers/base64ToFile";
 import toast from "react-simple-toasts";
+import useTitle from "$hooks/useTitle";
 
 const Root = ({
     theme,
@@ -23,6 +24,8 @@ const Root = ({
     theme: Theme;
     themeChange: () => void;
 }) => {
+    useTitle("Klugscheißer-Quiz");
+
     return (
         <div className="root">
             <div

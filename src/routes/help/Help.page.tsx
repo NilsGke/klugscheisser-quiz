@@ -1,8 +1,11 @@
 //assets
 import "./Help.page.scss";
 import HomeButton from "$components/HomeButton";
+import useTitle from "$hooks/useTitle";
 
 const Help = () => {
+    useTitle("ksq - help");
+
     return (
         <div id="helpPage" className="page help">
             <HomeButton />

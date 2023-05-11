@@ -19,6 +19,7 @@ import BackButton from "$components/BackButton";
 import testIcon from "$assets/test.svg";
 import imageIcon from "$assets/image.svg";
 import { confirmAlert } from "react-confirm-alert";
+import useTitle from "$hooks/useTitle";
 
 const Edit = ({
     initialCategory,
@@ -31,6 +32,8 @@ const Edit = ({
     const [name, setName] = useState(initialCategory.name);
     const [description, setDescription] = useState(initialCategory.description);
     const [answerTime, setAnswerTime] = useState(initialCategory.answerTime);
+
+    useTitle(`ksq - editor${name !== "" ? ": " + name : ""}`);
 
     // resource added by media pool (dot menu)
     const [addResource, setAddResource] = useState<Resource | null>(null);

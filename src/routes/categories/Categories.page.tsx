@@ -12,11 +12,14 @@ import "./Categories.page.scss";
 // assets
 import folderIcon from "$assets/folder.svg";
 import addIcon from "$assets/addRound.svg";
+import useTitle from "$hooks/useTitle";
 
 const Categories = () => {
     const [files, setFiles] = useState<File[]>();
     const [dragging, setDragging] = useState(false);
     const [update, setUpdate] = useState(Date.now());
+
+    useTitle("ksq - categories");
 
     const navigate = useNavigate();
 

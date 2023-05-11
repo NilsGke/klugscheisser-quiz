@@ -12,6 +12,7 @@ const Editor = () => {
     // set initial category if set in URL
     const { dbIndex: dbIndexParam } = useParams();
     const [dbIndex, setdbIndex] = useState<number | undefined>(undefined);
+
     useEffect(() => {
         if (dbIndexParam === undefined) {
             setCategory(emptyCategory);

@@ -12,12 +12,15 @@ import { getStoredBoard, storeBoardInDB, updateBoardInDB } from "$db/boards";
 import toast from "react-simple-toasts";
 import { useParams } from "react-router-dom";
 import BackButton from "$components/BackButton";
+import useTitle from "$hooks/useTitle";
 
 const BoardEditor = () => {
     const [board, setBoard] = useState<Board>({
         name: "",
         categories: [],
     });
+
+    useTitle(`ksq - board-editor${board.name ? ": " + board.name : ""}`);
 
     const categoriesContainerRef = useRef<HTMLDivElement>(null);
     console.log(categoriesContainerRef.current);

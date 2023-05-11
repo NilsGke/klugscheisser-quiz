@@ -43,6 +43,7 @@ import eyeIcon from "$assets/eye.svg";
 import { PieChart } from "react-minimal-pie-chart";
 import Settings from "$components/SettingsPane";
 import { SettingsType, getSettings } from "$helpers/settings";
+import useTitle from "$hooks/useTitle";
 
 enum State {
     idle = "idle",
@@ -165,6 +166,8 @@ const Game = ({ themeChange }: { themeChange: () => void }) => {
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useTitle(testMode ? "ksq - test-mode" : "ksq - Game");
 
     // store game on every change
     useEffect(() => {
