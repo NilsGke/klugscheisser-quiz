@@ -163,17 +163,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        flex-direction: column;
+        gap: 30px;
+        > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
 
-        button {
-            padding: 3px;
-            cursor: pointer;
-            label {
+            button {
+                padding: 3px;
                 cursor: pointer;
+                label {
+                    cursor: pointer;
+                }
             }
-        }
-        input {
-            display: none;
+
+            input {
+                display: none;
+            }
         }
     }
 }
