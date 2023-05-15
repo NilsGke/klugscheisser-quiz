@@ -23,6 +23,7 @@ import closeIcon from "$assets/close.svg";
 
 // styles
 import "./Setup.scss";
+import ResourceRenderer from "$components/ResourceRenderer";
 
 enum Step {
     CREATE_TEAMS,
@@ -47,7 +48,6 @@ const Setup: FC<props> = ({ setGameData }) => {
             team.name.trim() === "" ? (team.name = `Team #${index + 1}`) : null
         );
 
-        console.log("finished building game", { teams, categories });
         setGameData({
             categories,
             teams,
@@ -203,7 +203,6 @@ const Team = ({
             )
         )
             setShowColors(false);
-        console.log({ a: e.target });
     });
 
     const team = teams[teamIndex];
@@ -244,7 +243,6 @@ const Team = ({
                                     newTeams[teamIndex].color = color;
                                     setTeams(newTeams);
                                     setShowColors(false);
-                                    console.log("setShowColors");
                                 }}
                                 tabIndex={showColors ? 0 : -1}
                             ></button>
@@ -281,7 +279,6 @@ const Team = ({
                     onClick={() => {
                         const newTeams = teams.slice();
                         newTeams.splice(teamIndex, 1);
-                        console.log(newTeams, teamIndex);
                         setTeams(newTeams);
                     }}
                 >
@@ -351,7 +348,8 @@ const SelectCategories = ({
         setCategories(selected.map(categoryToGameCategory));
     }, [selected]);
 
-    console.log(selected);
+    // highlight fields
+    const [highlightFieldsOpen, setHighlightFieldsOpen] = useState(false);
 
     return (
         <>
@@ -365,6 +363,14 @@ const SelectCategories = ({
                 >
                     select board
                 </button>
+
+                <button
+                    className="highlightFields"
+                    onClick={() => setHighlightFieldsOpen(true)}
+                >
+                    highlight fields
+                </button>
+
                 <h2>select categories</h2>
                 <div className="container">
                     <CategoryBrowser
@@ -395,7 +401,6 @@ const SelectCategories = ({
                             const categories = board.categories.filter(
                                 (c) => !categoryIsDeleted(c)
                             ) as Indexed<Category>[];
-                            console.log(categories);
 
                             setSelected((prev) => [
                                 ...prev,
@@ -408,6 +413,78 @@ const SelectCategories = ({
                     />
                 </div>
             </div>
+            {highlightFieldsOpen ? (
+                <div className="highlightFieldsWrapper">
+                    <div className="highlightFields">
+                        <button
+                            className="close"
+                            onClick={() => setHighlightFieldsOpen(false)}
+                        >
+                            <img src={closeIcon} alt="close" />
+                        </button>
+                        <div
+                            className="categories"
+                            style={{
+                                justifyContent:
+                                    selected.length === 0
+                                        ? "center"
+                                        : undefined,
+                            }}
+                        >
+                            {selected.map((category, categoryIndex) => (
+                                <div
+                                    className="category"
+                                    key={category.dbIndex}
+                                >
+                                    <h3>{category.name}</h3>
+                                    {category.fields.map(
+                                        (field, fieldIndex) => (
+                                            <div
+                                                className="field"
+                                                key={fieldIndex}
+                                            >
+                                                <ResourceRenderer
+                                                    resource={field.question}
+                                                    small
+                                                />
+                                                <button
+                                                    className={
+                                                        "overlay" +
+                                                        (field.highlighted
+                                                            ? " highlighted"
+                                                            : "")
+                                                    }
+                                                    onClick={() => {
+                                                        const categories =
+                                                            selected.slice();
+
+                                                        categories[
+                                                            categoryIndex
+                                                        ].fields[
+                                                            fieldIndex
+                                                        ].highlighted = !(
+                                                            categories[
+                                                                categoryIndex
+                                                            ].fields[fieldIndex]
+                                                                .highlighted ??
+                                                            false
+                                                        );
+
+                                                        setSelected(categories);
+                                                    }}
+                                                ></button>
+                                            </div>
+                                        )
+                                    )}
+                                </div>
+                            ))}
+                            {selected.length === 0
+                                ? "no category selected!"
+                                : null}
+                        </div>
+                    </div>
+                </div>
+            ) : null}
         </>
     );
 };
