@@ -20,7 +20,7 @@ import {
     GameTeam as TeamType,
     categoryToGameCategory,
 } from "$types/gameTypes";
-import { Category, Resource } from "$types/categoryTypes";
+import { Audio, Category, Resource } from "$types/categoryTypes";
 // helpers
 import { getStoredCategory, removeCategoryFromDb } from "$db/categories";
 import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
@@ -46,8 +46,11 @@ import { SettingsType, getSettings } from "$helpers/settings";
 import useTitle from "$hooks/useTitle";
 import { Theme } from "main";
 import ResourceRenderer from "$components/ResourceRenderer";
+import { getThing } from "$db/things";
+import HomeButton from "$components/HomeButton";
 
 enum State {
+    intro = "intro",
     idle = "idle",
     goingBig = "goingBig",
     showDescription = "showDescription",
@@ -189,7 +192,6 @@ const Game = ({
             setLoading(true);
             getGameFromDb()
                 .then((game) => {
-                    console.log("game found", game);
                     setGameData(game);
                     setLoading(false);
                 })
@@ -214,8 +216,6 @@ const Game = ({
 
         return () => {};
     }, [gameData]);
-
-    console.log({ gameData, loading });
 
     const activeTimers = useRef<NodeJS.Timeout[]>([]);
     const abortTimers = () => {
@@ -280,14 +280,6 @@ const Game = ({
                     emojiSize: 20,
                 });
 
-            console.log(
-                newCategories.map((cat) =>
-                    cat.fields.map(
-                        (field) => typeof field.answered === "string"
-                    )
-                )
-            );
-
             if (
                 newCategories.every((cat) =>
                     cat.fields.every(
@@ -296,7 +288,6 @@ const Game = ({
                 )
             ) {
                 setTimeout(() => setGameState(State.done), 650);
-                console.log("done");
             } else setGameState(State.idle);
 
             return {
@@ -308,7 +299,6 @@ const Game = ({
         setBuzzeredTeamIndex(null);
         setSelected(null);
     };
-    console.log(gameState);
 
     const endGame = () => {
         if (
@@ -371,16 +361,22 @@ const Game = ({
 
     if (errorMessage !== "")
         return (
-            <div id="gamePage">
-                <p className="error">{errorMessage}</p>
+            <div id="gamePage" className="error">
+                <HomeButton />
+                <p>{errorMessage}</p>
             </div>
         );
 
+    // display SETUP if no game data
     if (gameData === null)
         return (
             <div id="gamePage">
                 <Setup
-                    setGameData={(gameData: Game) => setGameData(gameData)}
+                    setGameData={(gameData: Game) => {
+                        setGameData(gameData);
+                        if (settings.theme === "senior")
+                            setGameState(State.intro);
+                    }}
                 />
             </div>
         );
@@ -500,6 +496,10 @@ const Game = ({
                     </Fragment>
                 ))}
             </div>
+
+            {gameState === State.intro ? (
+                <Intro start={() => setGameState(State.idle)} />
+            ) : null}
 
             {gameState === State.done ? (
                 <div className="doneWrapper">
@@ -1216,4 +1216,33 @@ const Team = ({
         </div>
     );
 };
+
+const Intro = ({ start }: { start: () => void }) => {
+    const [musicFile, setMusicFile] = useState<File | null>(null);
+    useEffect(() => {
+        getThing<File>("introMusic")
+            .then((file) => setMusicFile(file))
+            .catch(() => console.warn("no intro music found"));
+    }, []);
+
+    return (
+        <div className="intro">
+            <h1>Willkommen</h1>
+            {musicFile ? (
+                <ResourceRenderer
+                    resource={{
+                        type: "audio",
+                        content: musicFile as Audio,
+                        volume: 70,
+                    }}
+                    autoplay
+                />
+            ) : (
+                <code>no intro music provided</code>
+            )}
+            <button onClick={start}>Start</button>
+        </div>
+    );
+};
+
 export default Game;
