@@ -4,6 +4,8 @@ import {
     addVolumeToAudioResource,
     addVolumeToVideoResource,
 } from "$types/categoryTypes";
+import { Game } from "$types/gameTypes";
+import { Thing } from "./things";
 
 /** ### version documentation
  *
@@ -19,7 +21,7 @@ export type Indexed<T> = T & {
     dbIndex: number;
 };
 
-const DB_VERSION = 7;
+const DB_VERSION = 9;
 const DB_NAME = "LocalFileDatabase";
 
 export const initIndexedDB = (
@@ -192,6 +194,57 @@ const migrations: MigrationFunction[] = [
             objectStore.transaction.oncomplete = () => resolve();
 
             objectStore.transaction.onerror = reject;
+        }),
+    // create new stuff object store and delete games
+    (db) =>
+        new Promise<void>((resolve, reject) => {
+            const objectStore = db.createObjectStore("things", {
+                autoIncrement: true,
+            });
+
+            objectStore.createIndex("thingKey", "thingKey", {
+                unique: true,
+            });
+
+            objectStore.transaction.oncomplete = async () => {
+                // get old game if one is running
+                const game = await new Promise<Game>((resolve, reject) => {
+                    const request = db
+                        .transaction("games", "readonly")
+                        .objectStore("games")
+                        .get(0);
+
+                    request.onsuccess = () => {
+                        if (request.result === undefined)
+                            return request.dispatchEvent(new Event("error"));
+
+                        resolve(request.result as Game);
+                    };
+                    request.onerror = () => reject();
+                }).catch(() => undefined); // if it errors, we ignore the running game (there probably is no game running)
+
+                // save previous game in new things store
+                if (game !== undefined) {
+                    const setGameRequest = db
+                        .transaction("things", "readwrite")
+                        .objectStore("things")
+                        .put({
+                            thingKey: "activeGame",
+                            value: game,
+                        } as Thing);
+
+                    setGameRequest.onsuccess = () => resolve();
+                } else {
+                    resolve();
+                }
+            };
+        }),
+
+    // delete old game store
+    (db) =>
+        new Promise<void>((resolve, reject) => {
+            db.deleteObjectStore("games");
+            resolve();
         }),
 ];
 
