@@ -309,8 +309,7 @@ const Game = ({
             return;
         abortTimers();
         jsConfetti.clearCanvas();
-        deleteGameFromDb();
-        window.location.href = "/";
+        deleteGameFromDb().then(() => (window.location.href = "/"));
     };
 
     // confetti on win
