@@ -170,7 +170,7 @@ const Game = ({
             })
             .catch((error) => {
                 setErrorMessage("category not found");
-                console.log("error", error);
+                console.error("error", error);
             })
             .finally(() => {
                 setLoading(false);
@@ -196,7 +196,7 @@ const Game = ({
                     setLoading(false);
                 })
                 .catch(() => {
-                    console.log("no game found");
+                    console.info("no game found");
                 })
                 .finally(() => {
                     setLoading(false);
@@ -837,7 +837,8 @@ const Field = ({
                 className={
                     "field" +
                     (selected ? " selected" : "") +
-                    (typeof field.answered === "string" ? " answered" : "")
+                    (typeof field.answered === "string" ? " answered" : "") +
+                    (field.highlighted ? " highlighted " : "")
                 }
                 onClick={
                     typeof field.answered !== "string" && !selected
