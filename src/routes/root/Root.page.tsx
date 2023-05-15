@@ -10,10 +10,9 @@ import { Theme } from "main";
 
 import lightIcon from "$assets/sun.svg";
 import darkIcon from "$assets/moon.svg";
-import colorfulIcon from "$assets/colorPalette.svg";
+import elderlyIcon from "$assets/elderly.svg";
 import { changeSetting } from "$helpers/settings";
 import fileToBase64 from "$helpers/fileToBase64";
-import { base64ToFile } from "$helpers/base64ToFile";
 import toast from "react-simple-toasts";
 import useTitle from "$hooks/useTitle";
 import { removeThing, setThing } from "$db/things";
@@ -83,7 +82,7 @@ const Root = ({
                     style={{
                         opacity: theme === "senior" ? 1 : 0,
                     }}
-                    src={colorfulIcon}
+                    src={elderlyIcon}
                     alt=""
                 />
             </button>
