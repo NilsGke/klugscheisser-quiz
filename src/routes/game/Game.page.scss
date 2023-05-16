@@ -134,7 +134,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: 1px solid $white;
+                border: 2px solid $white;
                 margin: 0;
                 font-size: 25px;
                 cursor: pointer;
@@ -458,6 +458,12 @@
                         left: 0;
                         height: 100%;
                         width: 100%;
+                    }
+                }
+                &.highlighted {
+                    border-color: $darkBlue;
+                    .content {
+                        background: #0c59ff1f;
                     }
                 }
             }

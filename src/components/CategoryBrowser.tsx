@@ -99,8 +99,6 @@ const CategoryBrowser: FC<props> = ({
         submit(chosenCategories);
     };
 
-    console.log("category browser: ", selected);
-
     return (
         <div className="categoryBrowser">
             <div className="browser">
@@ -240,8 +238,6 @@ const CategoryElement = ({
         typeof category.description === "string"
             ? gradient
             : `url("${imageUrl.current}")`;
-
-    console.log(bgImgage);
 
     return (
         <div

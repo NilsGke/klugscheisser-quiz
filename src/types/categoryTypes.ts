@@ -40,6 +40,7 @@ export interface Category {
 export interface Field {
     question: Resource;
     answer: Resource;
+    highlighted?: boolean;
 }
 
 export type Resource =
@@ -119,7 +120,8 @@ export interface PartialCategory extends Omit<Category, "fields"> {
     ];
 }
 
-export interface PartialField extends Omit<Field, "question" | "answer"> {
+export interface PartialField
+    extends Omit<Field, "question" | "answer" | "highlighted"> {
     question: PartialResource;
     answer: PartialResource;
 }
