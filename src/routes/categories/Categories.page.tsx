@@ -95,9 +95,9 @@ const Categories = () => {
     return (
         <div id="editorPage">
             <HomeButton />
-            <h1>Kategorie-Editor</h1>
             <div id="onboard">
                 <div className="decide">
+                    <h1>Kategorie-Editor</h1>
                     <CategoryBrowser
                         refresh={update}
                         testable
