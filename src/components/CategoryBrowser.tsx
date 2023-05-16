@@ -2,17 +2,20 @@ import { FC, useEffect, useMemo, useRef, useState } from "react";
 import "./CategoryBrowser.scss";
 import { Category } from "$types/categoryTypes";
 import { Indexed } from "$db/indexeddb";
+import autoAnimate from "@formkit/auto-animate";
+import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
+import { confirmAlert } from "react-confirm-alert";
+import stringToColorGradient from "$helpers/stringToColorGradient";
+
 // assets
 import editIcon from "$assets/edit.svg";
 import testIcon from "$assets/test.svg";
 import checkIcon from "$assets/check.svg";
 import removeIcon from "$assets/close.svg";
 import trashIcon from "$assets/trash.svg";
-import autoAnimate from "@formkit/auto-animate";
-import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
-import { confirmAlert } from "react-confirm-alert";
-import hashString from "$helpers/hashString";
-import stringToColorGradient from "$helpers/stringToColorGradient";
+import sortAZIcon from "$assets/sortAZ.svg";
+import sortZAIcon from "$assets/sortZA.svg";
+import clockIcon from "$assets/clock.svg";
 
 type props = {
     refresh?: any;
@@ -37,6 +40,12 @@ enum Purpose {
     VIEWING,
     CHOOSE_ONE,
     SELECTING_MULTIPLE,
+}
+
+enum SortingMethod {
+    creationDate = "creationDate",
+    abcNormal = "abcNormal",
+    abcReverse = "abcReverse",
 }
 
 /** adding `selected` prop makes this component controlled by its parent */
@@ -99,6 +108,24 @@ const CategoryBrowser: FC<props> = ({
         submit(chosenCategories);
     };
 
+    // sorting
+    const [sortingMethod, setSortingMethod] = useState(
+        SortingMethod.creationDate
+    );
+    const sorted = filtered.sort((a, b) => {
+        switch (sortingMethod) {
+            case SortingMethod.creationDate:
+                return b.dbIndex - a.dbIndex;
+            case SortingMethod.abcNormal:
+                return a.name < b.name ? -1 : 1;
+            case SortingMethod.abcReverse:
+                return a.name > b.name ? -1 : 1;
+
+            default:
+                return 1;
+        }
+    });
+
     return (
         <div className="categoryBrowser">
             <div className="browser">
@@ -108,9 +135,42 @@ const CategoryBrowser: FC<props> = ({
                         placeholder="search..."
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
+                    <button
+                        title={`sort by ${sortingMethod}`}
+                        className="sort"
+                        onClick={() =>
+                            setSortingMethod((prev) => {
+                                switch (prev) {
+                                    case SortingMethod.abcNormal:
+                                        return SortingMethod.abcReverse;
+                                    case SortingMethod.abcReverse:
+                                        return SortingMethod.creationDate;
+                                    case SortingMethod.creationDate:
+                                        return SortingMethod.abcNormal;
+
+                                    default:
+                                        return SortingMethod.creationDate;
+                                }
+                            })
+                        }
+                    >
+                        <img
+                            src={
+                                sortingMethod === SortingMethod.abcNormal
+                                    ? sortAZIcon
+                                    : sortingMethod === SortingMethod.abcReverse
+                                    ? sortZAIcon
+                                    : sortingMethod ===
+                                      SortingMethod.creationDate
+                                    ? clockIcon
+                                    : "error"
+                            }
+                            alt={sortingMethod}
+                        />
+                    </button>
                 </div>
                 <div className="results" ref={listRef}>
-                    {filtered.map((category) => (
+                    {sorted.map((category) => (
                         <CategoryElement
                             key={category.dbIndex}
                             category={category}
