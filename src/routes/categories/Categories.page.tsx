@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import "./Categories.page.scss";
 import { storeCategoryInDB } from "$db/categories";
 import toast from "react-simple-toasts";
 import { importCategoryFromZip } from "$helpers/zip";
 import { useNavigate } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import exportAllCategories from "$helpers/exportAllCategories";
+import downloadFile from "$helpers/downloadFile";
 // components
 import HomeButton from "$components/HomeButton";
 import CategoryBrowser from "$components/CategoryBrowser";
@@ -13,6 +15,7 @@ import "./Categories.page.scss";
 import folderIcon from "$assets/folder.svg";
 import addIcon from "$assets/addRound.svg";
 import useTitle from "$hooks/useTitle";
+import downloadIcon from "$assets/downloadFolder.svg";
 
 const Categories = () => {
     const [files, setFiles] = useState<File[]>();
@@ -92,6 +95,10 @@ const Categories = () => {
         });
     }, [files]);
 
+    const [exportInfo, setExportInfo] = useState<
+        Parameters<Parameters<typeof exportAllCategories>[0]>[0] | null
+    >(null);
+
     return (
         <div id="editorPage">
             <HomeButton />
@@ -103,6 +110,7 @@ const Categories = () => {
                         testable
                         editable
                         deletable
+                        downloadable
                     />
                     <div className="actions">
                         <label
@@ -140,9 +148,93 @@ const Categories = () => {
                             <img src={addIcon} alt="create new logo" />
                             <p>Create New Category</p>
                         </button>
+                        <button
+                            className="backup"
+                            onClick={() =>
+                                confirmAlert({
+                                    title: "export all categories?",
+                                    childrenElement: () => (
+                                        <p>
+                                            this will create a large zip file
+                                            containing all your categories
+                                            <br /> <br />
+                                            This file might get very big!
+                                        </p>
+                                    ),
+                                    buttons: [
+                                        {
+                                            label: "cancel",
+                                        },
+                                        {
+                                            label: "export",
+                                            onClick: () =>
+                                                exportAllCategories(
+                                                    setExportInfo
+                                                ).then((file) => {
+                                                    downloadFile(
+                                                        file,
+                                                        `backup_${new Date().toLocaleDateString(
+                                                            navigator.language,
+                                                            {
+                                                                year: "numeric",
+                                                                month: "numeric",
+                                                                day: "numeric",
+                                                            }
+                                                        )}.ksq.zip`
+                                                    );
+                                                    setExportInfo(null);
+                                                    toast("export successful");
+                                                }),
+                                        },
+                                    ],
+                                })
+                            }
+                        >
+                            <img src={downloadIcon} alt="download icon" />
+                            backup
+                        </button>
                     </div>
                 </div>
             </div>
+
+            {exportInfo !== null ? (
+                <div className="exportInfoContainer">
+                    <div className="exportInfo">
+                        <h1>Exporting</h1>
+                        <div className="categories">
+                            Categories:
+                            <div className="progressBar">
+                                <div
+                                    className="progress"
+                                    style={{
+                                        width: `${Math.ceil(
+                                            (100 / exportInfo.categoriesTotal) *
+                                                exportInfo.categoriesDone
+                                        )}%`,
+                                    }}
+                                ></div>
+                            </div>
+                            <span>
+                                {exportInfo.categoriesDone}/
+                                {exportInfo.categoriesTotal}
+                            </span>
+                        </div>
+                        <div className="currentFile">
+                            {exportInfo.currentAction}
+                            <div className="progressBar">
+                                <div
+                                    className="progress"
+                                    style={{
+                                        width: `${Math.ceil(
+                                            exportInfo.currentPercent
+                                        )}%`,
+                                    }}
+                                ></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 };
