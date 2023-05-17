@@ -1,6 +1,5 @@
 import toast from "react-simple-toasts";
-import { JSZipMetadata } from "jszip";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
     Category,
     Image,
@@ -12,7 +11,6 @@ import {
 import "./Editor.scss";
 import MediaPool from "./MediaPool";
 import CategoryEditor from "./CategoryEditor";
-import { generateZipFromCategory } from "$helpers/zip";
 import { Indexed } from "$db/indexeddb";
 import { storeCategoryInDB, updateCategoryInDB } from "$db/categories";
 import BackButton from "$components/BackButton";
@@ -33,6 +31,14 @@ const Edit = ({
     const [description, setDescription] = useState(initialCategory.description);
     const [answerTime, setAnswerTime] = useState(initialCategory.answerTime);
 
+    // unsaved changes
+    const [unsavedChanges, setUnsavedChanges] = useState(dbIndex === undefined);
+    const [firstRender, setFirstRender] = useState(true);
+    useEffect(() => {
+        if (firstRender) return setFirstRender(false);
+        setUnsavedChanges(true);
+    }, [category, name, description, answerTime]);
+
     useTitle(`ksq - editor${name !== "" ? ": " + name : ""}`);
 
     // resource added by media pool (dot menu)
@@ -44,31 +50,50 @@ const Edit = ({
         []
     ); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
 
+    const unloadHandler = useCallback(
+        (e: BeforeUnloadEvent) => {
+            console.log("beforeunload");
+
+            if (unsavedChanges) {
+                console.log("beforeunload stop");
+                e.preventDefault();
+                return (e.returnValue = "");
+            }
+        },
+        [unsavedChanges]
+    );
+
+    // ask user to confirm unload
+    useEffect(() => {
+        if (!unsavedChanges) return;
+
+        window.addEventListener("beforeunload", unloadHandler);
+        return () => window.removeEventListener("beforeunload", unloadHandler);
+    }, [unsavedChanges]);
+
     // exporting
-    const [exporting, setExporting] = useState<boolean>(false);
-    const [exportData, setExportData] = useState<JSZipMetadata | null>(null);
-    const exportCategory = async () => {
+    const saveCategory = async () => {
+        // validate category
         if (
             !category.fields.every(
                 (field) =>
                     field.question !== undefined && field.answer !== undefined
             )
         )
-            return toast("please fill out every field");
+            return toast("❌please fill out every field");
 
-        if (name.trim() === "") return toast("please enter a name");
+        if (name.trim() === "") return toast("❌please enter a name");
 
         if (answerTime <= 0 || Number.isNaN(answerTime))
-            return toast("please enter a (positive) answer-time");
+            return toast("❌please enter a (positive) answer-time");
 
         category.name = name;
         category.description = description;
 
         if (!isCategory(category))
-            return toast("your category is not complete!");
+            return toast("❌your category is not complete!");
 
-        setExporting(true);
-
+        // save category
         let promiseDbIndex: Promise<Indexed<Category>["dbIndex"]>;
         if (dbIndex)
             promiseDbIndex = updateCategoryInDB(
@@ -76,47 +101,18 @@ const Edit = ({
             );
         else promiseDbIndex = storeCategoryInDB(category);
 
-        generateZipFromCategory(category, setExportData).then(
-            async (result) => {
-                const url = window.URL.createObjectURL(result);
-                const link = document.createElement("a");
-                link.href = url;
-                link.setAttribute(
-                    "download",
-                    `${category.name
-                        .trim()
-                        .replace(/[^a-z0-9]/gi, "_")
-                        .toLowerCase()}.ksq.zip`
+        promiseDbIndex.then((promisedDbIndex) => {
+            setUnsavedChanges(false);
+            if (dbIndex === undefined) {
+                window.onbeforeunload = null;
+                window.removeEventListener("beforeunload", unloadHandler);
+                window.location.replace(
+                    `/categories/editor/${promisedDbIndex}`
                 );
-                document.body.appendChild(link);
-                link.click();
-                link.remove();
-                promiseDbIndex.then((promisedDbIndex) => {
-                    if (dbIndex === undefined) {
-                        window.onbeforeunload = null;
-                        window.location.replace(
-                            `/categories/editor/${promisedDbIndex}`
-                        );
-                    }
-                    toast("✅ category saved and exported");
-                    setTimeout(() => setExporting(false), 1000);
-                });
             }
-        );
+            toast("✅ category saved");
+        });
     };
-
-    // ask user to confirm unload
-    useEffect(() => {
-        const unloadHandler = (e: BeforeUnloadEvent) => {
-            if (!exporting) {
-                e.preventDefault();
-                return (e.returnValue = "");
-            }
-        };
-        window.addEventListener("beforeunload", unloadHandler);
-
-        return () => window.removeEventListener("beforeunload", unloadHandler);
-    }, [exporting]);
 
     // description file input
     const descriptionImageInputRef = useRef<HTMLInputElement>(null);
@@ -145,11 +141,12 @@ const Edit = ({
         window.open(`/categories/test/${dbIndex}/destroy`);
     };
 
-    console.log(addResource);
-
     return (
         <div id="edit">
-            <BackButton confirm to="/categories" />
+            <BackButton
+                to="/categories"
+                confirm={unsavedChanges ?? undefined}
+            />
 
             <div id="topRow">
                 <input
@@ -259,8 +256,8 @@ const Edit = ({
                     <img src={testIcon} alt="" />
                 </button>
 
-                <button className="export" onClick={exportCategory}>
-                    save & export
+                <button className="export" onClick={saveCategory}>
+                    save{unsavedChanges ? " ❗" : "d ✔️"}
                 </button>
             </div>
 
@@ -340,34 +337,6 @@ const Edit = ({
                         setCategory(Object.assign({}, newCategory));
                     }}
                 />
-            </div>
-
-            <div
-                className={
-                    "exportPopupContainer" +
-                    (exporting ? " visible " : " hidden ")
-                }
-            >
-                <div className="exportPopup">
-                    <h2>Exporting</h2>
-                    {exportData ? (
-                        <>
-                            <div className="progressBar">
-                                <div
-                                    className="progress"
-                                    style={{
-                                        width: `${Math.round(
-                                            exportData.percent
-                                        )}%`,
-                                    }}
-                                ></div>
-                            </div>
-                            <div className="currentFile">
-                                {exportData.currentFile}
-                            </div>
-                        </>
-                    ) : null}
-                </div>
             </div>
         </div>
     );
