@@ -16,6 +16,7 @@ import Boards from "./routes/boards/Boards.page";
 import BoardEditor from "./routes/boards/editor/BoardEditor.page";
 import { getSettings } from "$helpers/settings";
 import "light.scss";
+import "./confirm-alert.scss";
 
 enum NetworkStatus {
     ONLINE = "online",
