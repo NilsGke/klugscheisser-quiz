@@ -127,3 +127,13 @@ export const removeCategoryFromDb = (dbIndex: Indexed<Category>["dbIndex"]) =>
         request.onsuccess = resolve;
         request.onerror = reject;
     });
+
+export const countCategories = () =>
+    new Promise<number>((resolve, reject) => {
+        const request = db
+            .transaction("categories", "readonly")
+            .objectStore("categories")
+            .count();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });

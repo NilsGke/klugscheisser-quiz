@@ -16,6 +16,10 @@ import trashIcon from "$assets/trash.svg";
 import sortAZIcon from "$assets/sortAZ.svg";
 import sortZAIcon from "$assets/sortZA.svg";
 import clockIcon from "$assets/clock.svg";
+import downloadIcon from "$assets/download.svg";
+import { generateZipFromCategory } from "$helpers/zip";
+import downloadFile from "$helpers/downloadFile";
+import toast from "react-simple-toasts";
 
 type props = {
     refresh?: any;
@@ -35,6 +39,7 @@ type props = {
     testable?: boolean;
     editable?: boolean;
     deletable?: boolean;
+    downloadable?: boolean;
 };
 enum Purpose {
     VIEWING,
@@ -67,6 +72,7 @@ const CategoryBrowser: FC<props> = ({
     testable,
     deletable,
     editable,
+    downloadable,
 }) => {
     const purpose: Purpose = selecting
         ? Purpose.SELECTING_MULTIPLE
@@ -117,9 +123,9 @@ const CategoryBrowser: FC<props> = ({
             case SortingMethod.creationDate:
                 return b.dbIndex - a.dbIndex;
             case SortingMethod.abcNormal:
-                return a.name < b.name ? -1 : 1;
+                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
             case SortingMethod.abcReverse:
-                return a.name > b.name ? -1 : 1;
+                return a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 1;
 
             default:
                 return 1;
@@ -192,6 +198,7 @@ const CategoryBrowser: FC<props> = ({
                                 .includes(category.dbIndex)}
                             deletable={deletable}
                             editable={editable}
+                            downloadable={downloadable}
                             delete={() =>
                                 removeCategoryFromDb(category.dbIndex).then(
                                     () =>
@@ -267,6 +274,7 @@ const CategoryElement = ({
 
     testable = false,
     editable = false,
+    downloadable = false,
 }: {
     category: Indexed<Category>;
 
@@ -285,6 +293,7 @@ const CategoryElement = ({
 
     testable?: boolean;
     editable?: boolean;
+    downloadable?: boolean;
 }) => {
     const imageUrl = useRef(
         typeof category.description === "string"
@@ -361,6 +370,45 @@ const CategoryElement = ({
                         </button>
                     ) : null}
 
+                    {testable ? (
+                        <button
+                            className="test"
+                            title="test category in a game"
+                            onClick={() =>
+                                window.open(
+                                    `/categories/test/${category.dbIndex}`,
+                                    "_blank"
+                                )
+                            }
+                        >
+                            <img src={testIcon} alt="test in new Tab icon" />
+                        </button>
+                    ) : null}
+
+                    {downloadable ? (
+                        <button
+                            className="download"
+                            title="download category file"
+                            onClick={() => {
+                                toast("⏳export...");
+                                generateZipFromCategory(category, () => {})
+                                    .then((file) => {
+                                        downloadFile(
+                                            file,
+                                            category.name + ".ksq.zip"
+                                        );
+                                        toast("✔️export successful");
+                                    })
+                                    .catch((error) => {
+                                        console.error(error);
+                                        toast("❌exporting failed!");
+                                    });
+                            }}
+                        >
+                            <img src={downloadIcon} alt="download icon" />
+                        </button>
+                    ) : null}
+
                     {deletable ? (
                         <button
                             className="delete"
@@ -385,21 +433,6 @@ const CategoryElement = ({
                             }
                         >
                             <img src={trashIcon} alt="trash icon" />
-                        </button>
-                    ) : null}
-
-                    {testable ? (
-                        <button
-                            className="test"
-                            title="test category in a game"
-                            onClick={() =>
-                                window.open(
-                                    `/categories/test/${category.dbIndex}`,
-                                    "_blank"
-                                )
-                            }
-                        >
-                            <img src={testIcon} alt="test in new Tab icon" />
                         </button>
                     ) : null}
                 </div>
