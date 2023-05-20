@@ -18,6 +18,7 @@ import testIcon from "$assets/test.svg";
 import imageIcon from "$assets/image.svg";
 import { confirmAlert } from "react-confirm-alert";
 import useTitle from "$hooks/useTitle";
+import useStringifyChange from "$hooks/useStringifyChange";
 
 const Edit = ({
     initialCategory,
@@ -33,11 +34,11 @@ const Edit = ({
 
     // unsaved changes
     const [unsavedChanges, setUnsavedChanges] = useState(dbIndex === undefined);
-    const [firstRender, setFirstRender] = useState(true);
-    useEffect(() => {
-        if (firstRender) return setFirstRender(false);
-        setUnsavedChanges(true);
-    }, [category, name, description, answerTime]);
+
+    useStringifyChange(category, () => setUnsavedChanges(true));
+    useStringifyChange(name, () => setUnsavedChanges(true));
+    useStringifyChange(description, () => setUnsavedChanges(true));
+    useStringifyChange(answerTime, () => setUnsavedChanges(true));
 
     useTitle(`ksq - editor${name !== "" ? ": " + name : ""}`);
 
@@ -257,7 +258,7 @@ const Edit = ({
                 </button>
 
                 <button className="export" onClick={saveCategory}>
-                    save{unsavedChanges ? " ❗" : "d ✔️"}
+                    save{unsavedChanges ? " ❗" : <>d &#9989;</>}
                 </button>
             </div>
 
