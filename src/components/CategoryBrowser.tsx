@@ -313,7 +313,9 @@ const CategoryElement = ({
             className="categoryWrapper"
             style={{
                 backgroundImage: bgImgage,
+                cursor: selectable ? "pointer" : undefined,
             }}
+            onClick={selectable ? toggle : undefined}
         >
             <div
                 className={"category" + (choosable ? " choosable" : "")}
