@@ -9,7 +9,7 @@
     $pad: 10px;
     aside,
     #categories {
-        margin: 20px;
+        margin: 25px;
         padding: $pad;
     }
 
@@ -30,7 +30,7 @@
 
             width: 100%;
             display: flex;
-            gap: 30px;
+            gap: 20px;
 
             .team {
                 display: grid;
@@ -43,6 +43,10 @@
                 width: 100%;
                 border-radius: 20px;
                 padding: 5px;
+                border: 3px solid $grey;
+
+                transition: all 0.2s ease-out;
+
                 h2 {
                     font-size: 17px;
                 }
@@ -70,6 +74,10 @@
 
                 &.buzzered {
                 }
+            }
+
+            &:has(.buzzered) > .team:not(.buzzered) {
+                opacity: 0.3;
             }
         }
         #gameControls {

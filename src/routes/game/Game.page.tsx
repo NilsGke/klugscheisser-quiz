@@ -48,6 +48,7 @@ import { Theme } from "main";
 import ResourceRenderer from "$components/ResourceRenderer";
 import { getThing } from "$db/things";
 import HomeButton from "$components/HomeButton";
+import Gamepad from "$components/Gamepad";
 
 enum State {
     intro = "intro",
@@ -81,48 +82,6 @@ const Game = ({
     );
 
     const categoriesRef = useRef<HTMLDivElement>(null);
-
-    const keyboardCallback = useCallback(
-        (key: string, e: KeyboardEvent) => {
-            if (
-                e.target &&
-                Array.from((e.target as HTMLInputElement).classList).includes(
-                    "dontBuzzer"
-                )
-            )
-                return;
-
-            if (key === "Escape" || key === "0")
-                return setBuzzeredTeamIndex(null);
-            const index = parseInt(key) - 1;
-
-            if (gameData === null || isNaN(index)) return;
-            const team = gameData.teams.at(index);
-            if (team === undefined) return;
-            setBuzzeredTeamIndex(index);
-            document.getElementById("gamePage")?.animate(
-                [
-                    {
-                        boxShadow: `inset 0 0 0px 10px ${team.color}`,
-                    },
-                    {
-                        boxShadow: `inset 0 0 400px 190px ${team.color}`,
-                    },
-                    ...new Array(5).fill({
-                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
-                    }),
-                    {
-                        boxShadow: `inset 0 0 0px -30px transparent`,
-                    },
-                ],
-                {
-                    duration: 3000,
-                    easing: "ease-out",
-                }
-            );
-        },
-        [gameData]
-    );
 
     // remove category from db if url is ./test/:dbIndex/destroy
     const { pathname } = useLocation();
@@ -206,8 +165,6 @@ const Game = ({
         []
     );
 
-    useKeyboard(keyboardCallback);
-
     useLayoutEffect(() => {
         if (gameData === null) return;
         if (categoriesRef.current === null)
@@ -243,6 +200,59 @@ const Game = ({
                 setTimeout(() => setGameState(State.showQuestion), 4500)
             );
     };
+
+    const buzzer = useCallback(
+        (index: number) => {
+            if (!gameData || buzzeredTeamIndex !== null) return;
+            const team = gameData.teams[index];
+            if (gameState !== State.idle) setBuzzeredTeamIndex(index);
+            document.getElementById("gamePage")?.animate(
+                [
+                    {
+                        boxShadow: `inset 0 0 0px 10px ${team.color}`,
+                    },
+                    {
+                        boxShadow: `inset 0 0 400px 190px ${team.color}`,
+                    },
+                    ...new Array(5).fill({
+                        boxShadow: `inset 0 0 400px -30px ${team.color}`,
+                    }),
+                    {
+                        boxShadow: `inset 0 0 0px -30px transparent`,
+                    },
+                ],
+                {
+                    duration: 3000,
+                    easing: "ease-out",
+                }
+            );
+        },
+        [gameData, gameState, buzzeredTeamIndex]
+    );
+
+    const keyboardCallback = useCallback(
+        (key: string, e: KeyboardEvent) => {
+            if (
+                e.target &&
+                Array.from((e.target as HTMLInputElement).classList).includes(
+                    "dontBuzzer"
+                )
+            )
+                return;
+
+            if (key === "Escape" || key === "0")
+                return setBuzzeredTeamIndex(null);
+            const index = parseInt(key) - 1;
+
+            if (gameData === null || isNaN(index)) return;
+            const team = gameData.teams.at(index);
+            if (team === undefined) return;
+            buzzer(index);
+        },
+        [gameData, buzzer]
+    );
+
+    useKeyboard(keyboardCallback);
 
     const grantPoints = (points: number) => {
         if (buzzeredTeamIndex === null)
@@ -396,6 +406,7 @@ const Game = ({
                         <Team
                             key={teamIndex}
                             team={team}
+                            theme={theme}
                             index={teamIndex}
                             setTeam={(newTeam: GameTeam) => {
                                 const newTeams =
@@ -411,6 +422,7 @@ const Game = ({
                                 );
                             }}
                             buzzered={teamIndex === buzzeredTeamIndex}
+                            buzzeredTeamIndex={buzzeredTeamIndex}
                         />
                     ))}
                 </div>
@@ -476,6 +488,7 @@ const Game = ({
                                     unselect={() => {
                                         abortTimers();
                                         setSelected(null);
+                                        setBuzzeredTeamIndex(null);
                                         setGameState(State.idle);
                                     }}
                                     onClick={() => {
@@ -495,6 +508,11 @@ const Game = ({
                     </Fragment>
                 ))}
             </div>
+
+            <Gamepad
+                teams={gameData.teams}
+                buzzer={(team, teamIndex) => buzzer(teamIndex)}
+            />
 
             {gameState === State.intro ? (
                 <Intro start={() => setGameState(State.idle)} />
@@ -1144,11 +1162,15 @@ const Team = ({
     buzzered,
     setTeam,
     index,
+    theme,
+    buzzeredTeamIndex,
 }: {
     team: TeamType;
     buzzered: boolean;
     setTeam: (newTeam: GameTeam) => void;
     index: number;
+    theme: Theme;
+    buzzeredTeamIndex: number | null;
 }) => {
     const teamRef = useRef<HTMLDivElement>(null);
 
@@ -1162,7 +1184,6 @@ const Team = ({
                                  inset 0 0 30px 0px ${team.color},
                                  0 0 100px 10px ${team.color}
                             `,
-                    border: `1px solid ${team.color}`,
                 },
                 {
                     boxShadow: `
@@ -1174,7 +1195,6 @@ const Team = ({
                                  inset 0 0 30px 0px ${team.color},
                                  0 0 100px 10px ${team.color}
                             `,
-                    border: `1px solid ${team.color}`,
                 },
             ],
             { duration: 600, easing: "ease-in-out", iterations: Infinity }
@@ -1185,7 +1205,12 @@ const Team = ({
         <div
             className={"team" + (buzzered ? " buzzered" : "")}
             style={{
-                border: `1px solid ${team.color}`,
+                borderColor: team.color,
+                background:
+                    theme === "senior" &&
+                    (buzzeredTeamIndex === null || buzzered)
+                        ? team.color
+                        : undefined,
             }}
             ref={teamRef}
         >
