@@ -107,9 +107,11 @@ const Edit = ({
             if (dbIndex === undefined) {
                 window.onbeforeunload = null;
                 window.removeEventListener("beforeunload", unloadHandler);
-                window.location.replace(
-                    `/categories/editor/${promisedDbIndex}`
-                );
+                window.setTimeout(() => {
+                    window.location.replace(
+                        `/categories/editor/${promisedDbIndex}`
+                    );
+                }, 300);
             }
             toast("✅ category saved");
         });
