@@ -182,6 +182,19 @@
             input {
                 display: none;
             }
+
+            &.buzzerSounds {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                .sound {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                }
+            }
         }
     }
 }

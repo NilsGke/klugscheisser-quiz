@@ -16,6 +16,7 @@ import fileToBase64 from "$helpers/fileToBase64";
 import toast from "react-simple-toasts";
 import useTitle from "$hooks/useTitle";
 import { removeThing, setThing } from "$db/things";
+import removeIcon from "$assets/trash.svg";
 
 const Root = ({
     theme,
@@ -145,27 +146,14 @@ const Root = ({
                             onClick={() => {
                                 removeThing("introMusic")
                                     .then(() => toast("🚮intro music removed"))
-                                    .catch((e) => toast("removing failed"));
+                                    .catch((e) => toast("❌removing failed"));
                             }}
                         >
                             delete intro music
                         </button>
-                        <input
-                            type="file"
-                            name="introMusicInput"
+                        <AudioInput
                             id="introMusicInput"
-                            accept="audio/*"
-                            onChange={async (e) => {
-                                const files = (e.target as HTMLInputElement)
-                                    .files;
-                                if (files === null) return;
-                                const file = files[0];
-                                if (file === undefined) return;
-                                if (!file.type.startsWith("audio/"))
-                                    return toast(
-                                        "❌File is not a standard audio file"
-                                    );
-
+                            onChange={async (file) => {
                                 try {
                                     setThing("introMusic", file);
                                     toast("✅music saved 🎵");
@@ -176,6 +164,42 @@ const Root = ({
                             }}
                         />
                     </div>
+                    <div className="buzzerSounds">
+                        {new Array(4).fill("").map((a, i) => (
+                            <div className="sound" key={i}>
+                                <button>
+                                    <label htmlFor={"buzzerSound" + i}>
+                                        Buzzer-Sound #{i + 1}
+                                    </label>
+                                </button>
+                                <button
+                                    className="remove"
+                                    onClick={() =>
+                                        removeThing("buzzerSound" + i)
+                                            .then(() =>
+                                                toast("🚮Buzzer sound removed")
+                                            )
+                                            .catch(() =>
+                                                toast("❌removing failed")
+                                            )
+                                    }
+                                >
+                                    <img src={removeIcon} alt="remove" />
+                                </button>
+                                <AudioInput
+                                    id={"buzzerSound" + i}
+                                    onChange={async (file) => {
+                                        setThing("buzzerSound" + i, file)
+                                            .then(() => toast("✅sound saved"))
+                                            .catch((e) => {
+                                                console.error(e);
+                                                toast("❌something went wrong");
+                                            });
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ) : null}
         </div>
@@ -183,3 +207,30 @@ const Root = ({
 };
 
 export default Root;
+
+const AudioInput = ({
+    onChange,
+    id,
+}: {
+    onChange: (file: File) => void;
+    id: string;
+}) => {
+    return (
+        <input
+            type="file"
+            name={id}
+            id={id}
+            accept="audio/*"
+            onChange={(e) => {
+                const files = (e.target as HTMLInputElement).files;
+                if (files === null) return;
+                const file = files[0];
+                if (file === undefined) return;
+                if (!file.type.startsWith("audio/"))
+                    return toast("❌File is not a standard audio file");
+
+                onChange(file);
+            }}
+        />
+    );
+};

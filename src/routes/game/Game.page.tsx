@@ -1201,6 +1201,18 @@ const Team = ({
         );
     }, []);
 
+    // play buzzer sound
+    const [sound, setSound] = useState<Audio | null>(null);
+    if (theme === "senior") {
+        useEffect(() => {
+            getThing<Audio>("buzzerSound" + index)
+                .then(setSound)
+                .catch((error) => {
+                    console.log(`No Buzzer sound for Team: ${index}`, error);
+                });
+        }, []);
+    }
+
     return (
         <div
             className={"team" + (buzzered ? " buzzered" : "")}
@@ -1214,6 +1226,19 @@ const Team = ({
             }}
             ref={teamRef}
         >
+            {buzzered && sound ? (
+                <ResourceRenderer
+                    style={{
+                        display: "none",
+                    }}
+                    autoplay
+                    resource={{
+                        type: "audio",
+                        content: sound,
+                        volume: 70,
+                    }}
+                />
+            ) : null}
             <h2>{team.name === "" ? `Team #${index + 1}` : team.name}</h2>
 
             <div className="members">
