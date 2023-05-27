@@ -132,7 +132,6 @@ const AudioPlayer: FC<props> = ({
             <audio
                 src={audioUrl}
                 preload="metadata"
-                loop
                 ref={audioElementRef}
                 autoPlay={autoplay}
             ></audio>
