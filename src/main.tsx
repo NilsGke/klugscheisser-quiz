@@ -168,6 +168,8 @@ const App = () => {
             <div className="loading">
                 <Spinner />
                 <div className="text">migrating local database</div>
+                <div className="text sub">this might take a while</div>
+                <div className="text sub">please do not close the tab!</div>
                 <div className="info">
                     {migrationsTotal - migrationsLeft}/{migrationsTotal}
                 </div>

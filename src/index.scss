@@ -38,7 +38,23 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 60px;
+    .loadingSpinner {
+        margin-bottom: 60px;
+    }
+    .text {
+        margin-bottom: 10px;
+        &:first-of-type {
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+        &.sub {
+            color: $grey;
+        }
+    }
+    .info {
+        margin-top: 20px;
+        font-size: 25px;
+    }
 }
 
 code {
