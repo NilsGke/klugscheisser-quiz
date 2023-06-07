@@ -4,6 +4,7 @@ export const emptyCategory: PartialCategory = {
     name: "",
     description: "",
     answerTime: 10,
+    thumbnail: null,
     fields: [
         {
             question: undefined,
@@ -32,6 +33,7 @@ Object.freeze(emptyCategory);
 export interface Category {
     name: string;
     description: string | Image;
+    thumbnail: Image | null;
     answerTime: number;
     fields: [Field, Field, Field, Field, Field];
 }
