@@ -76,6 +76,7 @@ export const getStoredCategories = (startIndex: number, length: number = 5) =>
             if (cursor && i < length) {
                 const category = cursor.value as Indexed<Category>;
                 category.dbIndex = parseInt(cursor.primaryKey as string) || -1;
+                categories.push(category);
                 i++;
                 cursor.continue();
             } else {
