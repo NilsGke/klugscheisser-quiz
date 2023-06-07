@@ -9,8 +9,10 @@ import {
     TextResource,
     Video,
 } from "$types/categoryTypes";
+import { generateThumbnail } from "./thumbnail";
 
-interface CategoryConfig extends Omit<Category, "fields" | "description"> {
+interface CategoryConfig
+    extends Omit<Category, "fields" | "description" | "thumbnail"> {
     description:
         | {
               type: "text";
@@ -169,6 +171,11 @@ export const importCategoryFromZip = (file: File) =>
                 );
             }
 
+            const thumbnail =
+                typeof description !== "string"
+                    ? await generateThumbnail(description)
+                    : null;
+
             const category: PartialCategory = {
                 name: config.name,
                 description,
@@ -180,6 +187,7 @@ export const importCategoryFromZip = (file: File) =>
                     { question: undefined, answer: undefined },
                     { question: undefined, answer: undefined },
                 ],
+                thumbnail,
             };
 
             const proms = config.fields
