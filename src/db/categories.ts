@@ -2,10 +2,14 @@ import { StoredBoard } from "$types/boardTypes";
 import { Category } from "$types/categoryTypes";
 import { db, Indexed } from "./indexeddb";
 
+export enum SortingMethod {
+    creationDate = "creationDate",
+    abcNormal = "abcNormal",
+    abcReverse = "abcReverse",
+}
+
 export const storeCategoryInDB = (category: Category) =>
     new Promise<number>(async (resolve, reject) => {
-        console.log("upload category", category);
-
         const request = db
             .transaction("categories", "readwrite")
             .objectStore("categories")
@@ -64,16 +68,14 @@ export const getStoredCategories = (startIndex: number, length: number = 5) =>
             .objectStore("categories")
             .openCursor(IDBKeyRange.upperBound(startIndex), "prev");
 
-        // NOTE cursor is going in reverse!
         let i = 0;
         const categories: Indexed<Category>[] = [];
 
         request.onsuccess = (event) => {
             const cursor = request.result;
             if (cursor && i < length) {
-                const file = cursor.value as Indexed<Category>;
-                file.dbIndex = parseInt(cursor.primaryKey as string) || -1;
-                categories.push(file);
+                const category = cursor.value as Indexed<Category>;
+                category.dbIndex = parseInt(cursor.primaryKey as string) || -1;
                 i++;
                 cursor.continue();
             } else {
