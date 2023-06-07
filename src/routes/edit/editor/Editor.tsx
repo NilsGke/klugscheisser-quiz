@@ -19,6 +19,7 @@ import imageIcon from "$assets/image.svg";
 import { confirmAlert } from "react-confirm-alert";
 import useTitle from "$hooks/useTitle";
 import useStringifyChange from "$hooks/useStringifyChange";
+import { generateThumbnail } from "$helpers/thumbnail";
 
 const Edit = ({
     initialCategory,
@@ -30,6 +31,7 @@ const Edit = ({
     const [category, setCategory] = useState<PartialCategory>(initialCategory);
     const [name, setName] = useState(initialCategory.name);
     const [description, setDescription] = useState(initialCategory.description);
+    const [thumbnail, setThumbnail] = useState(initialCategory.thumbnail);
     const [answerTime, setAnswerTime] = useState(initialCategory.answerTime);
 
     // unsaved changes
@@ -122,8 +124,11 @@ const Edit = ({
     const [descriptionImageUrl, setDescriptionImageUrl] = useState("");
 
     useEffect(() => {
-        if (typeof description === "string") return;
-        setDescriptionImageUrl(URL.createObjectURL(description));
+        if (typeof description !== "string")
+            setDescriptionImageUrl(URL.createObjectURL(description));
+
+        if (typeof description === "string") setThumbnail(null);
+        else generateThumbnail(description).then(setThumbnail);
     }, [description]);
 
     const test = async () => {
@@ -138,6 +143,7 @@ const Edit = ({
                 },
                 answer: field.answer ?? { content: "[empty]", type: "text" },
             })) as Category["fields"],
+            thumbnail,
         };
 
         const dbIndex = await storeCategoryInDB(wholeCategory);
