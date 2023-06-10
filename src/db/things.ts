@@ -22,7 +22,7 @@ export const getThing = <T = any>(thingKey: string) =>
         request.onerror = () => reject(request.error);
     });
 
-export const setThing = (thingKey: string, value: any) =>
+export const setThing = <T = any>(thingKey: string, value: T) =>
     new Promise<void>(async (resolve, reject) => {
         const primaryKey = await getThingPrimaryKey(thingKey).catch(
             () => undefined
