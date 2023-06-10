@@ -16,6 +16,7 @@ import folderIcon from "$assets/folder.svg";
 import addIcon from "$assets/addRound.svg";
 import useTitle from "$hooks/useTitle";
 import downloadIcon from "$assets/downloadFolder.svg";
+import { changeSetting, defaultSettings, getSettings } from "$helpers/settings";
 
 const Categories = () => {
     const [files, setFiles] = useState<File[]>();
@@ -153,14 +154,7 @@ const Categories = () => {
                             onClick={() =>
                                 confirmAlert({
                                     title: "export all categories?",
-                                    childrenElement: () => (
-                                        <p>
-                                            this will create a large zip file
-                                            containing all your categories
-                                            <br /> <br />
-                                            This file might get very big!
-                                        </p>
-                                    ),
+                                    childrenElement: () => <PopupChildren />,
                                     buttons: [
                                         {
                                             label: "cancel",
@@ -170,21 +164,27 @@ const Categories = () => {
                                             onClick: () =>
                                                 exportAllCategories(
                                                     setExportInfo
-                                                ).then((file) => {
-                                                    downloadFile(
-                                                        file,
-                                                        `backup_${new Date().toLocaleDateString(
-                                                            navigator.language,
+                                                )
+                                                    .then((file) => {
+                                                        setExportInfo(null);
+                                                        toast(
+                                                            "🟩 Export successful!"
+                                                        );
+                                                    })
+                                                    .catch((error) => {
+                                                        console.error(error);
+                                                        toast(
+                                                            `🟥 Error while exporting! \n\n ${error}`,
                                                             {
-                                                                year: "numeric",
-                                                                month: "numeric",
-                                                                day: "numeric",
+                                                                clickClosable:
+                                                                    true,
+                                                                onClick: () =>
+                                                                    setExportInfo(
+                                                                        null
+                                                                    ),
                                                             }
-                                                        )}.ksq.zip`
-                                                    );
-                                                    setExportInfo(null);
-                                                    toast("export successful");
-                                                }),
+                                                        );
+                                                    }),
                                         },
                                     ],
                                 })
@@ -236,6 +236,45 @@ const Categories = () => {
                 </div>
             ) : null}
         </div>
+    );
+};
+
+const PopupChildren = () => {
+    const [maxExportSize, setMaxExportSize] = useState(
+        getSettings().maxExportSize
+    );
+
+    const updateMaxExportSize = (num: number) => {
+        setMaxExportSize(num);
+        changeSetting({
+            maxExportSize: num,
+        });
+    };
+
+    return (
+        <p>
+            The browser might not be able to handle all categories at once, so
+            the website breaks it up into multiple zip files <br />
+            you might need to allow the page to download multiple files
+            <br /> <br />
+            you can configure the max file size here:{" "}
+            <input
+                type="number"
+                value={maxExportSize / 10 ** 6}
+                onChange={(e) =>
+                    !isNaN(parseInt(e.target.value)) &&
+                    updateMaxExportSize(parseInt(e.target.value) * 10 ** 6)
+                }
+            />{" "}
+            (MB){" "}
+            <button
+                onClick={() =>
+                    updateMaxExportSize(defaultSettings.maxExportSize)
+                }
+            >
+                reset
+            </button>
+        </p>
     );
 };
 
