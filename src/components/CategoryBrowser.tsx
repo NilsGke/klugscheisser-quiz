@@ -2,8 +2,12 @@ import { FC, useEffect, useMemo, useRef, useState } from "react";
 import "./CategoryBrowser.scss";
 import { Category } from "$types/categoryTypes";
 import { Indexed } from "$db/indexeddb";
-import autoAnimate from "@formkit/auto-animate";
-import { getStoredCategories, removeCategoryFromDb } from "$db/categories";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import {
+    SortingMethod,
+    getStoredCategories,
+    removeCategoryFromDb,
+} from "$db/categories";
 import { confirmAlert } from "react-confirm-alert";
 import stringToColorGradient from "$helpers/stringToColorGradient";
 
@@ -20,6 +24,7 @@ import downloadIcon from "$assets/download.svg";
 import { generateZipFromCategory } from "$helpers/zip";
 import downloadFile from "$helpers/downloadFile";
 import toast from "react-simple-toasts";
+import useDebounce from "$hooks/useDebounce";
 
 type props = {
     refresh?: any;
@@ -45,12 +50,6 @@ enum Purpose {
     VIEWING,
     CHOOSE_ONE,
     SELECTING_MULTIPLE,
-}
-
-enum SortingMethod {
-    creationDate = "creationDate",
-    abcNormal = "abcNormal",
-    abcReverse = "abcReverse",
 }
 
 /** adding `selected` prop makes this component controlled by its parent */
@@ -84,28 +83,19 @@ const CategoryBrowser: FC<props> = ({
     }, [refresh]);
 
     const [searchTerm, setSearchTerm] = useState("");
+    const search = useDebounce(searchTerm, 100);
 
-    const listRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (listRef.current) autoAnimate(listRef.current);
-    }, []);
-
-    const selectedRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (selectedRef.current) autoAnimate(selectedRef.current);
-    }, []);
+    const [selectedRef] = useAutoAnimate();
 
     const filtered = categories
         .filter((category) => !exclude.includes(category.dbIndex))
         .filter(
             (category) =>
-                category.name
-                    .toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
+                category.name.toLowerCase().includes(search.toLowerCase()) ||
                 (typeof category.description === "string" &&
                     category.description
                         .toLowerCase()
-                        .includes(searchTerm.toLowerCase()))
+                        .includes(search.toLowerCase()))
         );
 
     const submitFun = () => {
@@ -175,7 +165,7 @@ const CategoryBrowser: FC<props> = ({
                         />
                     </button>
                 </div>
-                <div className="results" ref={listRef}>
+                <div className="results">
                     {sorted.map((category) => (
                         <CategoryElement
                             key={category.dbIndex}
@@ -298,7 +288,7 @@ const CategoryElement = ({
     const imageUrl = useRef(
         typeof category.description === "string"
             ? ""
-            : URL.createObjectURL(category.description)
+            : URL.createObjectURL(category.thumbnail ?? category.description)
     );
 
     const gradient = useMemo(() => stringToColorGradient(category.name), []);

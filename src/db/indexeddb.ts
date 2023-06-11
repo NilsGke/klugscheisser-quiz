@@ -1,3 +1,4 @@
+import { generateThumbnail } from "$helpers/thumbnail";
 import {
     Category,
     MediaTypes,
@@ -14,6 +15,9 @@ import { Thing } from "./things";
  * @version 5 added volume to audio and video
  * @version 6 added board store
  * @version 7 added game store
+ * @version 8 added thing store
+ * @version 9 remove old game store (@version 7)
+ * @version 10 generate thumbnails for categories
  */
 export let db: IDBDatabase;
 
@@ -21,7 +25,7 @@ export type Indexed<T> = T & {
     dbIndex: number;
 };
 
-const DB_VERSION = 9;
+const DB_VERSION = 10;
 const DB_NAME = "LocalFileDatabase";
 
 export const initIndexedDB = (
@@ -83,9 +87,21 @@ const migrate = async (newVersion: number) =>
                     `migration function is undefined for version: ${newVersion}`
                 );
 
-            migrationFunction(db, event).then(() => {
+            migrationFunction(db, event).then(async (asyncMutationFunction) => {
                 db.close();
-                resolve();
+
+                if (asyncMutationFunction) {
+                    const request = window.indexedDB.open(DB_NAME, newVersion);
+                    request.onsuccess = async () => {
+                        const db = request.result;
+                        await asyncMutationFunction(db);
+                        resolve();
+                    };
+                    request.onerror = () => {
+                        console.error(request.error);
+                        reject(request.error);
+                    };
+                } else resolve();
             });
         };
 
@@ -95,7 +111,8 @@ const migrate = async (newVersion: number) =>
 type MigrationFunction = (
     db: IDBDatabase,
     event: IDBVersionChangeEvent
-) => Promise<any>;
+) => Promise<mutationFunction | void>;
+type mutationFunction = (db: IDBDatabase) => Promise<void>;
 
 const migrations: MigrationFunction[] = [
     // version 0
@@ -195,7 +212,7 @@ const migrations: MigrationFunction[] = [
 
             objectStore.transaction.onerror = reject;
         }),
-    // create new stuff object store and delete games
+    // create new things store
     (db) =>
         new Promise<void>((resolve, reject) => {
             const objectStore = db.createObjectStore("things", {
@@ -246,6 +263,64 @@ const migrations: MigrationFunction[] = [
             db.deleteObjectStore("games");
             resolve();
         }),
+    // generate thumbnails for categories
+    () =>
+        new Promise<mutationFunction>((resolve, reject) =>
+            resolve(
+                (db) =>
+                    new Promise((resolve, reject) => {
+                        const transaction = db
+                            .transaction("categories", "readwrite")
+                            .objectStore("categories")
+                            .openCursor();
+
+                        const proms: Promise<void>[] = [];
+
+                        transaction.onsuccess = async (e: Event) => {
+                            const cursor = transaction.result;
+                            if (cursor === null) {
+                                await Promise.all(proms);
+                                return resolve();
+                            }
+
+                            const category: Category = cursor.value;
+                            const key = cursor.key;
+
+                            // dont wait for cursor update to finish because transaction will close :(
+                            cursor.continue();
+
+                            proms.push(
+                                new Promise<void>(async (resolve, reject) => {
+                                    const thumbnail: Category["thumbnail"] =
+                                        typeof category.description === "string"
+                                            ? null
+                                            : await generateThumbnail(
+                                                  category.description
+                                              );
+
+                                    const request = db
+                                        .transaction("categories", "readwrite")
+                                        .objectStore("categories")
+                                        .put(
+                                            {
+                                                ...category,
+                                                thumbnail,
+                                            } as Category,
+                                            key
+                                        );
+
+                                    request.onsuccess = () => resolve();
+                                    request.onerror = () => {
+                                        console.error(request.error);
+                                        reject(request.error);
+                                    };
+                                })
+                            );
+                        };
+                        transaction.onerror = reject;
+                    })
+            )
+        ),
 ];
 
 const getCurrentVersion = () =>
