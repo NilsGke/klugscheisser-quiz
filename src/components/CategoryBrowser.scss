@@ -85,13 +85,17 @@
             width: 400px;
             height: auto;
             background-color: $dark;
-            border: 1px solid $lightBlue;
+            border: 2px solid $lightBlue;
             border-radius: 20px;
 
             background-repeat: no-repeat;
             background-size: cover;
             background-position: center;
             overflow: hidden;
+
+            &:has(.selectContainer:not(.selected)) {
+                border-color: gray;
+            }
 
             .category {
                 gap: 10px;
