@@ -106,6 +106,30 @@
                 height: 40px;
                 cursor: pointer;
                 transition: background 0.2s ease-out;
+                img {
+                    filter: invert(1);
+                    aspect-ratio: 1;
+                    &.homeIcon {
+                        height: 90%;
+                        aspect-ratio: 1;
+                    }
+                }
+                &:has(.testIcon) {
+                    position: relative;
+                    &::after {
+                        content: "";
+                        display: block;
+                        height: 2px;
+                        width: 100%;
+                        background: white;
+                        border-radius: 100px;
+                        rotate: -45deg;
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        background-blend-mode: difference;
+                    }
+                }
                 &:hover {
                     background: $lighterDark;
                 }

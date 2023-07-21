@@ -40,6 +40,10 @@ import closeIcon from "$assets/close.svg";
 import editIcon from "$assets/edit.svg";
 import checkIcon from "$assets/check.svg";
 import eyeIcon from "$assets/eye.svg";
+import gearIcon from "$assets/gear.svg";
+import finishFlagIcon from "$assets/finishFlag.svg";
+import testIcon from "$assets/test.svg";
+import homeIcon from "$assets/home.svg";
 import { PieChart } from "react-minimal-pie-chart";
 import Settings from "$components/SettingsPane";
 import { SettingsType, getSettings } from "$helpers/settings";
@@ -429,9 +433,25 @@ const Game = ({
                 <div id="gameControls">
                     <button
                         className="settings"
+                        onClick={() => (window.location.href = "/")}
+                    >
+                        <img
+                            src={homeIcon}
+                            className="homeIcon"
+                            alt="home icon"
+                            title="home page"
+                        />
+                    </button>
+
+                    <button
+                        className="settings"
                         onClick={() => setSettingsOpen(true)}
                     >
-                        settings
+                        <img
+                            src={gearIcon}
+                            alt="settings icon"
+                            title="settings"
+                        />
                     </button>
 
                     {testMode ? (
@@ -442,7 +462,12 @@ const Game = ({
                                 window.close();
                             }}
                         >
-                            end test
+                            <img
+                                src={testIcon}
+                                alt="end test icon"
+                                title="end test"
+                                className="testIcon"
+                            />
                         </button>
                     ) : (
                         <button
@@ -453,7 +478,11 @@ const Game = ({
                                 setGameState(State.done);
                             }}
                         >
-                            end game
+                            <img
+                                src={finishFlagIcon}
+                                alt="finish icon"
+                                title="end game"
+                            />
                         </button>
                     )}
                 </div>
