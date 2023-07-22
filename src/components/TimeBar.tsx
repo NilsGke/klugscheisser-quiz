@@ -4,9 +4,10 @@ import "./TimeBar.scss";
 type props = {
     time: number; // milliseconds
     stop?: boolean;
+    reverse?: boolean;
 };
 
-const TimeBar: FC<props> = ({ time, stop }) => {
+const TimeBar: FC<props> = ({ time, stop, reverse }) => {
     const progressRef = useRef<HTMLDivElement>(null);
 
     const [animation, setAnimation] = useState<Animation | undefined>(
@@ -21,15 +22,16 @@ const TimeBar: FC<props> = ({ time, stop }) => {
             progressRef.current.animate(
                 [
                     {
-                        width: "0%",
+                        width: reverse ? "100%" : "0%",
                     },
                     {
-                        width: "100%",
+                        width: reverse ? "0%" : "100%",
                     },
                 ],
                 {
                     duration: time,
                     easing: "ease-out",
+                    fill: "forwards",
                 }
             )
         );
