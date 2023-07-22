@@ -13,6 +13,7 @@ import moon from "$assets/moon.svg";
 import closeIcon from "$assets/close.svg";
 import cursorClickIcon from "$assets/cursorClick.svg";
 import cycleIcon from "$assets/cycle.svg";
+import stopwatchIcon from "$assets/stopwatch.svg";
 
 const Settings = ({
     onChange,
@@ -96,6 +97,27 @@ const Settings = ({
                                 })
                             }
                             checked={settings.diashowNext === "auto"}
+                        />
+                    </div>
+
+                    <div className="setting">
+                        <p className="description">Use Answer time</p>
+                        <Switch
+                            checkedIcon={
+                                <img
+                                    src={stopwatchIcon}
+                                    alt="stopwatchIcon icon"
+                                />
+                            }
+                            uncheckedIcon={
+                                <img src={closeIcon} alt="no stopwatch icon" />
+                            }
+                            onChange={(value) =>
+                                changeSetting({
+                                    useAnswerTime: value,
+                                })
+                            }
+                            checked={settings.useAnswerTime}
                         />
                     </div>
                 </div>

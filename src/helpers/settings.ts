@@ -9,6 +9,7 @@ export interface SettingsType {
     descriptionNext: "click" | "auto";
     theme: Theme;
     maxExportSize: number;
+    useAnswerTime: boolean;
 }
 
 export type keyValueSettingsType = keyValue & SettingsType;
@@ -18,6 +19,7 @@ export const defaultSettings: SettingsType = {
     diashowNext: "auto",
     theme: "dark",
     maxExportSize: 1_000_000_000,
+    useAnswerTime: true,
 };
 
 export const getSettings = () => {

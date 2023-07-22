@@ -304,21 +304,29 @@
                             height: 100%;
                             width: 100%;
                             padding: 4%;
-                            > button.reveal {
+                            > div.bottom {
                                 position: absolute;
                                 bottom: 20px;
-                                font-size: 20px;
-                                border: 1px solid $white;
-                                background: transparent;
-                                color: $white;
-                                border-radius: 10px;
-                                padding: 10px;
-                                cursor: pointer;
-                                transition: all 0.2s ease-in-out;
-                                &:hover {
-                                    box-shadow: 0 0 20px -3px $white;
-                                    background: $white;
-                                    color: $dark;
+                                width: 80%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                flex-direction: column;
+                                gap: 20px;
+                                > button.reveal {
+                                    font-size: 20px;
+                                    border: 1px solid $white;
+                                    background: transparent;
+                                    color: $white;
+                                    border-radius: 10px;
+                                    padding: 10px;
+                                    cursor: pointer;
+                                    transition: all 0.2s ease-in-out;
+                                    &:hover {
+                                        box-shadow: 0 0 20px -3px $white;
+                                        background: $white;
+                                        color: $dark;
+                                    }
                                 }
                             }
                             &:has(> .videoPlayer) {

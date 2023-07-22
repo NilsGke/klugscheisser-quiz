@@ -791,6 +791,21 @@ const Field = ({
         else goSmall();
     }, [selected]);
 
+    // trigger answer time timeout
+    const [timeUp, setTimeUp] = useState(false);
+    useEffect(() => {
+        if (settings.useAnswerTime && buzzeredTeamIndex !== undefined) {
+            const timer = setTimeout(
+                () => setTimeUp(true),
+                category.answerTime * 1000
+            );
+            return () => {
+                setTimeUp(false);
+                clearTimeout(timer);
+            };
+        }
+    }, [buzzeredTeamIndex]);
+
     const fieldContainerRef = useRef<HTMLDivElement>(null);
 
     const goBig = () => {
@@ -894,6 +909,11 @@ const Field = ({
                         : undefined
                 }
                 ref={fieldRef}
+                style={{
+                    borderColor: selected && timeUp ? "#ff6464" : undefined,
+                    boxShadow:
+                        selected && timeUp ? "0 0 30px #ff6464" : undefined,
+                }}
             >
                 <div className="contentContainer">
                     {selected ? (
@@ -984,21 +1004,37 @@ const Field = ({
                                                 }
                                             />
                                         )}
-                                        <button
-                                            className="reveal"
-                                            style={{
-                                                opacity:
-                                                    buzzeredTeamIndex ===
-                                                        null && !testMode
-                                                        ? 0
-                                                        : 1,
-                                            }}
-                                            onClick={() =>
-                                                setGameState(State.showAnswer)
-                                            }
-                                        >
-                                            show Answer
-                                        </button>
+
+                                        <div className="bottom">
+                                            {buzzeredTeamIndex !== null &&
+                                            settings.useAnswerTime ? (
+                                                <TimeBar
+                                                    time={
+                                                        category.answerTime *
+                                                        1000
+                                                    }
+                                                    reverse
+                                                />
+                                            ) : null}
+
+                                            <button
+                                                className="reveal"
+                                                style={{
+                                                    opacity:
+                                                        buzzeredTeamIndex ===
+                                                            null && !testMode
+                                                            ? 0
+                                                            : 1,
+                                                }}
+                                                onClick={() =>
+                                                    setGameState(
+                                                        State.showAnswer
+                                                    )
+                                                }
+                                            >
+                                                show Answer
+                                            </button>
+                                        </div>
                                     </div>
                                 ) : null}
 
@@ -1050,6 +1086,7 @@ const Field = ({
                                                         {points}
                                                     </button>
                                                 </div>
+
                                                 <div
                                                     className={
                                                         "custom" +
