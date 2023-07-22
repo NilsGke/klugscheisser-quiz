@@ -30,7 +30,7 @@
 
     .gamepadOverlay {
         padding: 50px;
-        min-width: 35vw;
+        min-width: 40vw;
         min-height: 40vh;
         background-color: $dark;
         border-radius: 30px;
@@ -62,40 +62,52 @@
         }
 
         .mapping {
-            width: 80%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             gap: 10px;
-            .team {
+            .mappingTable {
                 // height: 50px;
-                width: 100%;
-                display: flex;
+                display: grid;
+                grid-template-columns: auto auto auto;
                 align-items: center;
-                justify-content: center;
-                flex-direction: row;
                 gap: 10px;
                 > * {
-                    flex: 1;
+                    // flex: 1;
                 }
 
-                button {
-                    cursor: pointer;
-                    border: 1px solid $grey;
-                    background-color: transparent;
-                    color: $white;
-                    border-radius: 5px;
-                    height: 30px;
-                    width: 50px;
+                .name {
+                    white-space: nowrap;
+                }
 
-                    transition: all 0.2s ease-in-out;
-                    &:hover {
-                        background-color: $lighterDark;
-                    }
-                    &.active {
-                        color: $red;
-                        background: $lighterDark;
+                .buttons {
+                    min-width: 300px;
+
+                    button {
+                        cursor: pointer;
+                        border: 1px solid $grey;
+                        background-color: transparent;
+                        color: $white;
+                        border-radius: 5px;
+                        height: 30px;
+                        width: 50px;
+                        margin: 0;
+                        &:not(:last-child) {
+                            margin-right: 5px;
+                        }
+
+                        transition: all 0.2s ease-in-out;
+                        &:hover {
+                            background-color: $lighterDark;
+                            &:not(:is(.add, .stop)) {
+                                color: $red;
+                            }
+                        }
+
+                        &.add {
+                            opacity: 0.5;
+                        }
                     }
                 }
             }
