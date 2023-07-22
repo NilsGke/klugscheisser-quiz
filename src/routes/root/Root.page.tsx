@@ -17,6 +17,7 @@ import toast from "react-simple-toasts";
 import useTitle from "$hooks/useTitle";
 import { removeThing, setThing } from "$db/things";
 import removeIcon from "$assets/trash.svg";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 const Root = ({
     theme,
@@ -26,9 +27,10 @@ const Root = ({
     themeChange: () => void;
 }) => {
     useTitle("Klugscheißer-Quiz");
+    const [rootContainerRef] = useAutoAnimate();
 
     return (
-        <div className="root">
+        <div className="root" ref={rootContainerRef}>
             <div
                 id="background"
                 style={{
