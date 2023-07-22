@@ -5,7 +5,9 @@ import {
 } from "$helpers/gamepad";
 import { useState, useEffect, useCallback } from "react";
 
-const useGamepad = (callback: (id: number) => void) => {
+const useGamepad = (
+    callback: (id: { button: number; gamepad: number }) => void
+) => {
     const [connected, setConnected] = useState(
         !(
             Object.keys(gamepads).length === 0 &&

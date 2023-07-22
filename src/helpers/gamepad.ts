@@ -17,7 +17,7 @@ window.addEventListener("gamepadconnected", connect, false);
 window.addEventListener("gamepaddisconnected", disconnect, false);
 
 export interface CustomGamepadEventMap {
-    buttonpress: CustomEvent<number>;
+    buttonpress: CustomEvent<{ gamepad: number; button: number }>;
 }
 interface GamepadEvents {
     //adds definition to Document, but you can do the same with HTMLElement
@@ -36,7 +36,7 @@ interface GamepadEvents {
 
 export const gamepadEvents: GamepadEvents = document.createElement("a");
 
-const pressed: number[] = [];
+const pressed: { button: number; gamepad: number }[] = [];
 
 const update = () => {
     const pads = navigator.getGamepads();
@@ -46,21 +46,30 @@ const update = () => {
         }
     }
 
-    Object.keys(gamepads).forEach((gamepadId) => {
-        const controller = gamepads[parseInt(gamepadId)];
+    Object.keys(gamepads).forEach((gamepadIdString) => {
+        const gamepadId = parseInt(gamepadIdString);
+        const controller = gamepads[gamepadId];
         controller.buttons.forEach((button, i) => {
             if (button.pressed) {
-                if (!pressed.includes(i)) {
+                if (!pressed.map((b) => b.button).includes(i)) {
                     gamepadEvents.dispatchEvent(
-                        new CustomEvent<number>("buttonpress", {
-                            detail: i,
+                        new CustomEvent<
+                            CustomGamepadEventMap["buttonpress"]["detail"]
+                        >("buttonpress", {
+                            detail: {
+                                button: i,
+                                gamepad: gamepadId,
+                            },
                         })
                     );
 
-                    pressed.push(i);
+                    pressed.push({ button: i, gamepad: gamepadId });
                 }
-            } else if (pressed.includes(i))
-                pressed.splice(pressed.indexOf(i), 1);
+            } else if (pressed.map((b) => b.button).includes(i))
+                pressed.splice(
+                    pressed.findIndex((b) => b.button === i),
+                    1
+                );
         });
     });
 
