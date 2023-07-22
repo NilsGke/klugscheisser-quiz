@@ -1,24 +1,18 @@
 @import "../colors.scss";
 
 #gamepadButton {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    height: 30px;
-    width: 30px;
-
     background-color: transparent;
     border: none;
     cursor: pointer;
 
     img {
-        height: 80%;
         filter: $invert;
     }
 }
 
 .gamepadOverlayWrapper {
-    position: absolute;
+    position: fixed;
+    z-index: 10;
     top: 0;
     left: 0;
     height: 100svh;

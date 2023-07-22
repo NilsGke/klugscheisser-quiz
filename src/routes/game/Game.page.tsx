@@ -53,6 +53,7 @@ import ResourceRenderer from "$components/ResourceRenderer";
 import { getThing } from "$db/things";
 import HomeButton from "$components/HomeButton";
 import Gamepad from "$components/Gamepad";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 enum State {
     intro = "intro",
@@ -370,6 +371,8 @@ const Game = ({
     const [settingsOpen, setSettingsOpen] = useState(false);
     const [settings, setSettings] = useState(getSettings());
 
+    const [gameControlsRef] = useAutoAnimate();
+
     if (loading) return <Spinner />;
 
     if (errorMessage !== "")
@@ -430,7 +433,7 @@ const Game = ({
                         />
                     ))}
                 </div>
-                <div id="gameControls">
+                <div id="gameControls" ref={gameControlsRef}>
                     <button
                         className="settings"
                         onClick={() => (window.location.href = "/")}
@@ -485,6 +488,11 @@ const Game = ({
                             />
                         </button>
                     )}
+
+                    <Gamepad
+                        teams={gameData.teams}
+                        buzzer={(team, teamIndex) => buzzer(teamIndex)}
+                    />
                 </div>
             </aside>
             <div id="categories" ref={categoriesRef}>
@@ -537,11 +545,6 @@ const Game = ({
                     </Fragment>
                 ))}
             </div>
-
-            <Gamepad
-                teams={gameData.teams}
-                buzzer={(team, teamIndex) => buzzer(teamIndex)}
-            />
 
             {gameState === State.intro ? (
                 <Intro start={() => setGameState(State.idle)} />
