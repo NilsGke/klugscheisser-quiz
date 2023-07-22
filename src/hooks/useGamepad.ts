@@ -3,7 +3,7 @@ import {
     gamepadEvents,
     gamepads,
 } from "$helpers/gamepad";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const useGamepad = (callback: (id: number) => void) => {
     const [connected, setConnected] = useState(
