@@ -794,7 +794,11 @@ const Field = ({
     // trigger answer time timeout
     const [timeUp, setTimeUp] = useState(false);
     useEffect(() => {
-        if (settings.useAnswerTime && buzzeredTeamIndex !== undefined) {
+        if (
+            settings.useAnswerTime &&
+            buzzeredTeamIndex !== undefined &&
+            gameState === State.showQuestion
+        ) {
             const timer = setTimeout(
                 () => setTimeUp(true),
                 category.answerTime * 1000
@@ -802,9 +806,10 @@ const Field = ({
             return () => {
                 setTimeUp(false);
                 clearTimeout(timer);
+                console.log("clearTimer");
             };
         }
-    }, [buzzeredTeamIndex]);
+    }, [buzzeredTeamIndex, gameState]);
 
     const fieldContainerRef = useRef<HTMLDivElement>(null);
 
