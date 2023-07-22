@@ -26,7 +26,7 @@ import { getStoredCategory, removeCategoryFromDb } from "$db/categories";
 import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
 // hooks
 import useKeyboard from "$hooks/keyboard";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 // components
 import AudioPlayer from "$components/AudioPlayer";
 import VideoPlayer from "$components/VideoPlayer";
@@ -259,6 +259,8 @@ const Game = ({
 
     useKeyboard(keyboardCallback);
 
+    const navigate = useNavigate();
+
     const grantPoints = (points: number) => {
         if (buzzeredTeamIndex === null)
             throw new Error(
@@ -434,10 +436,7 @@ const Game = ({
                     ))}
                 </div>
                 <div id="gameControls" ref={gameControlsRef}>
-                    <button
-                        className="settings"
-                        onClick={() => (window.location.href = "/")}
-                    >
+                    <button className="settings" onClick={() => navigate("/")}>
                         <img
                             src={homeIcon}
                             className="homeIcon"
