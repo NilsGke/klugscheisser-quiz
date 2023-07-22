@@ -149,11 +149,9 @@
                         cursor: pointer;
                         img {
                             height: 80%;
+                            filter: $invert;
                         }
                         &.move {
-                            img {
-                                filter: $invert;
-                            }
                             &.left {
                                 rotate: 90deg;
                             }
