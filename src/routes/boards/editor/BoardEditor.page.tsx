@@ -13,6 +13,7 @@ import toast from "react-simple-toasts";
 import { useParams } from "react-router-dom";
 import BackButton from "$components/BackButton";
 import useTitle from "$hooks/useTitle";
+import Diashow from "$components/Diashow";
 
 const BoardEditor = () => {
     const [board, setBoard] = useState<Board>({
@@ -152,6 +153,14 @@ const BoardEditor = () => {
                                                 <div className="text">
                                                     {field.question.content}
                                                 </div>
+                                            ) : field.question.type ===
+                                              "imageCollection" ? (
+                                                <Diashow
+                                                    images={
+                                                        field.question.content
+                                                    }
+                                                    view
+                                                />
                                             ) : (
                                                 <ResourceRenderer
                                                     resource={field.question}
