@@ -89,7 +89,7 @@ const BoardEditor = () => {
                         `/boards/editor/${promisedDbIndex}`
                     );
                 }
-                toast("✅ baord saved!");
+                toast("✅ board saved!");
             })
             .catch((error) => {
                 toast(error);
