@@ -20,6 +20,7 @@ import { confirmAlert } from "react-confirm-alert";
 import useTitle from "$hooks/useTitle";
 import useStringifyChange from "$hooks/useStringifyChange";
 import { generateThumbnail } from "$helpers/thumbnail";
+import { useNavigate } from "react-router-dom";
 
 const Edit = ({
     initialCategory,
@@ -43,6 +44,8 @@ const Edit = ({
     useStringifyChange(answerTime, () => setUnsavedChanges(true));
 
     useTitle(`ksq - editor${name !== "" ? ": " + name : ""}`);
+
+    const navigate = useNavigate();
 
     // resource added by media pool (dot menu)
     const [addResource, setAddResource] = useState<Resource | null>(null);
@@ -109,11 +112,7 @@ const Edit = ({
             if (dbIndex === undefined) {
                 window.onbeforeunload = null;
                 window.removeEventListener("beforeunload", unloadHandler);
-                window.setTimeout(() => {
-                    window.location.replace(
-                        `/categories/editor/${promisedDbIndex}`
-                    );
-                }, 300);
+                navigate(`/categories/editor/${promisedDbIndex}`);
             }
             toast("✅ category saved");
         });

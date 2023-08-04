@@ -10,7 +10,7 @@ import "./BoardEditor.page.scss";
 import autoAnimate from "@formkit/auto-animate";
 import { getStoredBoard, storeBoardInDB, updateBoardInDB } from "$db/boards";
 import toast from "react-simple-toasts";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "$components/BackButton";
 import useTitle from "$hooks/useTitle";
 import Diashow from "$components/Diashow";
@@ -30,6 +30,8 @@ const BoardEditor = () => {
         if (categoriesContainerRef.current)
             autoAnimate(categoriesContainerRef.current);
     }, []);
+
+    const navigate = useNavigate();
 
     const [addCategoryOpen, setAddCategoryOpen] = useState(false);
 
@@ -85,11 +87,8 @@ const BoardEditor = () => {
 
         promise
             .then((promisedDbIndex) => {
-                if (dbIndex === undefined) {
-                    window.location.replace(
-                        `/boards/editor/${promisedDbIndex}`
-                    );
-                }
+                if (dbIndex === undefined)
+                    navigate(`/boards/editor/${promisedDbIndex}`);
                 toast("✅ board saved!");
             })
             .catch((error) => {
