@@ -83,17 +83,13 @@ const Categories = () => {
     // file stuff
     useEffect(() => {
         if (files === undefined) return;
-        files.forEach((file) => {
-            if (file.type !== "application/x-zip-compressed") {
-                toast(`"${file.name}" is not a zip file`);
-            } else {
-                importCategoryFromZip(file).then((category) =>
-                    storeCategoryInDB(category).then((dbIndex) =>
-                        setUpdate(Date.now())
-                    )
-                );
-            }
-        });
+        files.forEach((file) =>
+            importCategoryFromZip(file).then((category) =>
+                storeCategoryInDB(category).then((dbIndex) =>
+                    setUpdate(Date.now())
+                )
+            )
+        );
     }, [files]);
 
     const [exportInfo, setExportInfo] = useState<
@@ -124,7 +120,7 @@ const Categories = () => {
                                 type="file"
                                 name="category zip input"
                                 id="fileInput"
-                                accept=".ksq.zip"
+                                accept=".zip"
                                 multiple
                                 tabIndex={1}
                                 onChange={(e) => {
