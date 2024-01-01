@@ -10,6 +10,7 @@ export interface SettingsType {
     theme: Theme;
     maxExportSize: number;
     useAnswerTime: boolean;
+    smallCategories: boolean;
 }
 
 export type keyValueSettingsType = keyValue & SettingsType;
@@ -20,6 +21,7 @@ export const defaultSettings: SettingsType = {
     theme: "dark",
     maxExportSize: 1_000_000_000,
     useAnswerTime: true,
+    smallCategories: false,
 };
 
 export const getSettings = () => {

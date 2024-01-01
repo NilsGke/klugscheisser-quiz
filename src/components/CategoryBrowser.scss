@@ -23,7 +23,8 @@
             gap: 10px;
 
             input,
-            button.sort {
+            button.sort,
+            button.smallOrBig {
                 height: 40px;
                 width: 100%;
                 font-size: 18px;
@@ -33,7 +34,8 @@
                 color: $white;
                 padding: 5px;
             }
-            button.sort {
+            button.sort,
+            button.smallOrBig {
                 width: 60px;
                 cursor: pointer;
                 transition: all 0.2s ease-out;
@@ -207,6 +209,23 @@
                         &:hover {
                             background: $lighterDark;
                         }
+                    }
+                }
+            }
+            &.small {
+                width: 200px;
+                .category {
+                    flex-direction: column;
+                    gap: 0;
+                    .content {
+                        h2 {
+                            line-height: 20px;
+                            font-size: 18px;
+                            margin-bottom: 2px;
+                        }
+                    }
+                    .buttons {
+                        flex-direction: row;
                     }
                 }
             }

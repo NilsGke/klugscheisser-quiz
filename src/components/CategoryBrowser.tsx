@@ -25,6 +25,9 @@ import { generateZipFromCategory } from "$helpers/zip";
 import downloadFile from "$helpers/downloadFile";
 import toast from "react-simple-toasts";
 import useDebounce from "$hooks/useDebounce";
+import zoomInArrows from "$assets/zoomInArrows.svg";
+import zoomOutArrows from "$assets/zoomOutArrows.svg";
+import { changeSetting, getSettings } from "$helpers/settings";
 
 type props = {
     refresh?: any;
@@ -45,6 +48,7 @@ type props = {
     editable?: boolean;
     deletable?: boolean;
     downloadable?: boolean;
+    defaultSmall?: boolean;
 };
 enum Purpose {
     VIEWING,
@@ -72,6 +76,7 @@ const CategoryBrowser: FC<props> = ({
     deletable,
     editable,
     downloadable,
+    defaultSmall,
 }) => {
     const purpose: Purpose = selecting
         ? Purpose.SELECTING_MULTIPLE
@@ -122,6 +127,10 @@ const CategoryBrowser: FC<props> = ({
         }
     });
 
+    const [smallCategories, setSmallCategories] = useState(
+        defaultSmall ?? getSettings().smallCategories
+    );
+
     return (
         <div className="categoryBrowser">
             <div className="browser">
@@ -164,6 +173,22 @@ const CategoryBrowser: FC<props> = ({
                             alt={sortingMethod}
                         />
                     </button>
+                    <button
+                        title={`${smallCategories ? "zoom in" : "zoom out"}`}
+                        className="smallOrBig"
+                        onClick={() => {
+                            setSmallCategories((prev) => {
+                                changeSetting({
+                                    smallCategories: !prev,
+                                });
+                                return !prev;
+                            });
+                        }}
+                    >
+                        <img
+                            src={smallCategories ? zoomInArrows : zoomOutArrows}
+                        />
+                    </button>
                 </div>
                 <div className="results">
                     {sorted.map((category) => (
@@ -189,6 +214,7 @@ const CategoryBrowser: FC<props> = ({
                             deletable={deletable}
                             editable={editable}
                             downloadable={downloadable}
+                            small={smallCategories}
                             delete={() =>
                                 removeCategoryFromDb(category.dbIndex).then(
                                     () =>
@@ -231,6 +257,7 @@ const CategoryBrowser: FC<props> = ({
                                                 )
                                             );
                                     }}
+                                    small={smallCategories}
                                 />
                             ))}
                         </div>
@@ -265,6 +292,7 @@ const CategoryElement = ({
     testable = false,
     editable = false,
     downloadable = false,
+    small,
 }: {
     category: Indexed<Category>;
 
@@ -284,23 +312,27 @@ const CategoryElement = ({
     testable?: boolean;
     editable?: boolean;
     downloadable?: boolean;
+
+    small: boolean;
 }) => {
-    const imageUrl = useRef(
-        typeof category.description === "string"
-            ? ""
-            : URL.createObjectURL(category.thumbnail ?? category.description)
-    );
+    const imageURL = useMemo(() => {
+        if (small) return "";
+        console.log("regenerate imageURL");
+        if (typeof category.description === "string") return "";
+        if (category.thumbnail) return URL.createObjectURL(category.thumbnail);
+        return URL.createObjectURL(category.description);
+    }, [category, small]);
 
     const gradient = useMemo(() => stringToColorGradient(category.name), []);
 
     const bgImgage =
         typeof category.description === "string"
             ? gradient
-            : `url("${imageUrl.current}")`;
+            : `url("${imageURL}")`;
 
     return (
         <div
-            className="categoryWrapper"
+            className={"categoryWrapper" + (small ? " small" : "")}
             style={{
                 backgroundImage: bgImgage,
                 cursor: selectable ? "pointer" : undefined,
@@ -333,21 +365,21 @@ const CategoryElement = ({
 
                 <div className="content">
                     <h2>{category.name}</h2>
-                    <div className="description">
-                        {typeof category.description === "string" ? (
-                            <>
-                                <p>{category.description}</p>
-                            </>
-                        ) : (
-                            <img
-                                src={imageUrl.current}
-                                alt="categor description image"
-                                onLoad={() =>
-                                    URL.revokeObjectURL(imageUrl.current)
-                                }
-                            />
-                        )}
-                    </div>
+                    {!small && (
+                        <div className="description">
+                            {typeof category.description === "string" ? (
+                                <>
+                                    <p>{category.description}</p>
+                                </>
+                            ) : (
+                                <img
+                                    src={imageURL}
+                                    alt="categor description image"
+                                    onLoad={() => URL.revokeObjectURL(imageURL)}
+                                />
+                            )}
+                        </div>
+                    )}
                 </div>
                 <div className="buttons">
                     {editable ? (
