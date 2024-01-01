@@ -317,7 +317,6 @@ const CategoryElement = ({
 }) => {
     const imageURL = useMemo(() => {
         if (small) return "";
-        console.log("regenerate imageURL");
         if (typeof category.description === "string") return "";
         if (category.thumbnail) return URL.createObjectURL(category.thumbnail);
         return URL.createObjectURL(category.description);
