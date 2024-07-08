@@ -13,7 +13,7 @@ import { confirmAlert } from "react-confirm-alert";
 
 // types
 import {
-    Game,
+    type Game,
     GameField,
     GameTeam,
     TeamColors,
