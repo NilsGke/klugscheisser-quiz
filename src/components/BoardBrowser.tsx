@@ -7,6 +7,10 @@ import editIcon from "$assets/edit.svg";
 import "./BoardBrowser.scss";
 import { useNavigate } from "react-router-dom";
 import autoAnimate from "@formkit/auto-animate";
+import { SortingMethod } from "$db/categories";
+import sortAZIcon from "$assets/sortAZ.svg";
+import sortZAIcon from "$assets/sortZA.svg";
+import clockIcon from "$assets/clock.svg";
 
 type props = {
     select?: (board: Indexed<Board>) => void;
@@ -38,18 +42,70 @@ const BoardBrowser = ({ select }: props) => {
         if (listRef.current) autoAnimate(listRef.current);
     }, []);
 
+    // sorting
+    const [sortingMethod, setSortingMethod] = useState(
+        SortingMethod.creationDate
+    );
+    const sorted = filtered.toSorted((a, b) => {
+        switch (sortingMethod) {
+            case SortingMethod.creationDate:
+                return b.dbIndex - a.dbIndex;
+            case SortingMethod.abcNormal:
+                return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+            case SortingMethod.abcReverse:
+                return a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 1;
+
+            default:
+                return 1;
+        }
+    });
+
     return (
         <div className="boardBrowser">
-            <input
-                type="text"
-                className="search"
-                placeholder="search"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <div className="searchHeader">
+                <input
+                    type="text"
+                    className="search"
+                    placeholder="search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button
+                    title={`sort by ${sortingMethod}`}
+                    className="sort"
+                    onClick={() =>
+                        setSortingMethod((prev) => {
+                            switch (prev) {
+                                case SortingMethod.abcNormal:
+                                    return SortingMethod.abcReverse;
+                                case SortingMethod.abcReverse:
+                                    return SortingMethod.creationDate;
+                                case SortingMethod.creationDate:
+                                    return SortingMethod.abcNormal;
+
+                                default:
+                                    return SortingMethod.creationDate;
+                            }
+                        })
+                    }
+                >
+                    <img
+                        src={
+                            sortingMethod === SortingMethod.abcNormal
+                                ? sortAZIcon
+                                : sortingMethod === SortingMethod.abcReverse
+                                ? sortZAIcon
+                                : sortingMethod === SortingMethod.creationDate
+                                ? clockIcon
+                                : "error"
+                        }
+                        alt={sortingMethod}
+                    />
+                </button>
+            </div>
             <div className="boardsContainer">
                 <div className="boards" ref={listRef}>
-                    {filtered.map((board) => (
+                    {sorted.map((board) => (
                         <BoardElement
                             key={board.dbIndex}
                             board={board}

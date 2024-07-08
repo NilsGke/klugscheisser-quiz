@@ -113,7 +113,7 @@ const CategoryBrowser: FC<props> = ({
     const [sortingMethod, setSortingMethod] = useState(
         SortingMethod.creationDate
     );
-    const sorted = filtered.sort((a, b) => {
+    const sorted = filtered.toSorted((a, b) => {
         switch (sortingMethod) {
             case SortingMethod.creationDate:
                 return b.dbIndex - a.dbIndex;
