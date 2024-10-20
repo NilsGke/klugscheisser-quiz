@@ -17,6 +17,13 @@ import BoardEditor from "./routes/boards/editor/BoardEditor.page";
 import { getSettings } from "$helpers/settings";
 import "light.scss";
 import "./confirm-alert.scss";
+import DirectoryChooser from "$components/DirectoryChooser";
+import { IDBClient } from "./indexedDB/lib/IDBClient";
+import { getLatestFSDH, migrations } from "./indexedDB/db";
+import { IDBClientProvider } from "./indexedDB/lib/IDBClientProvider";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import useIDBStatus from "indexedDB/lib/hooks/useIDBStatus";
+import useIDB from "indexedDB/lib/hooks/useIDB";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -34,6 +41,10 @@ const App = () => {
     const [indexedDbIsReady, setIndexedDbIsReady] = useState(false);
     const [migrationsTotal, setMigrationsTotal] = useState(0);
     const [migrationsLeft, setMigrationsLeft] = useState(0);
+
+    // new IDB Status
+    const dbStatus = useIDBStatus();
+    const db = useIDB();
 
     useEffect(() => {
         initIndexedDB(setMigrationsTotal, setMigrationsLeft).then(() =>
@@ -94,6 +105,11 @@ const App = () => {
         return () => {};
     }, []);
 
+    // User Directofy
+    const [fileSystemDirectoryHandle, setFileSystemDirectoryHandle] = useState<
+        FileSystemDirectoryHandle | "useLatest" | "choose"
+    >("useLatest");
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -101,6 +117,9 @@ const App = () => {
                 <Root
                     theme={theme}
                     themeChange={() => setTheme(getSettings().theme)}
+                    changeDirectory={() =>
+                        setFileSystemDirectoryHandle("choose")
+                    }
                 />
             ),
         },
@@ -176,6 +195,29 @@ const App = () => {
             </div>
         );
 
+    if (dbStatus !== "ready")
+        return (
+            <div className="loading">
+                <div className="text">Migrating Local Database...</div>
+
+                <div className="text sub">
+                    This might take some time <br />
+                    Please do not close this tab
+                </div>
+            </div>
+        );
+
+    if (typeof fileSystemDirectoryHandle === "string")
+        return (
+            <div id="directoryChooserPage">
+                <h1>Wähle dein KSQ Verzeichnis</h1>
+                <DirectoryChooser
+                    useLatest={fileSystemDirectoryHandle === "useLatest"}
+                    setFSDH={setFileSystemDirectoryHandle}
+                />
+            </div>
+        );
+
     return (
         <>
             {network === NetworkStatus.OFFLINE ? <OfflineBanner /> : null}
@@ -189,6 +231,15 @@ const App = () => {
     );
 };
 
+// reactQuery for IDB lib
+const queryClient = new QueryClient();
+// new IDB
+const dbClient = new IDBClient({ name: "fsdh", migrations });
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <App />
+    <IDBClientProvider client={dbClient}>
+        <QueryClientProvider client={queryClient}>
+            <App />
+        </QueryClientProvider>
+    </IDBClientProvider>
 );

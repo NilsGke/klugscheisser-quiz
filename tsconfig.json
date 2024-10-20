@@ -16,7 +16,7 @@
         "noEmit": true,
         "jsx": "react-jsx",
         "sourceMap": true,
-        "types": ["vite-plugin-pwa/client"],
+        "types": ["vite-plugin-pwa/client", "@types/wicg-file-system-access"],
         "baseUrl": "./src",
         "paths": {
             "$assets/*": ["assets/*"],

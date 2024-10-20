@@ -1,30 +1,32 @@
 import "./Root.page.scss";
 import { Link } from "react-router-dom";
+import { Theme } from "main";
+import { changeSetting } from "$helpers/settings";
+import fileToBase64 from "$helpers/fileToBase64";
+import toast from "react-simple-toasts";
+import useTitle from "$hooks/useTitle";
+import { removeThing, setThing } from "$db/things";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 // assets
 import playIcon from "$assets/playOutline.svg";
 import helpIcon from "$assets/help.svg";
 import boardIcon from "$assets/board.svg";
 import categoryIcon from "$assets/category.svg";
 import backgroundImage from "$assets/background.excalidraw.svg";
-import { Theme } from "main";
-
+import removeIcon from "$assets/trash.svg";
 import lightIcon from "$assets/sun.svg";
 import darkIcon from "$assets/moon.svg";
 import elderlyIcon from "$assets/elderly.svg";
-import { changeSetting } from "$helpers/settings";
-import fileToBase64 from "$helpers/fileToBase64";
-import toast from "react-simple-toasts";
-import useTitle from "$hooks/useTitle";
-import { removeThing, setThing } from "$db/things";
-import removeIcon from "$assets/trash.svg";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import changeDirIcon from "$assets/editDirectory.svg";
 
 const Root = ({
     theme,
     themeChange,
+    changeDirectory,
 }: {
     theme: Theme;
     themeChange: () => void;
+    changeDirectory: () => void;
 }) => {
     useTitle("Klugscheißer-Quiz");
     const [rootContainerRef] = useAutoAnimate();
@@ -90,9 +92,18 @@ const Root = ({
                 />
             </button>
 
-            <Link to={"/help"} className="helpIcon">
+            <Link to={"/help"} className="actionButton help">
                 <img src={helpIcon} alt="question mark icon" />
             </Link>
+
+            {/* change directory button */}
+            <button
+                className="actionButton changeDir"
+                title="KSQ Ordner ändern"
+                onClick={changeDirectory}
+            >
+                <img src={changeDirIcon} alt="change directory" />
+            </button>
 
             {theme === "senior" ? (
                 <div className="extraOptions">
