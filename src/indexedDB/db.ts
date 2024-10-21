@@ -28,15 +28,17 @@ export const migrations: IDBMigrationFunction[] = [
 
 export const getLatestFSDH = (db: IDBDatabase) =>
     new Promise<FSDHWithKey>((resolve, reject) => {
-        const objectStore = db
+        const request = db
             .transaction("fsdh", "readonly")
-            .objectStore("fsdh");
-        const request = objectStore.openCursor();
+            .objectStore("fsdh")
+            .index("lastOpened" satisfies keyof FSDH)
+            .openCursor(null, "prev");
+
         request.onsuccess = function (event) {
             if (event.target === null) return reject();
             const cursor = request.result;
             if (cursor === null) return reject();
-            resolve({ ...cursor.value, key: cursor.key });
+            resolve({ ...cursor.value, key: cursor.primaryKey });
         };
     });
 
