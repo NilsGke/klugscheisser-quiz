@@ -28,6 +28,7 @@ import useDebounce from "$hooks/useDebounce";
 import zoomInArrows from "$assets/zoomInArrows.svg";
 import zoomOutArrows from "$assets/zoomOutArrows.svg";
 import { changeSetting, getSettings } from "$helpers/settings";
+import { getAllCategories } from "filesystem/categories";
 
 type props = {
     refresh?: any;
@@ -49,6 +50,8 @@ type props = {
     deletable?: boolean;
     downloadable?: boolean;
     defaultSmall?: boolean;
+
+    fsdh: FileSystemDirectoryHandle;
 };
 enum Purpose {
     VIEWING,
@@ -77,10 +80,16 @@ const CategoryBrowser: FC<props> = ({
     editable,
     downloadable,
     defaultSmall,
+
+    fsdh,
 }) => {
     const purpose: Purpose = selecting
         ? Purpose.SELECTING_MULTIPLE
         : Purpose.VIEWING;
+
+    useEffect(() => {
+        getAllCategories(fsdh).then(console.log);
+    }, []);
 
     const [categories, setCategories] = useState<Indexed<Category>[]>([]);
     useEffect(() => {

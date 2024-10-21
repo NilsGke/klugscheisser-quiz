@@ -25,6 +25,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useIDBStatus from "indexedDB/lib/hooks/useIDBStatus";
 import useIDB from "indexedDB/lib/hooks/useIDB";
 import toast from "react-simple-toasts";
+import { getAllCategoryNames } from "filesystem/categories";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -111,6 +112,20 @@ const App = () => {
         FileSystemDirectoryHandle | "useLatest" | "choose"
     >("useLatest");
 
+    if (typeof fileSystemDirectoryHandle === "string")
+        return (
+            <div id="directoryChooserPage">
+                <h1>Wähle dein KSQ Verzeichnis</h1>
+                <DirectoryChooser
+                    useLatest={fileSystemDirectoryHandle === "useLatest"}
+                    setFSDH={(fsdh) => {
+                        setFileSystemDirectoryHandle(fsdh);
+                        toast(`Verzeichnis "${fsdh.name}" gewählt`);
+                    }}
+                />
+            </div>
+        );
+
     const router = createBrowserRouter([
         {
             path: "/",
@@ -131,7 +146,15 @@ const App = () => {
         // categories
         {
             path: "/categories",
-            element: <Categories />,
+            element: <Categories fsdh={fileSystemDirectoryHandle} />,
+            loader: async ({ request }) => {
+                // getAllCategoryNames(fileSystemDirectoryHandle);
+                const perms = await fileSystemDirectoryHandle.queryPermission({
+                    mode: "readwrite",
+                });
+                console.log(perms);
+                return perms;
+            },
         },
         {
             path: "/categories/editor",
@@ -205,20 +228,6 @@ const App = () => {
                     This might take some time <br />
                     Please do not close this tab
                 </div>
-            </div>
-        );
-
-    if (typeof fileSystemDirectoryHandle === "string")
-        return (
-            <div id="directoryChooserPage">
-                <h1>Wähle dein KSQ Verzeichnis</h1>
-                <DirectoryChooser
-                    useLatest={fileSystemDirectoryHandle === "useLatest"}
-                    setFSDH={(fsdh) => {
-                        setFileSystemDirectoryHandle(fsdh);
-                        toast(`Verzeichnis "${fsdh.name}" gewählt`);
-                    }}
-                />
             </div>
         );
 

@@ -18,7 +18,7 @@ import useTitle from "$hooks/useTitle";
 import downloadIcon from "$assets/downloadFolder.svg";
 import { changeSetting, defaultSettings, getSettings } from "$helpers/settings";
 
-const Categories = () => {
+const Categories = ({ fsdh }: { fsdh: FileSystemDirectoryHandle }) => {
     const [files, setFiles] = useState<File[]>();
     const [dragging, setDragging] = useState(false);
     const [update, setUpdate] = useState(Date.now());
@@ -104,6 +104,7 @@ const Categories = () => {
                     <h1>Kategorie-Editor</h1>
                     <CategoryBrowser
                         refresh={update}
+                        fsdh={fsdh}
                         testable
                         editable
                         deletable

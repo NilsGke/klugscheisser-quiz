@@ -20,6 +20,7 @@ export default function DirectoryChooser({
     setFSDH: (fsdh: FileSystemDirectoryHandle) => void;
 }) {
     const [fsdh, setFsdh] = useState<FileSystemDirectoryHandle | null>(null);
+    const [needPermission, setNeedPermission] = useState(false);
 
     const db = useIDB();
     const { data: handles, refetch: refetchRecent } = useIDBQuery({
@@ -61,8 +62,8 @@ export default function DirectoryChooser({
     useEffect(() => {
         if (db === null || !useLatest) return;
         getLatestFSDH(db).then((fsdh) => {
-            setFileSystemDirectoryHandle(fsdh.fileSystemDirectoryHandle);
-            updateFSDHLastOpened(db, fsdh.key).then(() => refetchRecent());
+            setFsdh(fsdh.fileSystemDirectoryHandle);
+            // updateFSDHLastOpened(db, fsdh.key).then(() => refetchRecent());
         });
     }, [db]);
 
@@ -70,21 +71,28 @@ export default function DirectoryChooser({
 
     const checkPermissions = () =>
         new Promise<void>(async (resolve, reject) => {
+            setNeedPermission(true);
             if (fsdh === null) return resolve();
             const perms = await fsdh.queryPermission();
 
             if (perms === "granted") return resolve();
 
-            fsdh.requestPermission({ mode: "readwrite" }).then((perms) => {
-                if (perms === "granted") return resolve();
-                if (perms === "prompt") return checkPermissions().then(resolve);
-                if (perms === "denied") {
-                    toast(
-                        "⚠️ Du musst der Webseite Berechtigungen auf das Verzeichnis geben!"
-                    );
-                    checkPermissions().then(resolve);
-                }
-            });
+            fsdh.requestPermission({ mode: "readwrite" })
+                .then((perms) => {
+                    if (perms === "granted") return resolve();
+                    if (perms === "prompt")
+                        return checkPermissions().then(resolve);
+                    if (perms === "denied") {
+                        toast(
+                            "⚠️ Du musst der Webseite Berechtigungen auf das Verzeichnis geben!"
+                        );
+                        checkPermissions().then(resolve);
+                    }
+                })
+                .catch((error) => {
+                    // dont throw security error as it is expected if page is initialized
+                    if (error.name !== "SecurityError") throw error;
+                });
         });
 
     useEffect(() => {
@@ -98,6 +106,28 @@ export default function DirectoryChooser({
                 setFileSystemDirectoryHandle(fsdh);
             });
     }, [fsdh, db]);
+
+    if (needPermission && fsdh)
+        return (
+            <div id="directoryChooser">
+                <h2>
+                    Bitte gib der Webseite die benötigten Berechtigungen für
+                    Ordner: "{fsdh.name}"
+                </h2>
+                <button
+                    onClick={() =>
+                        checkPermissions().then(() =>
+                            setFileSystemDirectoryHandle(fsdh)
+                        )
+                    }
+                >
+                    Berechtigung erteilen
+                </button>
+                <button className="small" onClick={() => setFsdh(null)}>
+                    anderen ordner wählen
+                </button>
+            </div>
+        );
 
     return (
         <div id="directoryChooser">
@@ -116,7 +146,7 @@ export default function DirectoryChooser({
                 </>
             )}
             {supported && (
-                <div id="directoryChooser">
+                <>
                     <button
                         onClick={() => {
                             window
@@ -144,7 +174,7 @@ export default function DirectoryChooser({
                                         className="handle"
                                         key={String(handle.key)}
                                         onClick={() => {
-                                            setFileSystemDirectoryHandle(
+                                            setFsdh(
                                                 handle.fileSystemDirectoryHandle
                                             );
                                             if (db)
@@ -164,7 +194,7 @@ export default function DirectoryChooser({
                                 ))}
                         </div>
                     </div>
-                </div>
+                </>
             )}
         </div>
     );

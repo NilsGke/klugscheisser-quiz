@@ -27,6 +27,10 @@
             &:hover {
                 scale: 1.02;
             }
+            &.small {
+                padding: 0.5rem;
+                font-size: 0.8rem;
+            }
         }
         #lastHandles {
             display: flex;
