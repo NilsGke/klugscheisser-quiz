@@ -34,14 +34,20 @@
             justify-content: center;
             align-items: center;
             gap: 1rem;
-            .handle {
-                padding: 0.5rem;
-                border-radius: 10px;
-                background: $lighterDark;
-                border: 1px solid $grey;
-                p {
-                    color: $grey;
-                    font-size: smaller;
+            .list {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 1rem;
+                .handle {
+                    padding: 0.5rem;
+                    border-radius: 10px;
+                    background: $lighterDark;
+                    border: 1px solid $grey;
+                    p {
+                        color: $grey;
+                        font-size: smaller;
+                    }
                 }
             }
         }

@@ -136,31 +136,32 @@ export default function DirectoryChooser({
                     </button>
                     <div id="lastHandles">
                         <h2>Letzte Verzeichnisse:</h2>
-                        <div>
-                            {handles?.map((handle) => (
-                                <button
-                                    className="handle"
-                                    key={String(handle.key)}
-                                    onClick={() => {
-                                        setFileSystemDirectoryHandle(
-                                            handle.fileSystemDirectoryHandle
-                                        );
-                                        if (db)
-                                            updateFSDHLastOpened(
-                                                db,
-                                                handle.key
-                                            ).then(() => refetchRecent());
-                                    }}
-                                >
-                                    #{String(handle.key)}
-                                    <br />
-                                    <p>
-                                        <RelativeTime
-                                            time={handle.lastOpened}
-                                        />
-                                    </p>
-                                </button>
-                            ))}
+                        <div className="list">
+                            {handles
+                                ?.sort((a, b) => b.lastOpened - a.lastOpened)
+                                .map((handle) => (
+                                    <button
+                                        className="handle"
+                                        key={String(handle.key)}
+                                        onClick={() => {
+                                            setFileSystemDirectoryHandle(
+                                                handle.fileSystemDirectoryHandle
+                                            );
+                                            if (db)
+                                                updateFSDHLastOpened(
+                                                    db,
+                                                    handle.key
+                                                ).then(() => refetchRecent());
+                                        }}
+                                    >
+                                        {handle.fileSystemDirectoryHandle.name}
+                                        <p>
+                                            <RelativeTime
+                                                time={handle.lastOpened}
+                                            />
+                                        </p>
+                                    </button>
+                                ))}
                         </div>
                     </div>
                 </div>

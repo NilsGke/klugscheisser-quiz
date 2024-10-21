@@ -24,6 +24,7 @@ import { IDBClientProvider } from "./indexedDB/lib/IDBClientProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useIDBStatus from "indexedDB/lib/hooks/useIDBStatus";
 import useIDB from "indexedDB/lib/hooks/useIDB";
+import toast from "react-simple-toasts";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -213,7 +214,10 @@ const App = () => {
                 <h1>Wähle dein KSQ Verzeichnis</h1>
                 <DirectoryChooser
                     useLatest={fileSystemDirectoryHandle === "useLatest"}
-                    setFSDH={setFileSystemDirectoryHandle}
+                    setFSDH={(fsdh) => {
+                        setFileSystemDirectoryHandle(fsdh);
+                        toast(`Verzeichnis "${fsdh.name}" gewählt`);
+                    }}
                 />
             </div>
         );
