@@ -28,7 +28,7 @@ import useDebounce from "$hooks/useDebounce";
 import zoomInArrows from "$assets/zoomInArrows.svg";
 import zoomOutArrows from "$assets/zoomOutArrows.svg";
 import { changeSetting, getSettings } from "$helpers/settings";
-import { getAllCategories } from "filesystem/categories";
+import { CategoryNew, getAllCategories } from "filesystem/categories";
 
 type props = {
     refresh?: any;
@@ -86,10 +86,6 @@ const CategoryBrowser: FC<props> = ({
     const purpose: Purpose = selecting
         ? Purpose.SELECTING_MULTIPLE
         : Purpose.VIEWING;
-
-    useEffect(() => {
-        getAllCategories(fsdh).then(console.log);
-    }, []);
 
     const [categories, setCategories] = useState<Indexed<Category>[]>([]);
     useEffect(() => {

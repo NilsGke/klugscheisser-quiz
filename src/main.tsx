@@ -19,13 +19,13 @@ import "light.scss";
 import "./confirm-alert.scss";
 import DirectoryChooser from "$components/DirectoryChooser";
 import { IDBClient } from "./indexedDB/lib/IDBClient";
-import { getLatestFSDH, migrations } from "./indexedDB/db";
+import { migrations } from "./indexedDB/db";
 import { IDBClientProvider } from "./indexedDB/lib/IDBClientProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useIDBStatus from "indexedDB/lib/hooks/useIDBStatus";
 import useIDB from "indexedDB/lib/hooks/useIDB";
 import toast from "react-simple-toasts";
-import { getAllCategoryNames } from "filesystem/categories";
+import { ToastContainer } from "react-toastify";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -252,6 +252,7 @@ const dbClient = new IDBClient({ name: "fsdh", migrations });
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <IDBClientProvider client={dbClient}>
         <QueryClientProvider client={queryClient}>
+            <ToastContainer />
             <App />
         </QueryClientProvider>
     </IDBClientProvider>

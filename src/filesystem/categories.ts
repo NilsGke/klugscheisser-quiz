@@ -1,4 +1,3 @@
-import DeepPartial from "$types/deepPartial";
 import { z } from "zod";
 
 export enum SortingMethod {
@@ -7,7 +6,7 @@ export enum SortingMethod {
     abcReverse = "abcReverse",
 }
 
-type Category = {
+export type CategoryNew = {
     name: string;
     dirHandle: FileSystemDirectoryHandle;
     mediaDirHandle: FileSystemDirectoryHandle;
@@ -20,44 +19,33 @@ type Category = {
     fields: { question: Ressource[]; answer: Ressource[] }[];
 };
 
-type Ressource =
-    | { type: "text"; content: string }
-    | Image
-    | ImageCollection
-    | Video
-    | Audio;
+type Ressource = Text | Image | Video | Audio;
 
 interface Media {
     type: string;
 }
 
+interface Text extends Media {
+    type: "text";
+    content: string;
+}
 interface Image extends Media {
     type: "image";
     handle: FileSystemFileHandle;
 }
-interface ImageCollection extends Media {
-    type: "imageCollection";
-    handles: FileSystemFileHandle[];
-}
 interface Video extends Media {
-    type: "image";
+    type: "video";
     handle: FileSystemFileHandle;
 }
 interface Audio extends Media {
-    type: "image";
+    type: "audio";
     handle: FileSystemFileHandle;
 }
 
-const jsonRessourceSchema = z.union([
-    z.object({
-        type: z.enum(["text", "image", "video", "audio"]),
-        content: z.string(),
-    }),
-    z.object({
-        type: z.literal("imageCollection"),
-        content: z.array(z.string()),
-    }),
-]);
+const jsonRessourceSchema = z.object({
+    type: z.enum(["text", "image", "video", "audio"]),
+    content: z.string(),
+});
 
 const infoFileSchema = z.object({
     name: z.string(),
@@ -65,11 +53,8 @@ const infoFileSchema = z.object({
         type: z.enum(["image", "text"]),
         content: z.string(),
     }),
-    thumbnail: z.object({
-        type: z.enum(["image", "text"]),
-        content: z.string(),
-    }),
-    anserTime: z.number(),
+    thumbnail: z.string().nullable(),
+    answerTime: z.number(),
     fields: z.array(
         z.object({
             question: z.array(jsonRessourceSchema),
@@ -85,7 +70,7 @@ class MediaDirNotFoundError extends CategoryParseError {}
 class MissingMediaError extends CategoryParseError {}
 
 export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
-    const categoryDirectories: Pick<Category, "dirHandle" | "name">[] = [];
+    const categoryDirectories: Pick<CategoryNew, "dirHandle" | "name">[] = [];
 
     // get all folders in ksq directory
     for await (const [_, handle] of fsdh.entries())
@@ -96,7 +81,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
             });
 
     // get category info file
-    const settledResult = await Promise.allSettled(
+    const results = await Promise.allSettled<CategoryNew>(
         categoryDirectories.map(async (category) => {
             const infoFileHandle = await category.dirHandle.getFileHandle(
                 "info.json"
@@ -116,12 +101,14 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
                 await JSON.parse(fileContents)
             );
             // handle errors
-            if (!infoObject.success)
+            if (!infoObject.success) {
+                const errors = infoObject.error.issues
+                    .map((issue) => `${issue.message} ${issue.path}`)
+                    .join(", ");
                 throw new InfoFieldError(
-                    `incorrect info fields in info.json for category "${
-                        category.name
-                    }": ${infoObject.error.format()._errors.join("\n")}`
+                    `incorrect info fields in info.json for category "${category.name}": ${errors}`
                 );
+            }
 
             const info = infoObject.data;
 
@@ -137,22 +124,22 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
                 });
 
             // get thumbnail if it has one
-            let thumbnail: Category["info"]["thumbnail"] = null;
-            if (info.thumbnail.type === "image")
+            let thumbnail: CategoryNew["info"]["thumbnail"] = null;
+            if (info.thumbnail !== null)
                 thumbnail = {
                     type: "image",
                     handle: await mediaDirHandle
-                        .getFileHandle(info.thumbnail.content)
+                        .getFileHandle(info.thumbnail)
                         .catch((error) => {
                             if (error.name === "NotFoundError")
                                 throw new MissingMediaError(
-                                    `Missing Thumbnail ("${info.thumbnail.content}") inside media folder from category: "${category.name}"`
+                                    `Missing Thumbnail ("${info.thumbnail}") inside media folder from category: "${category.name}"`
                                 );
                             else throw new CategoryParseError(error);
                         }),
                 };
             // get description if it has one
-            let description: Category["info"]["description"] =
+            let description: CategoryNew["info"]["description"] =
                 info.description.content;
             if (info.description.type === "image")
                 description = {
@@ -171,16 +158,44 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
             // get fields
             const fields = (await Promise.all(
                 info.fields.map(async (field) => {
-                    //TODO
-                    //NOTE: questions and answers can now have multiple different media types. THis is not implemetned anywhere else as of now
-                    const question: Ressource = [];
-                    const answer: Ressource = [];
+                    const getRessourceContent = async (
+                        media: z.infer<typeof jsonRessourceSchema>
+                    ): Promise<Ressource> => {
+                        if (media.type === "text")
+                            return {
+                                type: "text",
+                                content: media.content,
+                            };
+                        else {
+                            const handle = await mediaDirHandle
+                                .getFileHandle(media.content)
+                                .catch((error) => {
+                                    if (error.name === "NotFoundError")
+                                        throw new MissingMediaError(
+                                            `Missing Media of type "${media.type}" inside media folder from category: "${category.name}.\nName of Media stored as: "${media.content}"`
+                                        );
+                                    else throw new CategoryParseError(error);
+                                });
+
+                            return {
+                                type: media.type,
+                                handle: handle,
+                            };
+                        }
+                    };
+
+                    const question: Ressource[] = await Promise.all(
+                        field.question.map(getRessourceContent)
+                    );
+                    const answer: Ressource[] = await Promise.all(
+                        field.answer.map(getRessourceContent)
+                    );
 
                     return { question, answer };
                 })
-            )) satisfies Category["fields"];
+            )) satisfies CategoryNew["fields"];
 
-            return {
+            const result = {
                 name: info.name,
                 dirHandle: fsdh,
                 mediaDirHandle,
@@ -188,12 +203,22 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
                 info: {
                     thumbnail,
                     description,
-                    answerTime: info.anserTime,
+                    answerTime: info.answerTime,
                     infoHandle: infoFileHandle,
                 },
-            } satisfies Category;
+            } satisfies CategoryNew;
+
+            return result;
         })
     );
 
-    const errors: (CategoryParseError | InfoFileNotFoundError)[] = [];
+    const usable: CategoryNew[] = [];
+    const errors: CategoryParseError[] = [];
+
+    results.forEach((result) => {
+        if (result.status === "rejected") errors.push(result.reason);
+        else usable.push(result.value);
+    });
+
+    return { errors, usable };
 };
