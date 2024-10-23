@@ -8,14 +8,16 @@ export enum SortingMethod {
 
 export type CategoryNew = {
   name: string;
+
   dirHandle: FileSystemDirectoryHandle;
   mediaDirHandle: FileSystemDirectoryHandle;
+  infoHandle: FileSystemFileHandle;
+  lastModified: Date;
+
   description: Image | string;
-  info: {
-    infoHandle: FileSystemFileHandle;
-    thumbnail: Image | null;
-    answerTime: number;
-  };
+  thumbnail: Image | null;
+  answerTime: number;
+
   fields: { question: Ressource[]; answer: Ressource[] }[];
 };
 
@@ -124,7 +126,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
         });
 
       // get thumbnail if it has one
-      let thumbnail: CategoryNew["info"]["thumbnail"] = null;
+      let thumbnail: CategoryNew["thumbnail"] = null;
       if (info.thumbnail !== null)
         thumbnail = {
           type: "image",
@@ -200,11 +202,10 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
         mediaDirHandle,
         fields,
         description,
-        info: {
-          thumbnail,
-          answerTime: info.answerTime,
-          infoHandle: infoFileHandle,
-        },
+        thumbnail,
+        answerTime: info.answerTime,
+        infoHandle: infoFileHandle,
+        lastModified: new Date(infoFile.lastModified),
       } satisfies CategoryNew;
 
       return result;

@@ -31,8 +31,8 @@ const BoardBrowser = ({ select }: props) => {
       board.categories.some((category) =>
         categoryIsDeleted(category)
           ? false
-          : category.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      ),
+          : category.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
   );
 
   const listRef = useRef<HTMLDivElement>(null);
@@ -42,11 +42,11 @@ const BoardBrowser = ({ select }: props) => {
 
   // sorting
   const [sortingMethod, setSortingMethod] = useState(
-    SortingMethod.creationDate,
+    SortingMethod.lastModified
   );
   const sorted = filtered.toSorted((a, b) => {
     switch (sortingMethod) {
-      case SortingMethod.creationDate:
+      case SortingMethod.lastModified:
         return b.dbIndex - a.dbIndex;
       case SortingMethod.abcNormal:
         return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -77,12 +77,12 @@ const BoardBrowser = ({ select }: props) => {
                 case SortingMethod.abcNormal:
                   return SortingMethod.abcReverse;
                 case SortingMethod.abcReverse:
-                  return SortingMethod.creationDate;
-                case SortingMethod.creationDate:
+                  return SortingMethod.lastModified;
+                case SortingMethod.lastModified:
                   return SortingMethod.abcNormal;
 
                 default:
-                  return SortingMethod.creationDate;
+                  return SortingMethod.lastModified;
               }
             })
           }
@@ -92,10 +92,10 @@ const BoardBrowser = ({ select }: props) => {
               sortingMethod === SortingMethod.abcNormal
                 ? sortAZIcon
                 : sortingMethod === SortingMethod.abcReverse
-                  ? sortZAIcon
-                  : sortingMethod === SortingMethod.creationDate
-                    ? clockIcon
-                    : "error"
+                ? sortZAIcon
+                : sortingMethod === SortingMethod.lastModified
+                ? clockIcon
+                : "error"
             }
             alt={sortingMethod}
           />
@@ -141,7 +141,7 @@ const BoardElement = ({
               <div className="category" key={category.dbIndex}>
                 <h3>{category.name}</h3>
               </div>
-            ),
+            )
           )}
         </div>
       </div>

@@ -3,7 +3,7 @@ import { Category } from "$types/categoryTypes";
 import { db, Indexed } from "./indexeddb";
 
 export enum SortingMethod {
-  creationDate = "creationDate",
+  lastModified = "creationDate",
   abcNormal = "abcNormal",
   abcReverse = "abcReverse",
 }
@@ -17,7 +17,7 @@ export const storeCategoryInDB = (category: Category) =>
 
     request.onsuccess = (e) =>
       resolve(
-        (e.target as IDBRequest).result as Indexed<StoredBoard>["dbIndex"],
+        (e.target as IDBRequest).result as Indexed<StoredBoard>["dbIndex"]
       );
     request.onerror = reject;
   });

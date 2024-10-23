@@ -1,13 +1,7 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import "./CategoryBrowser.scss";
-import { Category } from "$types/categoryTypes";
-import { Indexed } from "$db/indexeddb";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import {
-  SortingMethod,
-  getStoredCategories,
-  removeCategoryFromDb,
-} from "$db/categories";
+import { SortingMethod } from "$db/categories";
 import { confirmAlert } from "react-confirm-alert";
 import stringToColorGradient from "$helpers/stringToColorGradient";
 
@@ -20,30 +14,27 @@ import trashIcon from "$assets/trash.svg";
 import sortAZIcon from "$assets/sortAZ.svg";
 import sortZAIcon from "$assets/sortZA.svg";
 import clockIcon from "$assets/clock.svg";
-import downloadIcon from "$assets/download.svg";
-import { generateZipFromCategory } from "$helpers/zip";
-import downloadFile from "$helpers/downloadFile";
 import useDebounce from "$hooks/useDebounce";
 import zoomInArrows from "$assets/zoomInArrows.svg";
 import zoomOutArrows from "$assets/zoomOutArrows.svg";
 import { changeSetting, getSettings } from "$helpers/settings";
 import { CategoryNew, getAllCategories } from "filesystem/categories";
-import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 type props = {
   refresh?: any;
 
   selecting?: boolean;
-  submit?: (categories: Indexed<Category>[]) => void;
+  submit?: (categories: CategoryNew[]) => void;
   finish?: boolean;
 
   chooseOne?: boolean;
-  choose?: (category: Indexed<Category>) => void;
+  choose?: (category: CategoryNew) => void;
 
-  exclude?: Indexed<Category>["dbIndex"][];
+  exclude?: CategoryNew["name"][];
 
-  setSelected?: (selected: Indexed<Category>[]) => void;
-  selected?: Indexed<Category>[];
+  setSelected?: (selected: CategoryNew[]) => void;
+  selected?: CategoryNew[];
 
   testable?: boolean;
   editable?: boolean;
@@ -87,10 +78,12 @@ const CategoryBrowser: FC<props> = ({
     ? Purpose.SELECTING_MULTIPLE
     : Purpose.VIEWING;
 
-  const [categories, setCategories] = useState<Indexed<Category>[]>([]);
-  useEffect(() => {
-    getStoredCategories(Infinity, Infinity).then(setCategories);
-  }, [refresh]);
+  //   const [categories, setCategories] = useState<CategoryNew[]>([]);
+  const { data: categories, refetch: refreshCategories } = useQuery({
+    queryKey: ["categoryQuery"],
+    queryFn: () => getAllCategories(fsdh).then(({ usable }) => usable),
+  });
+  console.log(categories);
 
   const [searchTerm, setSearchTerm] = useState("");
   const search = useDebounce(searchTerm, 100);
@@ -98,28 +91,28 @@ const CategoryBrowser: FC<props> = ({
   const [selectedRef] = useAutoAnimate();
 
   const filtered = categories
-    .filter((category) => !exclude.includes(category.dbIndex))
+    ?.filter((category) => !exclude.includes(category.name))
     .filter(
       (category) =>
         category.name.toLowerCase().includes(search.toLowerCase()) ||
         (typeof category.description === "string" &&
-          category.description.toLowerCase().includes(search.toLowerCase())),
+          category.description.toLowerCase().includes(search.toLowerCase()))
     );
 
   const submitFun = () => {
-    if (!submit || !selected) return;
+    if (!submit || !selected || categories === undefined) return;
     const chosenCategories = categories.filter((c) => selected.includes(c));
     submit(chosenCategories);
   };
 
   // sorting
   const [sortingMethod, setSortingMethod] = useState(
-    SortingMethod.creationDate,
+    SortingMethod.lastModified
   );
-  const sorted = filtered.toSorted((a, b) => {
+  const sorted = filtered?.toSorted((a, b) => {
     switch (sortingMethod) {
-      case SortingMethod.creationDate:
-        return b.dbIndex - a.dbIndex;
+      case SortingMethod.lastModified:
+        return b.lastModified.getTime() - a.lastModified.getTime();
       case SortingMethod.abcNormal:
         return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
       case SortingMethod.abcReverse:
@@ -131,7 +124,7 @@ const CategoryBrowser: FC<props> = ({
   });
 
   const [smallCategories, setSmallCategories] = useState(
-    defaultSmall ?? getSettings().smallCategories,
+    defaultSmall ?? getSettings().smallCategories
   );
 
   return (
@@ -152,12 +145,12 @@ const CategoryBrowser: FC<props> = ({
                   case SortingMethod.abcNormal:
                     return SortingMethod.abcReverse;
                   case SortingMethod.abcReverse:
-                    return SortingMethod.creationDate;
-                  case SortingMethod.creationDate:
+                    return SortingMethod.lastModified;
+                  case SortingMethod.lastModified:
                     return SortingMethod.abcNormal;
 
                   default:
-                    return SortingMethod.creationDate;
+                    return SortingMethod.lastModified;
                 }
               })
             }
@@ -167,10 +160,10 @@ const CategoryBrowser: FC<props> = ({
                 sortingMethod === SortingMethod.abcNormal
                   ? sortAZIcon
                   : sortingMethod === SortingMethod.abcReverse
-                    ? sortZAIcon
-                    : sortingMethod === SortingMethod.creationDate
-                      ? clockIcon
-                      : "error"
+                  ? sortZAIcon
+                  : sortingMethod === SortingMethod.lastModified
+                  ? clockIcon
+                  : "error"
               }
               alt={sortingMethod}
             />
@@ -191,9 +184,11 @@ const CategoryBrowser: FC<props> = ({
           </button>
         </div>
         <div className="results">
-          {sorted.map((category) => (
+          {sorted === undefined && "Loading"}
+
+          {sorted?.map((category) => (
             <CategoryElement
-              key={category.dbIndex}
+              key={category.name}
               category={category}
               selectable={purpose === Purpose.SELECTING_MULTIPLE}
               choosable={chooseOne}
@@ -205,27 +200,20 @@ const CategoryBrowser: FC<props> = ({
                   setSelected([...selected, category]);
                 else setSelected(selected.filter((i) => i !== category));
               }}
-              selected={selected
-                ?.map((c) => c.dbIndex)
-                .includes(category.dbIndex)}
+              selected={selected?.map((c) => c.name).includes(category.name)}
               deletable={deletable}
               editable={editable}
-              downloadable={downloadable}
               small={smallCategories}
-              delete={() =>
-                removeCategoryFromDb(category.dbIndex).then(() =>
-                  setCategories((prev) =>
-                    prev.filter(
-                      (prevCategory) =>
-                        prevCategory.dbIndex !== category.dbIndex,
-                    ),
-                  ),
-                )
-              }
+              delete={() => {
+                //TODO: reimplement category deletion
+                // removeCategoryFromDb(category.name).then(() =>
+                //     refreshCategories
+                // )
+              }}
             />
           ))}
 
-          {filtered.length === 0 ? (
+          {filtered?.length === 0 ? (
             <div className="nothing">nothing found</div>
           ) : null}
         </div>
@@ -239,13 +227,13 @@ const CategoryBrowser: FC<props> = ({
             <div className="categories" ref={selectedRef}>
               {selected.map((category, i) => (
                 <CategoryElement
-                  key={category.dbIndex}
+                  key={category.name}
                   category={category}
                   removable
                   remove={() => {
                     if (setSelected && selected)
                       setSelected(
-                        selected.filter((c) => c.dbIndex !== category.dbIndex),
+                        selected.filter((c) => c.name !== category.name)
                       );
                   }}
                   small={smallCategories}
@@ -282,10 +270,9 @@ const CategoryElement = ({
 
   testable = false,
   editable = false,
-  downloadable = false,
   small,
 }: {
-  category: Indexed<Category>;
+  category: CategoryNew;
 
   selected?: boolean;
   selectable?: boolean;
@@ -302,15 +289,16 @@ const CategoryElement = ({
 
   testable?: boolean;
   editable?: boolean;
-  downloadable?: boolean;
 
   small: boolean;
 }) => {
-  const imageURL = useMemo(() => {
-    if (small) return "";
-    if (typeof category.description === "string") return "";
-    if (category.thumbnail) return URL.createObjectURL(category.thumbnail);
-    return URL.createObjectURL(category.description);
+  const [imageURL, setImageUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (small || typeof category.description === "string") return;
+
+    (category.thumbnail || category.description).handle
+      .getFile()
+      .then((file) => setImageUrl(URL.createObjectURL(file)));
   }, [category, small]);
 
   const gradient = useMemo(() => stringToColorGradient(category.name), []);
@@ -357,9 +345,9 @@ const CategoryElement = ({
                 </>
               ) : (
                 <img
-                  src={imageURL}
+                  src={imageURL || ""}
                   alt="categor description image"
-                  onLoad={() => URL.revokeObjectURL(imageURL)}
+                  onLoad={() => imageURL && URL.revokeObjectURL(imageURL)}
                 />
               )}
             </div>
@@ -371,7 +359,7 @@ const CategoryElement = ({
               className="edit"
               title="edit category"
               onClick={() =>
-                (window.location.href = `/categories/editor/${category.dbIndex}`)
+                (window.location.href = `/categories/editor/${category.name}`)
               }
             >
               <img src={editIcon} alt="edit icon" />
@@ -383,31 +371,10 @@ const CategoryElement = ({
               className="test"
               title="test category in a game"
               onClick={() =>
-                window.open(`/categories/test/${category.dbIndex}`, "_blank")
+                window.open(`/categories/test/${category.name}`, "_blank")
               }
             >
               <img src={testIcon} alt="test in new Tab icon" />
-            </button>
-          ) : null}
-
-          {downloadable ? (
-            <button
-              className="download"
-              title="download category file"
-              onClick={() => {
-                toast("⏳export...");
-                generateZipFromCategory(category, () => {})
-                  .then((file) => {
-                    downloadFile(file, category.name + ".ksq.zip");
-                    toast("✔️export successful");
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    toast("❌exporting failed!");
-                  });
-              }}
-            >
-              <img src={downloadIcon} alt="download icon" />
             </button>
           ) : null}
 
