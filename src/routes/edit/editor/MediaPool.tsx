@@ -9,7 +9,7 @@ import {
     getStoredFilesLength,
     storeFileInIndexedDB,
 } from "$db/media";
-import toast from "react-simple-toasts";
+import { toast } from "react-toastify";
 import DotSpinner from "$components/DotSpinner";
 
 // assets

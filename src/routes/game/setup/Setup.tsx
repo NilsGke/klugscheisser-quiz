@@ -3,7 +3,7 @@ import { Game, TeamColors, categoryToGameCategory } from "$types/gameTypes";
 import autoAnimate from "@formkit/auto-animate";
 import { Category } from "$types/categoryTypes";
 import useKeyboard from "$hooks/keyboard";
-import toast from "react-simple-toasts";
+import { toast } from "react-toastify";
 import useClick from "$hooks/useClick";
 import { Indexed } from "$db/indexeddb";
 import { categoryIsDeleted } from "$types/boardTypes";

@@ -1,4 +1,4 @@
-import toast from "react-simple-toasts";
+import { toast } from "react-toastify";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import {
     Category,

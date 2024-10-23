@@ -9,7 +9,7 @@ import arrowIcon from "$assets/arrow.svg";
 import "./BoardEditor.page.scss";
 import autoAnimate from "@formkit/auto-animate";
 import { getStoredBoard, storeBoardInDB, updateBoardInDB } from "$db/boards";
-import toast from "react-simple-toasts";
+import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "$components/BackButton";
 import useTitle from "$hooks/useTitle";

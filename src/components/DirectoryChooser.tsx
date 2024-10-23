@@ -1,5 +1,5 @@
-import toast from "react-simple-toasts";
 import "./DirectoryChooser.scss";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import useIDB from "indexedDB/lib/hooks/useIDB";
 import useIDBQuery from "indexedDB/lib/hooks/useIDBQuery";

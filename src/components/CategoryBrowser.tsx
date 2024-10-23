@@ -23,12 +23,12 @@ import clockIcon from "$assets/clock.svg";
 import downloadIcon from "$assets/download.svg";
 import { generateZipFromCategory } from "$helpers/zip";
 import downloadFile from "$helpers/downloadFile";
-import toast from "react-simple-toasts";
 import useDebounce from "$hooks/useDebounce";
 import zoomInArrows from "$assets/zoomInArrows.svg";
 import zoomOutArrows from "$assets/zoomOutArrows.svg";
 import { changeSetting, getSettings } from "$helpers/settings";
 import { CategoryNew, getAllCategories } from "filesystem/categories";
+import { toast } from "react-toastify";
 
 type props = {
     refresh?: any;

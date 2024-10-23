@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Theme } from "main";
 import { changeSetting } from "$helpers/settings";
 import fileToBase64 from "$helpers/fileToBase64";
-import toast from "react-simple-toasts";
+import { toast } from "react-toastify";
 import useTitle from "$hooks/useTitle";
 import { removeThing, setThing } from "$db/things";
 import { useAutoAnimate } from "@formkit/auto-animate/react";

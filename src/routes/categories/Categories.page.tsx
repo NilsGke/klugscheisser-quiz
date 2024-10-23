@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { storeCategoryInDB } from "$db/categories";
-import toast from "react-simple-toasts";
+import { toast } from "react-toastify";
 import { importCategoryFromZip } from "$helpers/zip";
 import { useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
@@ -173,9 +173,9 @@ const Categories = ({ fsdh }: { fsdh: FileSystemDirectoryHandle }) => {
                                                         toast(
                                                             `🟥 Error while exporting! \n\n ${error}`,
                                                             {
-                                                                clickClosable:
-                                                                    true,
-                                                                onClick: () =>
+                                                                autoClose:
+                                                                    false,
+                                                                onClose: () =>
                                                                     setExportInfo(
                                                                         null
                                                                     ),

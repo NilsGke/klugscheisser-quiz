@@ -24,8 +24,8 @@ import { IDBClientProvider } from "./indexedDB/lib/IDBClientProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useIDBStatus from "indexedDB/lib/hooks/useIDBStatus";
 import useIDB from "indexedDB/lib/hooks/useIDB";
-import toast from "react-simple-toasts";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 enum NetworkStatus {
     ONLINE = "online",

@@ -20,8 +20,8 @@
     "react-dom": "^18.2.0",
     "react-minimal-pie-chart": "^8.4.0",
     "react-router-dom": "^6.9.0",
-    "react-simple-toasts": "^3.2.5",
     "react-switch": "^7.0.0",
+    "react-toastify": "^10.0.6",
     "zod": "^3.23.8"
   },
   "devDependencies": {
