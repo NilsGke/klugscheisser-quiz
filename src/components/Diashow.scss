@@ -1,185 +1,187 @@
 @import "../colors.scss";
 
 .diashow {
+  height: 100%;
+  width: 100%;
+  // background-color: $grey;
+  position: relative;
+
+  .info {
+    position: absolute;
+    color: $white;
+    opacity: 0.4;
+    top: -40px;
+    left: -40px;
+  }
+
+  .images {
     height: 100%;
+    // max-height: calc(100% - 60px);
     width: 100%;
-    // background-color: $grey;
-    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .image {
+      height: 100% !important;
+      width: calc(100% - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    .info {
-        position: absolute;
-        color: $white;
-        opacity: 0.4;
-        top: -40px;
-        left: -40px;
-    }
-
-    .images {
+      img {
         height: 100%;
-        // max-height: calc(100% - 60px);
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .image {
-            height: 100% !important;
-            width: calc(100% - 100px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            img {
-                height: 100%;
-                // width: 100%;
-                object-fit: contain;
-                border-radius: 20px;
-            }
-        }
+        // width: 100%;
+        object-fit: contain;
+        border-radius: 20px;
+      }
     }
-    .all {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        $pad: 5px;
-        padding: $pad;
-        .image {
-            padding: $pad;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+  }
+  .all {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    $pad: 5px;
+    padding: $pad;
+    .image {
+      padding: $pad;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .progress {
-        width: 100%;
-    }
-    .editorWrapper {
-        position: fixed;
-        height: 100svh;
-        width: 100svw;
-        top: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(5px) brightness(0.4);
+  }
+  .progress {
+    width: 100%;
+  }
+  .editorWrapper {
+    position: fixed;
+    height: 100svh;
+    width: 100svw;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px) brightness(0.4);
 
-        .editor {
-            height: 70%;
-            width: 80%;
-            background-color: $dark;
-            border-radius: 30px;
-            padding: 50px;
-            position: relative;
+    .editor {
+      height: 70%;
+      width: 80%;
+      background-color: $dark;
+      border-radius: 30px;
+      padding: 50px;
+      position: relative;
 
-            .close {
-                height: 35px;
-                aspect-ratio: 1;
-                background-color: transparent;
-                border: none;
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                cursor: pointer;
-                img {
-                    height: 70%;
-                    filter: $invert;
-                }
-            }
-
-            .images {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 20px;
-                .image {
-                    padding: 10px;
-                    border-radius: 10px;
-                    background-color: $lighterDark;
-                    flex: 1;
-                    width: 100%;
-                    height: 80%;
-
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: column;
-
-                    img {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: contain;
-                    }
-
-                    .controls {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        gap: 10%;
-                        margin-top: 10px;
-                        button {
-                            background-color: transparent;
-                            height: 30px;
-                            aspect-ratio: 1;
-                            border: none;
-                            cursor: pointer;
-
-                            &.left img {
-                                rotate: 90deg;
-                                filter: $invert;
-                            }
-                            &.right img {
-                                rotate: -90deg;
-                                filter: $invert;
-                            }
-                            img {
-                                height: 80%;
-                                filter: $invert;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    > button {
-        height: 100%;
-        width: 300px;
-        z-index: 1;
-        background: transparent;
+      .close {
+        height: 35px;
+        aspect-ratio: 1;
+        background-color: transparent;
         border: none;
         position: absolute;
+        top: 20px;
+        right: 20px;
         cursor: pointer;
-        top: 0;
-        border-radius: 20px;
-        outline: 0px solid transparent;
-
         img {
-            filter: $invert;
-            width: 50px;
-            aspect-ratio: 1;
+          height: 70%;
+          filter: $invert;
         }
+      }
 
-        transition: all 0.2s ease-out, outline 0.2s ease-in;
-        &:hover {
-            scale: 1.07;
-        }
-        &:focus-visible {
-            outline: 1px solid $grey;
-        }
+      .images {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        .image {
+          padding: 10px;
+          border-radius: 10px;
+          background-color: $lighterDark;
+          flex: 1;
+          width: 100%;
+          height: 80%;
 
-        &.prev {
-            left: -150px;
-            img {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+
+          .controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10%;
+            margin-top: 10px;
+            button {
+              background-color: transparent;
+              height: 30px;
+              aspect-ratio: 1;
+              border: none;
+              cursor: pointer;
+
+              &.left img {
                 rotate: 90deg;
-            }
-        }
-        &.next {
-            right: -150px;
-            img {
+                filter: $invert;
+              }
+              &.right img {
                 rotate: -90deg;
+                filter: $invert;
+              }
+              img {
+                height: 80%;
+                filter: $invert;
+              }
             }
+          }
         }
+      }
     }
+  }
+
+  > button {
+    height: 100%;
+    width: 300px;
+    z-index: 1;
+    background: transparent;
+    border: none;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    border-radius: 20px;
+    outline: 0px solid transparent;
+
+    img {
+      filter: $invert;
+      width: 50px;
+      aspect-ratio: 1;
+    }
+
+    transition:
+      all 0.2s ease-out,
+      outline 0.2s ease-in;
+    &:hover {
+      scale: 1.07;
+    }
+    &:focus-visible {
+      outline: 1px solid $grey;
+    }
+
+    &.prev {
+      left: -150px;
+      img {
+        rotate: 90deg;
+      }
+    }
+    &.next {
+      right: -150px;
+      img {
+        rotate: -90deg;
+      }
+    }
+  }
 }

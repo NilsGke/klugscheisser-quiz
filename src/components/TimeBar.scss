@@ -1,15 +1,15 @@
 @import "../colors.scss";
 
 .timeBarContainer {
-    width: 100%;
-    height: 4px;
-    overflow: hidden;
-    border-radius: 8px;
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 8px;
 
-    background: $grey;
-    .progress {
-        height: 100%;
-        background: $red;
-        transition: width 0.03s liner;
-    }
+  background: $grey;
+  .progress {
+    height: 100%;
+    background: $red;
+    transition: width 0.03s liner;
+  }
 }

@@ -2,215 +2,215 @@
 @import "../../colors.scss";
 
 .root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100svh;
+  background: $dark;
+  color: $white;
+
+  &,
+  * {
+    transition: all 0.2s ease-out !important;
+  }
+
+  button.themeSwitch {
+    background: transparent;
+    transition: filter 0.2s ease-out;
+    border: none;
+    height: 40px;
+    aspect-ratio: 1;
+    cursor: pointer;
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    img {
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      &.dark {
+        filter: invert(1);
+      }
+    }
+  }
+
+  #background {
+    position: absolute;
+    height: 100svh;
+    width: 100svw;
+    filter: $invert opacity(0.2) blur(2.5px);
+    pointer-events: none;
+    animation: backgroundShift 30s linear infinite;
+    @keyframes backgroundShift {
+      from {
+        background-position-x: 0svw;
+        background-position-y: 0svh;
+      }
+      to {
+        background-position-x: 969px;
+        background-position-y: 498px;
+      }
+    }
+  }
+
+  h1 {
+    font-size: 50px;
+    margin-bottom: 60px;
+  }
+
+  .pages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin-bottom: 30px;
+    padding: 30px;
+    border-radius: 30px;
+
+    gap: 5vw;
+    a {
+      background-color: $dark;
+      border: 1px solid;
+      &:nth-child(1) {
+        border-color: $orange;
+        background-color: $orange;
+        white-space: pre-wrap;
+        &::before {
+          box-shadow: 0px 0px 200px $orange;
+        }
+      }
+      &:nth-child(2) {
+        border-color: $pink;
+        background-color: $pink;
+        &::before {
+          box-shadow: 0px 0px 200px $pink;
+        }
+      }
+      &:nth-child(3) {
+        border-color: $lightBlue;
+        background-color: $lightBlue;
+        &::before {
+          box-shadow: 0px 0px 200px $lightBlue;
+        }
+      }
+
+      position: relative;
+      z-index: 3;
+      &::before {
+        content: "";
+        box-shadow: 0 0 50px #fff;
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 39px;
+      }
+
+      padding: 30px;
+      border-radius: 40px;
+      min-width: 14vw;
+      z-index: 2;
+
+      height: 300px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      flex-direction: column;
+      color: $white;
+      text-shadow: 0 0 60px $white;
+      text-decoration: none;
+      transition: scale 0.2s ease-out;
+      white-space: nowrap;
+
+      &:hover {
+        scale: 1.02;
+      }
+
+      .desc {
+        font-size: 30px;
+      }
+
+      img {
+        height: 80px;
+        aspect-ratio: 1;
+        filter: $invert;
+      }
+    }
+  }
+
+  .actionButton {
+    position: absolute;
+    bottom: 30px;
+    height: 60px;
+    aspect-ratio: 1;
+    display: flex;
+    border-radius: 100%;
+    border: 1px solid $white;
+    padding: 10px;
+    background: $lighterDark;
+    box-shadow: 0 0 30px shade($white, 50%);
+    cursor: pointer;
+    transition: scale 0.2s ease-out;
+    &:hover {
+      scale: 1.05;
+    }
+
+    img {
+      filter: $invert;
+      aspect-ratio: 1;
+      height: 100%;
+    }
+
+    &.help {
+      right: 30px;
+    }
+    &.changeDir {
+      right: 110px;
+      padding: 13px;
+    }
+  }
+
+  .extraOptions {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100svh;
-    background: $dark;
-    color: $white;
+    gap: 30px;
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
 
-    &,
-    * {
-        transition: all 0.2s ease-out !important;
-    }
-
-    button.themeSwitch {
-        background: transparent;
-        transition: filter 0.2s ease-out;
-        border: none;
-        height: 40px;
-        aspect-ratio: 1;
+      button {
+        padding: 3px;
         cursor: pointer;
-        position: fixed;
-        top: 30px;
-        right: 30px;
-        img {
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            &.dark {
-                filter: invert(1);
-            }
+        label {
+          cursor: pointer;
         }
-    }
+      }
 
-    #background {
-        position: absolute;
-        height: 100svh;
-        width: 100svw;
-        filter: $invert opacity(0.2) blur(2.5px);
-        pointer-events: none;
-        animation: backgroundShift 30s linear infinite;
-        @keyframes backgroundShift {
-            from {
-                background-position-x: 0svw;
-                background-position-y: 0svh;
-            }
-            to {
-                background-position-x: 969px;
-                background-position-y: 498px;
-            }
-        }
-    }
+      input {
+        display: none;
+      }
 
-    h1 {
-        font-size: 50px;
-        margin-bottom: 60px;
-    }
-
-    .pages {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: nowrap;
-        margin-bottom: 30px;
-        padding: 30px;
-        border-radius: 30px;
-
-        gap: 5vw;
-        a {
-            background-color: $dark;
-            border: 1px solid;
-            &:nth-child(1) {
-                border-color: $orange;
-                background-color: $orange;
-                white-space: pre-wrap;
-                &::before {
-                    box-shadow: 0px 0px 200px $orange;
-                }
-            }
-            &:nth-child(2) {
-                border-color: $pink;
-                background-color: $pink;
-                &::before {
-                    box-shadow: 0px 0px 200px $pink;
-                }
-            }
-            &:nth-child(3) {
-                border-color: $lightBlue;
-                background-color: $lightBlue;
-                &::before {
-                    box-shadow: 0px 0px 200px $lightBlue;
-                }
-            }
-
-            position: relative;
-            z-index: 3;
-            &::before {
-                content: "";
-                box-shadow: 0 0 50px #fff;
-                z-index: -1;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                border-radius: 39px;
-            }
-
-            padding: 30px;
-            border-radius: 40px;
-            min-width: 14vw;
-            z-index: 2;
-
-            height: 300px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            flex-direction: column;
-            color: $white;
-            text-shadow: 0 0 60px $white;
-            text-decoration: none;
-            transition: scale 0.2s ease-out;
-            white-space: nowrap;
-
-            &:hover {
-                scale: 1.02;
-            }
-
-            .desc {
-                font-size: 30px;
-            }
-
-            img {
-                height: 80px;
-                aspect-ratio: 1;
-                filter: $invert;
-            }
-        }
-    }
-
-    .actionButton {
-        position: absolute;
-        bottom: 30px;
-        height: 60px;
-        aspect-ratio: 1;
-        display: flex;
-        border-radius: 100%;
-        border: 1px solid $white;
-        padding: 10px;
-        background: $lighterDark;
-        box-shadow: 0 0 30px shade($white, 50%);
-        cursor: pointer;
-        transition: scale 0.2s ease-out;
-        &:hover {
-            scale: 1.05;
-        }
-
-        img {
-            filter: $invert;
-            aspect-ratio: 1;
-            height: 100%;
-        }
-
-        &.help {
-            right: 30px;
-        }
-        &.changeDir {
-            right: 110px;
-            padding: 13px;
-        }
-    }
-
-    .extraOptions {
+      &.buzzerSounds {
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        gap: 30px;
-        > div {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-
-            button {
-                padding: 3px;
-                cursor: pointer;
-                label {
-                    cursor: pointer;
-                }
-            }
-
-            input {
-                display: none;
-            }
-
-            &.buzzerSounds {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                .sound {
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 10px;
-                }
-            }
+        .sound {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
         }
+      }
     }
+  }
 }

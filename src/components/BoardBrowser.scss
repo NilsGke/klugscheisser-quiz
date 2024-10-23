@@ -1,145 +1,145 @@
 @import "../colors.scss";
 
 .boardBrowser {
-    padding: 40px;
-    height: 100%;
-    width: 100%;
-    .searchHeader {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 12px;
+  padding: 40px;
+  height: 100%;
+  width: 100%;
+  .searchHeader {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 12px;
 
-        input {
-            height: 40px;
-            border-radius: 15px;
-            width: 100%;
-            border: 1px solid $grey;
-            background: transparent;
-            margin-bottom: 20px;
-            font-size: 20px;
-            color: $white;
-            padding: 5px;
+    input {
+      height: 40px;
+      border-radius: 15px;
+      width: 100%;
+      border: 1px solid $grey;
+      background: transparent;
+      margin-bottom: 20px;
+      font-size: 20px;
+      color: $white;
+      padding: 5px;
+    }
+    button {
+      height: 40px;
+      width: 60px;
+      font-size: 18px;
+      border: 1px solid $grey;
+      border-radius: 15px;
+      color: $white;
+      cursor: pointer;
+      transition: all 0.2s ease-out;
+      background: $dark;
+      padding: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &:hover {
+        filter: invert(1);
+      }
+      img {
+        filter: $invert;
+        height: 60%;
+      }
+    }
+  }
+
+  .boardsContainer {
+    height: calc(100% - 40px - 20px);
+    width: 100%;
+    overflow-y: scroll;
+    .boards {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+
+      .board {
+        width: 400px;
+        border: 1px solid $orange;
+        padding: 15px;
+        border-radius: 20px;
+
+        h2 {
+          text-align: center;
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        button {
-            height: 40px;
-            width: 60px;
-            font-size: 18px;
-            border: 1px solid $grey;
-            border-radius: 15px;
-            color: $white;
-            cursor: pointer;
-            transition: all 0.2s ease-out;
-            background: $dark;
-            padding: none;
+        .categoriesWrapper {
+          height: calc(100% - 30px - 10px - 40px - 10px);
+          max-height: 200px;
+          overflow-y: auto;
+          border: 1px solid $grey;
+          border-radius: 20px;
+          padding: 10px;
+          .categories {
             display: flex;
             align-items: center;
             justify-content: center;
-            &:hover {
-                filter: invert(1);
+            flex-direction: column;
+            gap: 5px;
+            .category {
+              padding: 5px;
+              border: 1px solid $lightBlue;
+              border-radius: 6px;
+              h3 {
+                white-space: nowrap;
+                font-size: 15px;
+              }
+              &.deleted {
+                color: $grey;
+                font-size: 12px;
+              }
             }
+          }
+        }
+        .actions {
+          margin-top: 10px;
+          height: 40px;
+          width: 100%;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          justify-content: center;
+          button {
+            height: 100%;
+            aspect-ratio: 1;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 5px;
+            transition: background 0.2s ease-out;
             img {
-                filter: $invert;
-                height: 60%;
+              height: 70%;
+              width: 70%;
+              filter: $invert;
             }
-        }
-    }
-
-    .boardsContainer {
-        height: calc(100% - 40px - 20px);
-        width: 100%;
-        overflow-y: scroll;
-        .boards {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-
-            .board {
-                width: 400px;
-                border: 1px solid $orange;
-                padding: 15px;
-                border-radius: 20px;
-
-                h2 {
-                    text-align: center;
-                    margin-bottom: 10px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-                .categoriesWrapper {
-                    height: calc(100% - 30px - 10px - 40px - 10px);
-                    max-height: 200px;
-                    overflow-y: auto;
-                    border: 1px solid $grey;
-                    border-radius: 20px;
-                    padding: 10px;
-                    .categories {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        flex-direction: column;
-                        gap: 5px;
-                        .category {
-                            padding: 5px;
-                            border: 1px solid $lightBlue;
-                            border-radius: 6px;
-                            h3 {
-                                white-space: nowrap;
-                                font-size: 15px;
-                            }
-                            &.deleted {
-                                color: $grey;
-                                font-size: 12px;
-                            }
-                        }
-                    }
-                }
-                .actions {
-                    margin-top: 10px;
-                    height: 40px;
-                    width: 100%;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    justify-content: center;
-                    button {
-                        height: 100%;
-                        aspect-ratio: 1;
-                        background: transparent;
-                        border: none;
-                        cursor: pointer;
-                        border-radius: 4px;
-                        padding: 5px;
-                        transition: background 0.2s ease-out;
-                        img {
-                            height: 70%;
-                            width: 70%;
-                            filter: $invert;
-                        }
-                        &:hover {
-                            background: $lighterDark;
-                        }
-
-                        &.select {
-                            width: 90px;
-                            background-color: $lighterDark;
-                            border-radius: 20px;
-                            height: 35px;
-                            color: $white;
-                            font-size: 20px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            transition: background 0.2s ease-out;
-                            &:hover {
-                                background-color: $grey;
-                            }
-                        }
-                    }
-                }
+            &:hover {
+              background: $lighterDark;
             }
+
+            &.select {
+              width: 90px;
+              background-color: $lighterDark;
+              border-radius: 20px;
+              height: 35px;
+              color: $white;
+              font-size: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: background 0.2s ease-out;
+              &:hover {
+                background-color: $grey;
+              }
+            }
+          }
         }
+      }
     }
+  }
 }

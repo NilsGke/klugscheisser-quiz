@@ -1,796 +1,796 @@
 @import "../../colors.scss";
 
 #gamePage {
-    height: 100svh;
-    width: 100svw;
+  height: 100svh;
+  width: 100svw;
 
-    display: flex;
+  display: flex;
 
-    $pad: 10px;
-    aside,
-    #categories {
-        margin: 25px;
-        padding: $pad;
-    }
+  $pad: 10px;
+  aside,
+  #categories {
+    margin: 25px;
+    padding: $pad;
+  }
 
-    aside {
-        width: 20svw;
+  aside {
+    width: 20svw;
+    display: grid;
+    gap: 30px;
+    grid-template-rows: calc(100% - 80px - 2 * $pad) 80px;
+    grid-template-columns: 100%;
+
+    #teams {
+      align-self: center;
+      height: 100%;
+
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      display: flex;
+      gap: 20px;
+
+      .team {
         display: grid;
-        gap: 30px;
-        grid-template-rows: calc(100% - 80px - 2 * $pad) 80px;
-        grid-template-columns: 100%;
+        align-content: space-evenly;
+        justify-content: center;
 
-        #teams {
-            align-self: center;
-            height: 100%;
+        background: $dark;
+        height: 30vh;
+        max-height: 30vh;
+        width: 100%;
+        border-radius: 20px;
+        padding: 5px;
+        border: 3px solid $grey;
 
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        transition: all 0.2s ease-out;
 
-            width: 100%;
-            display: flex;
-            gap: 20px;
-
-            .team {
-                display: grid;
-                align-content: space-evenly;
-                justify-content: center;
-
-                background: $dark;
-                height: 30vh;
-                max-height: 30vh;
-                width: 100%;
-                border-radius: 20px;
-                padding: 5px;
-                border: 3px solid $grey;
-
-                transition: all 0.2s ease-out;
-
-                h2 {
-                    font-size: 17px;
-                }
-                &:not(.buzzered) {
-                    box-shadow: none !important;
-                    z-index: 0;
-                }
-
-                input {
-                    height: 40px;
-                    width: 80px;
-                    font-size: 24px;
-                    background: transparent;
-                    border: none;
-                    border-bottom: 2px solid $grey;
-                    color: $white;
-                    text-align: center;
-                    // hide arrows
-                    &::-webkit-outer-spin-button,
-                    &::-webkit-inner-spin-button {
-                        -webkit-appearance: none;
-                        margin: 0;
-                    }
-                }
-
-                &.buzzered {
-                }
-            }
-
-            &:has(.buzzered) > .team:not(.buzzered) {
-                opacity: 0.3;
-            }
+        h2 {
+          font-size: 17px;
         }
-        #gameControls {
-            align-self: flex-end;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            overflow: hidden;
-
-            width: 100%;
-            height: 80px;
-            background: $dark;
-            max-height: 10vh;
-            width: 100%;
-            border-radius: 20px;
-            border: 1px solid $grey;
-            display: flex;
-            padding: 20px;
-            > button {
-                border-radius: 10px;
-                background: transparent;
-                border: 1px solid $grey;
-                color: $white;
-                padding: 10px;
-                height: 40px;
-                cursor: pointer;
-                transition: background 0.2s ease-out;
-                img {
-                    filter: $invert;
-                    aspect-ratio: 1;
-                    &.homeIcon {
-                        height: 90%;
-                        aspect-ratio: 1;
-                    }
-                }
-                &:has(.testIcon) {
-                    position: relative;
-                    &::after {
-                        content: "";
-                        display: block;
-                        height: 2px;
-                        width: 100%;
-                        background: white;
-                        border-radius: 100px;
-                        rotate: -45deg;
-                        position: absolute;
-                        top: 50%;
-                        left: 0;
-                        background-blend-mode: difference;
-                    }
-                }
-                &:hover {
-                    background: $lighterDark;
-                }
-            }
+        &:not(.buzzered) {
+          box-shadow: none !important;
+          z-index: 0;
         }
+
+        input {
+          height: 40px;
+          width: 80px;
+          font-size: 24px;
+          background: transparent;
+          border: none;
+          border-bottom: 2px solid $grey;
+          color: $white;
+          text-align: center;
+          // hide arrows
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+
+        &.buzzered {
+        }
+      }
+
+      &:has(.buzzered) > .team:not(.buzzered) {
+        opacity: 0.3;
+      }
+    }
+    #gameControls {
+      align-self: flex-end;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      overflow: hidden;
+
+      width: 100%;
+      height: 80px;
+      background: $dark;
+      max-height: 10vh;
+      width: 100%;
+      border-radius: 20px;
+      border: 1px solid $grey;
+      display: flex;
+      padding: 20px;
+      > button {
+        border-radius: 10px;
+        background: transparent;
+        border: 1px solid $grey;
+        color: $white;
+        padding: 10px;
+        height: 40px;
+        cursor: pointer;
+        transition: background 0.2s ease-out;
+        img {
+          filter: $invert;
+          aspect-ratio: 1;
+          &.homeIcon {
+            height: 90%;
+            aspect-ratio: 1;
+          }
+        }
+        &:has(.testIcon) {
+          position: relative;
+          &::after {
+            content: "";
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: white;
+            border-radius: 100px;
+            rotate: -45deg;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            background-blend-mode: difference;
+          }
+        }
+        &:hover {
+          background: $lighterDark;
+        }
+      }
+    }
+  }
+
+  #categories {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 90svw;
+    position: relative;
+
+    display: grid;
+    grid-template-rows: 50px 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(1fr, 30);
+    grid-auto-flow: column;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      text-align: center;
     }
 
-    #categories {
+    .fieldContainer {
+      height: 100%;
+      .field {
+        height: 100%;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 20px;
-        width: 90svw;
-        position: relative;
+        border: 2px solid $white;
+        margin: 0;
+        font-size: 25px;
+        cursor: pointer;
+        &:has(.description),
+        &:has(.question),
+        &:has(.answer),
+        &.answered {
+          cursor: default;
+        }
 
-        display: grid;
-        grid-template-rows: 50px 1fr 1fr 1fr 1fr 1fr;
-        grid-template-columns: repeat(1fr, 30);
-        grid-auto-flow: column;
+        transition: all 0.2s ease-out;
+        border-radius: 10px;
 
-        h2 {
+        .contentContainer {
+          height: 100%;
+          width: 100%;
+          border-radius: 10px;
+          overflow: hidden;
+          background: $lighterDark;
+          position: relative;
+
+          > button.close {
+            opacity: 0;
+            transition: opacity 0.2s linear;
+
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            z-index: 2;
+            background-color: transparent;
+            border: none;
+            height: 30px;
+            aspect-ratio: 1;
+            cursor: pointer;
+
+            > img {
+              height: 80%;
+              filter: $invert;
+            }
+          }
+
+          .content {
+            height: 100%;
+            width: 100%;
+            transition: all 0.2s ease-out;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 25px;
-            text-align: center;
-        }
 
-        .fieldContainer {
-            height: 100%;
-            .field {
+            > div {
+              position: absolute;
+
+              transition: opacity 0.3s linear;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            > .resource {
+              height: 100%;
+              max-height: 100%;
+              width: 100%;
+              max-width: 100%;
+              > .image {
                 height: 100%;
+                max-height: 100%;
                 width: 100%;
+                max-width: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border: 2px solid $white;
-                margin: 0;
-                font-size: 25px;
-                cursor: pointer;
-                &:has(.description),
-                &:has(.question),
-                &:has(.answer),
-                &.answered {
-                    cursor: default;
+                > img {
+                  height: 100%;
                 }
-
-                transition: all 0.2s ease-out;
-                border-radius: 10px;
-
-                .contentContainer {
-                    height: 100%;
-                    width: 100%;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: $lighterDark;
-                    position: relative;
-
-                    > button.close {
-                        opacity: 0;
-                        transition: opacity 0.2s linear;
-
-                        position: absolute;
-                        right: 20px;
-                        top: 20px;
-                        z-index: 2;
-                        background-color: transparent;
-                        border: none;
-                        height: 30px;
-                        aspect-ratio: 1;
-                        cursor: pointer;
-
-                        > img {
-                            height: 80%;
-                            filter: $invert;
-                        }
-                    }
-
-                    .content {
-                        height: 100%;
-                        width: 100%;
-                        transition: all 0.2s ease-out;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-
-                        > div {
-                            position: absolute;
-
-                            transition: opacity 0.3s linear;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
-
-                        > .resource {
-                            height: 100%;
-                            max-height: 100%;
-                            width: 100%;
-                            max-width: 100%;
-                            > .image {
-                                height: 100%;
-                                max-height: 100%;
-                                width: 100%;
-                                max-width: 100%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                > img {
-                                    height: 100%;
-                                }
-                            }
-                        }
-
-                        .points {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
-                        .description {
-                            height: 100%;
-                            // width: 80%;
-
-                            position: absolute;
-
-                            padding: 50px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            flex-direction: column;
-
-                            .timeBarContainer {
-                                position: absolute;
-                                bottom: 10px;
-                                margin-top: 5px;
-                                width: 80%;
-                            }
-
-                            .image {
-                                height: 80%;
-                                max-height: calc(100% - 10px);
-                                width: 100%;
-                                img {
-                                    height: 100%;
-                                    width: 100%;
-                                    object-fit: contain;
-                                    border-radius: 10px;
-                                }
-                            }
-
-                            button.next {
-                                position: absolute;
-                                bottom: 20px;
-                                font-size: 20px;
-                                border: 1px solid $white;
-                                background: transparent;
-                                color: $white;
-                                border-radius: 10px;
-                                padding: 10px;
-                                cursor: pointer;
-                                transition: all 0.2s ease-in-out;
-                                &:hover {
-                                    box-shadow: 0 0 20px -3px $white;
-                                    background: $white;
-                                    color: $dark;
-                                }
-                            }
-                        }
-                        .question,
-                        .answer {
-                            height: 100%;
-                            width: 100%;
-                            padding: 4%;
-                            > div.bottom {
-                                position: absolute;
-                                bottom: 20px;
-                                width: 80%;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                flex-direction: column;
-                                gap: 20px;
-                                > button.reveal {
-                                    font-size: 20px;
-                                    border: 1px solid $white;
-                                    background: transparent;
-                                    color: $white;
-                                    border-radius: 10px;
-                                    padding: 10px;
-                                    cursor: pointer;
-                                    transition: all 0.2s ease-in-out;
-                                    &:hover {
-                                        box-shadow: 0 0 20px -3px $white;
-                                        background: $white;
-                                        color: $dark;
-                                    }
-                                }
-                            }
-                            &:has(> .videoPlayer) {
-                                padding: 50px;
-                            }
-                            &:has(> .videoPlayer) {
-                                padding: 50px;
-                            }
-                            .image {
-                                height: 80%;
-                                > img {
-                                    height: 100%;
-                                    max-width: 100%;
-                                    border-radius: 10px;
-                                }
-                            }
-                            .videoPlayer {
-                                height: 80%;
-                                width: 80%;
-                                &.playing {
-                                    animation-name: none;
-                                }
-                                .videoContainer {
-                                    width: 100%;
-                                    height: 100%;
-                                    video {
-                                        height: 100%;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                &.answered {
-                    color: $grey;
-                }
-                &:not(.selected) {
-                    border-color: $grey;
-                }
-
-                &.selected {
-                    animation: spinningBackground 3s linear infinite;
-                    padding: 2px;
-                    border-color: $grey;
-                    > div {
-                    }
-                    .contentContainer {
-                        > button.close {
-                            opacity: 1;
-                        }
-                        .content {
-                            .answer {
-                                height: 100%;
-                                width: 100%;
-                                position: relative;
-                                .points {
-                                    position: absolute;
-                                    bottom: 30px;
-                                    transition: bottom 0.2s ease-in-out;
-
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    flex-direction: column;
-                                    flex-wrap: nowrap;
-                                    gap: 10px;
-
-                                    button,
-                                    input {
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-
-                                        height: 40px;
-                                        background-color: transparent;
-                                        border: 1px solid $white;
-                                        border-radius: 5px;
-                                        padding: 10px;
-                                        color: $white;
-                                        cursor: pointer;
-                                        font-size: 24px;
-                                        img {
-                                            height: 100%;
-                                            filter: $invert;
-                                        }
-                                        &[type="number"] {
-                                            width: 85px;
-                                            &::-webkit-inner-spin-button,
-                                            &::-webkit-outer-spin-button {
-                                                -webkit-appearance: none;
-                                                margin: 0;
-                                            }
-                                            cursor: text;
-                                        }
-                                    }
-
-                                    > div {
-                                        display: flex;
-                                        align-items: center;
-                                        justify-content: center;
-                                        gap: 10px;
-                                    }
-
-                                    .normal {
-                                        button {
-                                            &:nth-child(1) {
-                                                color: $red;
-                                                transition: all 0.2s linear;
-                                                &:hover {
-                                                    color: $white;
-                                                    background: $red;
-                                                }
-                                            }
-                                            &:nth-child(3) {
-                                                color: $green;
-                                                transition: all 0.2s linear;
-                                                &:hover {
-                                                    color: $white;
-                                                    background: $green;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    .custom {
-                                        max-height: 40px;
-                                        transition: max-height 0.2s ease-in-out;
-                                        overflow: hidden;
-                                        &.hidden {
-                                            max-height: 0px;
-                                        }
-                                        button {
-                                            transition: all 0.2s linear;
-                                            &:nth-child(1) {
-                                                color: $red;
-                                                &:hover {
-                                                    color: $white;
-                                                    background: $red;
-                                                }
-                                            }
-                                            &:nth-child(3) {
-                                                &:hover {
-                                                    background: $yellow;
-                                                }
-                                            }
-                                            &:nth-child(4) {
-                                                color: $green;
-                                                &:hover {
-                                                    color: $white;
-                                                    background: $green;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    // background: conic-gradient(
-                    //     from var(--gradient-angle),
-                    //     $lighterDark,
-                    //     $lighterDark,
-                    //     $white
-                    // );
-                    animation: rotation 4s linear infinite;
-                    z-index: 2;
-                    &.transitioned {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        height: 100%;
-                        width: 100%;
-                    }
-                }
-                &.highlighted {
-                    border-color: $darkBlue;
-                    .content {
-                        background: #0c59ff1f;
-                    }
-                }
+              }
             }
-        }
-    }
 
-    &.error {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-    }
-
-    > .intro {
-        height: 100svh;
-        width: 100svw;
-        position: absolute;
-        background: $dark;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 20px;
-
-        .audio {
-            opacity: 0;
-            transition: 0.3s ease-out;
-            &:hover {
-                opacity: 1;
+            .points {
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
-            animation: fadeout 2s ease-out;
-            @keyframes fadeout {
-                from {
-                    opacity: 1;
-                }
-                to {
-                    opacity: 0;
-                }
-            }
-        }
+            .description {
+              height: 100%;
+              // width: 80%;
 
-        > button {
-            padding: 10px;
-            border: 1px solid $grey;
-            cursor: pointer;
-            border-radius: 10px;
-            font-size: 30px;
+              position: absolute;
 
-            transition: all 0.2s ease-out;
-            &:hover {
-                background: $white;
-                border-color: $white;
-                color: $dark;
-            }
-        }
-    }
+              padding: 50px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-direction: column;
 
-    .doneWrapper {
-        position: fixed;
-        height: 100svh;
-        width: 100svw;
-        top: 0;
-        left: 0;
-        backdrop-filter: blur(10px) brightness(0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .done {
-            position: relative;
-            padding: 50px;
-            border-radius: 30px;
-            background-color: $dark;
-            display: grid;
-            place-items: center;
-            grid-template-rows: 1fr 50px;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 50px;
-
-            .close {
-                background-color: transparent;
-                border: none;
-                height: 40px;
-                aspect-ratio: 1;
-                cursor: pointer;
+              .timeBarContainer {
                 position: absolute;
-                top: 20px;
-                right: 20px;
+                bottom: 10px;
+                margin-top: 5px;
+                width: 80%;
+              }
+
+              .image {
+                height: 80%;
+                max-height: calc(100% - 10px);
+                width: 100%;
                 img {
-                    height: 80%;
-                    filter: $invert;
+                  height: 100%;
+                  width: 100%;
+                  object-fit: contain;
+                  border-radius: 10px;
                 }
-            }
+              }
 
-            .winners {
-                display: flex;
-                align-items: end;
-                justify-content: center;
-                gap: 10px;
-                .team {
-                    background: $lighterDark;
-                    padding: 15px;
-                    border-radius: 10px;
-                    width: 150px;
-
-                    display: grid;
-                    grid-template-rows: auto 60px 30px;
-                    justify-items: center;
-
-                    &.first {
-                        height: 330px;
-                    }
-                    &.second {
-                        height: 260px;
-                    }
-                    &.third {
-                        height: 200px;
-                    }
-                    .place {
-                        font-size: 50px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
-                }
-            }
-            .leaderboard {
-                table.leaderboard {
-                    border-collapse: collapse;
-                    thead {
-                    }
-                    tbody {
-                    }
-                    tr {
-                        td,
-                        th {
-                            padding: 10px;
-                            text-align: center;
-                            vertical-align: middle;
-
-                            button {
-                                background-color: transparent;
-                                border: none;
-                                height: 100%;
-                                display: inline-block;
-                                margin-left: 5px;
-                                cursor: pointer;
-                                img {
-                                    translate: 0 2px;
-                                    filter: $invert;
-                                }
-                            }
-                        }
-                    }
-                }
-                // online inside border
-                table td,
-                table th {
-                    border: 1px solid $grey;
-                }
-                table tr:first-child th {
-                    border-top: 0;
-                }
-                table tr:last-child td {
-                    border-bottom: 0;
-                }
-                table tr td:first-child,
-                table tr th:first-child {
-                    border-left: 0;
-                }
-                table tr td:last-child,
-                table tr th:last-child {
-                    border-right: 0;
-                }
-            }
-            .chart {
-                height: 100%;
-                aspect-ratio: 1;
-                svg {
-                    height: 100%;
-                    aspect-ratio: 1;
-                }
-            }
-
-            button.closeGame {
-                grid-column: 1 / 4;
-                background-color: $lighterDark;
-                padding: 15px;
-                border-radius: 15px;
-                border: 1px solid $grey;
-                font-size: 16px;
+              button.next {
+                position: absolute;
+                bottom: 20px;
+                font-size: 20px;
+                border: 1px solid $white;
+                background: transparent;
                 color: $white;
+                border-radius: 10px;
+                padding: 10px;
                 cursor: pointer;
-
-                transition: all 0.2s ease-out;
+                transition: all 0.2s ease-in-out;
                 &:hover {
-                    border-color: $white;
-                    background-color: $white;
-                    color: $dark;
-                    box-shadow: 0 0 30px $grey;
+                  box-shadow: 0 0 20px -3px $white;
+                  background: $white;
+                  color: $dark;
                 }
+              }
             }
-        }
-    }
-}
-
-#react-confirm-alert {
-    .react-confirm-alert-overlay.answeredQuestions {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100svh;
-        width: 100svw;
-        backdrop-filter: blur(10px) brightness(0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .react-confirm-alert {
-            background-color: $dark;
-            border-radius: 30px;
-            padding: 30px;
-            .react-confirm-alert-body {
+            .question,
+            .answer {
+              height: 100%;
+              width: 100%;
+              padding: 4%;
+              > div.bottom {
+                position: absolute;
+                bottom: 20px;
+                width: 80%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 flex-direction: column;
-                gap: 30px;
-                max-height: 90vh;
-                overflow-y: scroll;
-
-                hr {
-                    width: 90%;
-                    border: 1px solid $grey;
+                gap: 20px;
+                > button.reveal {
+                  font-size: 20px;
+                  border: 1px solid $white;
+                  background: transparent;
+                  color: $white;
+                  border-radius: 10px;
+                  padding: 10px;
+                  cursor: pointer;
+                  transition: all 0.2s ease-in-out;
+                  &:hover {
+                    box-shadow: 0 0 20px -3px $white;
+                    background: $white;
+                    color: $dark;
+                  }
                 }
+              }
+              &:has(> .videoPlayer) {
+                padding: 50px;
+              }
+              &:has(> .videoPlayer) {
+                padding: 50px;
+              }
+              .image {
+                height: 80%;
+                > img {
+                  height: 100%;
+                  max-width: 100%;
+                  border-radius: 10px;
+                }
+              }
+              .videoPlayer {
+                height: 80%;
+                width: 80%;
+                &.playing {
+                  animation-name: none;
+                }
+                .videoContainer {
+                  width: 100%;
+                  height: 100%;
+                  video {
+                    height: 100%;
+                  }
+                }
+              }
+            }
+          }
+        }
 
-                .answeredQuestion {
+        &.answered {
+          color: $grey;
+        }
+        &:not(.selected) {
+          border-color: $grey;
+        }
+
+        &.selected {
+          animation: spinningBackground 3s linear infinite;
+          padding: 2px;
+          border-color: $grey;
+          > div {
+          }
+          .contentContainer {
+            > button.close {
+              opacity: 1;
+            }
+            .content {
+              .answer {
+                height: 100%;
+                width: 100%;
+                position: relative;
+                .points {
+                  position: absolute;
+                  bottom: 30px;
+                  transition: bottom 0.2s ease-in-out;
+
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  flex-direction: column;
+                  flex-wrap: nowrap;
+                  gap: 10px;
+
+                  button,
+                  input {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: 30px;
-                    > div {
-                        flex: 1;
-                        width: 40vw;
-                        img,
-                        video {
-                            border-radius: 10px;
-                            max-width: 100%;
-                        }
-                        > * {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
-                    }
-                }
 
-                .react-confirm-alert-button-group {
-                    margin-top: 20px;
+                    height: 40px;
+                    background-color: transparent;
+                    border: 1px solid $white;
+                    border-radius: 5px;
+                    padding: 10px;
+                    color: $white;
+                    cursor: pointer;
+                    font-size: 24px;
+                    img {
+                      height: 100%;
+                      filter: $invert;
+                    }
+                    &[type="number"] {
+                      width: 85px;
+                      &::-webkit-inner-spin-button,
+                      &::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                      }
+                      cursor: text;
+                    }
+                  }
+
+                  > div {
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     gap: 10px;
+                  }
 
+                  .normal {
                     button {
-                        position: fixed;
-                        bottom: 30px;
-                        font-size: 20px;
-                        cursor: pointer;
-                        background: transparent;
-                        color: $white;
-                        padding: 10px;
-                        border-radius: 10px;
-                        border: none;
-                        &:last-child {
-                            background-color: $lighterDark;
-                            border: 1px solid $grey;
-                        }
-                        transition: transform 0.2s ease-in;
+                      &:nth-child(1) {
+                        color: $red;
+                        transition: all 0.2s linear;
                         &:hover {
-                            transform: scale(1.03);
+                          color: $white;
+                          background: $red;
                         }
+                      }
+                      &:nth-child(3) {
+                        color: $green;
+                        transition: all 0.2s linear;
+                        &:hover {
+                          color: $white;
+                          background: $green;
+                        }
+                      }
                     }
-                    background-color: transparent;
+                  }
+                  .custom {
+                    max-height: 40px;
+                    transition: max-height 0.2s ease-in-out;
+                    overflow: hidden;
+                    &.hidden {
+                      max-height: 0px;
+                    }
+                    button {
+                      transition: all 0.2s linear;
+                      &:nth-child(1) {
+                        color: $red;
+                        &:hover {
+                          color: $white;
+                          background: $red;
+                        }
+                      }
+                      &:nth-child(3) {
+                        &:hover {
+                          background: $yellow;
+                        }
+                      }
+                      &:nth-child(4) {
+                        color: $green;
+                        &:hover {
+                          color: $white;
+                          background: $green;
+                        }
+                      }
+                    }
+                  }
                 }
+              }
             }
+          }
+          // background: conic-gradient(
+          //     from var(--gradient-angle),
+          //     $lighterDark,
+          //     $lighterDark,
+          //     $white
+          // );
+          animation: rotation 4s linear infinite;
+          z-index: 2;
+          &.transitioned {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+          }
         }
+        &.highlighted {
+          border-color: $darkBlue;
+          .content {
+            background: #0c59ff1f;
+          }
+        }
+      }
     }
+  }
+
+  &.error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  > .intro {
+    height: 100svh;
+    width: 100svw;
+    position: absolute;
+    background: $dark;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+
+    .audio {
+      opacity: 0;
+      transition: 0.3s ease-out;
+      &:hover {
+        opacity: 1;
+      }
+      animation: fadeout 2s ease-out;
+      @keyframes fadeout {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+    }
+
+    > button {
+      padding: 10px;
+      border: 1px solid $grey;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 30px;
+
+      transition: all 0.2s ease-out;
+      &:hover {
+        background: $white;
+        border-color: $white;
+        color: $dark;
+      }
+    }
+  }
+
+  .doneWrapper {
+    position: fixed;
+    height: 100svh;
+    width: 100svw;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(10px) brightness(0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .done {
+      position: relative;
+      padding: 50px;
+      border-radius: 30px;
+      background-color: $dark;
+      display: grid;
+      place-items: center;
+      grid-template-rows: 1fr 50px;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 50px;
+
+      .close {
+        background-color: transparent;
+        border: none;
+        height: 40px;
+        aspect-ratio: 1;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        img {
+          height: 80%;
+          filter: $invert;
+        }
+      }
+
+      .winners {
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        gap: 10px;
+        .team {
+          background: $lighterDark;
+          padding: 15px;
+          border-radius: 10px;
+          width: 150px;
+
+          display: grid;
+          grid-template-rows: auto 60px 30px;
+          justify-items: center;
+
+          &.first {
+            height: 330px;
+          }
+          &.second {
+            height: 260px;
+          }
+          &.third {
+            height: 200px;
+          }
+          .place {
+            font-size: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+      .leaderboard {
+        table.leaderboard {
+          border-collapse: collapse;
+          thead {
+          }
+          tbody {
+          }
+          tr {
+            td,
+            th {
+              padding: 10px;
+              text-align: center;
+              vertical-align: middle;
+
+              button {
+                background-color: transparent;
+                border: none;
+                height: 100%;
+                display: inline-block;
+                margin-left: 5px;
+                cursor: pointer;
+                img {
+                  translate: 0 2px;
+                  filter: $invert;
+                }
+              }
+            }
+          }
+        }
+        // online inside border
+        table td,
+        table th {
+          border: 1px solid $grey;
+        }
+        table tr:first-child th {
+          border-top: 0;
+        }
+        table tr:last-child td {
+          border-bottom: 0;
+        }
+        table tr td:first-child,
+        table tr th:first-child {
+          border-left: 0;
+        }
+        table tr td:last-child,
+        table tr th:last-child {
+          border-right: 0;
+        }
+      }
+      .chart {
+        height: 100%;
+        aspect-ratio: 1;
+        svg {
+          height: 100%;
+          aspect-ratio: 1;
+        }
+      }
+
+      button.closeGame {
+        grid-column: 1 / 4;
+        background-color: $lighterDark;
+        padding: 15px;
+        border-radius: 15px;
+        border: 1px solid $grey;
+        font-size: 16px;
+        color: $white;
+        cursor: pointer;
+
+        transition: all 0.2s ease-out;
+        &:hover {
+          border-color: $white;
+          background-color: $white;
+          color: $dark;
+          box-shadow: 0 0 30px $grey;
+        }
+      }
+    }
+  }
+}
+
+#react-confirm-alert {
+  .react-confirm-alert-overlay.answeredQuestions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100svh;
+    width: 100svw;
+    backdrop-filter: blur(10px) brightness(0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .react-confirm-alert {
+      background-color: $dark;
+      border-radius: 30px;
+      padding: 30px;
+      .react-confirm-alert-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 30px;
+        max-height: 90vh;
+        overflow-y: scroll;
+
+        hr {
+          width: 90%;
+          border: 1px solid $grey;
+        }
+
+        .answeredQuestion {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 30px;
+          > div {
+            flex: 1;
+            width: 40vw;
+            img,
+            video {
+              border-radius: 10px;
+              max-width: 100%;
+            }
+            > * {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+        }
+
+        .react-confirm-alert-button-group {
+          margin-top: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+
+          button {
+            position: fixed;
+            bottom: 30px;
+            font-size: 20px;
+            cursor: pointer;
+            background: transparent;
+            color: $white;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            &:last-child {
+              background-color: $lighterDark;
+              border: 1px solid $grey;
+            }
+            transition: transform 0.2s ease-in;
+            &:hover {
+              transform: scale(1.03);
+            }
+          }
+          background-color: transparent;
+        }
+      }
+    }
+  }
 }

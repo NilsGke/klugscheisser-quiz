@@ -6,24 +6,24 @@ import "./HomeButton.scss";
 import { FC } from "react";
 
 type props = {
-    confirm?: boolean;
-    to?: string;
+  confirm?: boolean;
+  to?: string;
 };
 
 const BackButton: FC<props> = ({ confirm, to }) => {
-    return (
-        <Link
-            to={to ?? "./../"}
-            onClick={(e) =>
-                confirm &&
-                !window.confirm("Are you sure? Unsaved Progress will be lost!")
-                    ? e.preventDefault()
-                    : null
-            }
-            className="backButton"
-        >
-            <img src={arrowIcon} alt="home icon" />
-        </Link>
-    );
+  return (
+    <Link
+      to={to ?? "./../"}
+      onClick={(e) =>
+        confirm &&
+        !window.confirm("Are you sure? Unsaved Progress will be lost!")
+          ? e.preventDefault()
+          : null
+      }
+      className="backButton"
+    >
+      <img src={arrowIcon} alt="home icon" />
+    </Link>
+  );
 };
 export default BackButton;

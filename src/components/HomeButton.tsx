@@ -4,23 +4,23 @@ import "./HomeButton.scss";
 import { FC } from "react";
 
 type props = {
-    confirm?: boolean;
+  confirm?: boolean;
 };
 
 const HomeButton: FC<props> = ({ confirm }) => {
-    return (
-        <Link
-            to={"/"}
-            onClick={(e) =>
-                confirm &&
-                !window.confirm("Are you sure? Unsaved Progress will be lost!")
-                    ? e.preventDefault()
-                    : null
-            }
-            className="homeButton"
-        >
-            <img src={homeIcon} alt="home icon" />
-        </Link>
-    );
+  return (
+    <Link
+      to={"/"}
+      onClick={(e) =>
+        confirm &&
+        !window.confirm("Are you sure? Unsaved Progress will be lost!")
+          ? e.preventDefault()
+          : null
+      }
+      className="homeButton"
+    >
+      <img src={homeIcon} alt="home icon" />
+    </Link>
+  );
 };
 export default HomeButton;

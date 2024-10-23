@@ -7,33 +7,33 @@ import Spinner from "$components/Spinner";
 import { getStoredCategory } from "$db/categories";
 
 const Editor = () => {
-    const [category, setCategory] = useState<PartialCategory | null>(null);
+  const [category, setCategory] = useState<PartialCategory | null>(null);
 
-    // set initial category if set in URL
-    const { dbIndex: dbIndexParam } = useParams();
-    const [dbIndex, setdbIndex] = useState<number | undefined>(undefined);
+  // set initial category if set in URL
+  const { dbIndex: dbIndexParam } = useParams();
+  const [dbIndex, setdbIndex] = useState<number | undefined>(undefined);
 
-    useEffect(() => {
-        if (dbIndexParam === undefined) {
-            setCategory(emptyCategory);
-        } else {
-            const index = parseInt(dbIndexParam);
-            if (isNaN(index)) return;
-            getStoredCategory(index)
-                .then(setCategory)
-                .then(() => {
-                    setdbIndex(index);
-                });
-        }
-    }, [dbIndexParam]);
+  useEffect(() => {
+    if (dbIndexParam === undefined) {
+      setCategory(emptyCategory);
+    } else {
+      const index = parseInt(dbIndexParam);
+      if (isNaN(index)) return;
+      getStoredCategory(index)
+        .then(setCategory)
+        .then(() => {
+          setdbIndex(index);
+        });
+    }
+  }, [dbIndexParam]);
 
-    if (category === null) return <Spinner />;
+  if (category === null) return <Spinner />;
 
-    return (
-        <div id="editorPage">
-            <Edit initialCategory={category} dbIndex={dbIndex} />
-        </div>
-    );
+  return (
+    <div id="editorPage">
+      <Edit initialCategory={category} dbIndex={dbIndex} />
+    </div>
+  );
 };
 
 export default Editor;

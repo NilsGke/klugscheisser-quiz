@@ -1,53 +1,53 @@
 import {
-    CustomGamepadEventMap,
-    gamepadEvents,
-    gamepads,
+  CustomGamepadEventMap,
+  gamepadEvents,
+  gamepads,
 } from "$helpers/gamepad";
 import { useState, useEffect, useCallback } from "react";
 
 const useGamepad = (
-    callback: (id: { button: number; gamepad: number }) => void
+  callback: (id: { button: number; gamepad: number }) => void,
 ) => {
-    const [connected, setConnected] = useState(
-        !(
-            Object.keys(gamepads).length === 0 &&
-            Object.getPrototypeOf(gamepads) === Object.prototype
-        )
-    );
+  const [connected, setConnected] = useState(
+    !(
+      Object.keys(gamepads).length === 0 &&
+      Object.getPrototypeOf(gamepads) === Object.prototype
+    ),
+  );
 
-    const refresh = () => {
-        setConnected(
-            !(
-                Object.keys(gamepads).length === 0 &&
-                Object.getPrototypeOf(gamepads) === Object.prototype
-            )
-        );
+  const refresh = () => {
+    setConnected(
+      !(
+        Object.keys(gamepads).length === 0 &&
+        Object.getPrototypeOf(gamepads) === Object.prototype
+      ),
+    );
+  };
+
+  // connecting / disconnecting
+  useEffect(() => {
+    window.addEventListener("gamepadconnected", refresh);
+    window.addEventListener("gamepaddisconnected", refresh);
+
+    return () => {
+      window.removeEventListener("gamepadconnected", refresh);
+      window.removeEventListener("gamepaddisconnected", refresh);
     };
+  }, []);
 
-    // connecting / disconnecting
-    useEffect(() => {
-        window.addEventListener("gamepadconnected", refresh);
-        window.addEventListener("gamepaddisconnected", refresh);
+  const handleButtonpress = useCallback(
+    (event: CustomGamepadEventMap["buttonpress"]) => callback(event.detail),
+    [callback],
+  );
 
-        return () => {
-            window.removeEventListener("gamepadconnected", refresh);
-            window.removeEventListener("gamepaddisconnected", refresh);
-        };
-    }, []);
+  // listen to buttonpresses
+  useEffect(() => {
+    gamepadEvents.addEventListener("buttonpress", handleButtonpress);
+    return () =>
+      gamepadEvents.removeEventListener("buttonpress", handleButtonpress);
+  }, [handleButtonpress]);
 
-    const handleButtonpress = useCallback(
-        (event: CustomGamepadEventMap["buttonpress"]) => callback(event.detail),
-        [callback]
-    );
-
-    // listen to buttonpresses
-    useEffect(() => {
-        gamepadEvents.addEventListener("buttonpress", handleButtonpress);
-        return () =>
-            gamepadEvents.removeEventListener("buttonpress", handleButtonpress);
-    }, [handleButtonpress]);
-
-    return { connected };
+  return { connected };
 };
 
 export default useGamepad;

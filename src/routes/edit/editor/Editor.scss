@@ -1,377 +1,376 @@
 @import "../../../colors.scss";
 
 #editorPage #edit {
-    height: 100svh;
-    width: 90svw;
+  height: 100svh;
+  width: 90svw;
 
-    max-width: 1600px;
+  max-width: 1600px;
 
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-rows: 9svh 91svh;
-    column-gap: 30px;
-    row-gap: 0px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 9svh 91svh;
+  column-gap: 30px;
+  row-gap: 0px;
 
-    #topRow {
-        grid-area: 1 / 1 / 2 / 4;
+  #topRow {
+    grid-area: 1 / 1 / 2 / 4;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+    gap: 15px;
+    input,
+    button {
+      background-color: transparent;
+      border: 1px solid $white;
+      font-size: 20px;
+      color: $white;
+    }
+    button {
+      height: 50px;
+      cursor: pointer;
+      border-radius: 20px;
+      padding: 10px;
+      box-shadow: 0 0 20px $grey;
+      white-space: nowrap;
+
+      transition: all 0.2s ease-out;
+      &:hover {
+        background-color: $white;
+        color: $dark;
+        box-shadow: 0 0 30px $white;
+      }
+      &.test {
+        aspect-ratio: 1;
+        img {
+          transition: filter 0.2s ease-in-out;
+          filter: $invert;
+        }
+        &:hover img {
+          filter: invert(0);
+        }
+      }
+    }
+    input {
+      border: none;
+      padding: 5px 0;
+      border-bottom: 1px solid $white;
+      width: 80%;
+      &::placeholder {
+        color: $grey;
+      }
+      &#nameInput {
+        width: 20%;
+      }
+      &#answerTime {
+        width: 10%;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+    }
+
+    .description {
+      width: 50%;
+      position: relative;
+      display: flex;
+      input {
         width: 100%;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 5px;
-        gap: 15px;
-        input,
-        button {
-            background-color: transparent;
-            border: 1px solid $white;
-            font-size: 20px;
-            color: $white;
-        }
-        button {
-            height: 50px;
-            cursor: pointer;
-            border-radius: 20px;
-            padding: 10px;
-            box-shadow: 0 0 20px $grey;
-            white-space: nowrap;
-
-            transition: all 0.2s ease-out;
-            &:hover {
-                background-color: $white;
-                color: $dark;
-                box-shadow: 0 0 30px $white;
-            }
-            &.test {
-                aspect-ratio: 1;
-                img {
-                    transition: filter 0.2s ease-in-out;
-                    filter: $invert;
-                }
-                &:hover img {
-                    filter: invert(0);
-                }
-            }
-        }
-        input {
-            border: none;
-            padding: 5px 0;
-            border-bottom: 1px solid $white;
-            width: 80%;
-            &::placeholder {
-                color: $grey;
-            }
-            &#nameInput {
-                width: 20%;
-            }
-            &#answerTime {
-                width: 10%;
-
-                &::-webkit-outer-spin-button,
-                &::-webkit-inner-spin-button {
-                    -webkit-appearance: none;
-                    margin: 0;
-                }
-            }
-        }
-
-        .description {
-            width: 50%;
-            position: relative;
-            display: flex;
-            input {
-                width: 100%;
-            }
-            label.image {
-                position: absolute;
-                right: 0;
-                top: 0;
-                border: none;
-                padding: 0;
-                height: 40px;
-                aspect-ratio: 1;
-                box-shadow: none;
-                cursor: pointer;
-
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                img {
-                    transition: filter 0.2s ease-out;
-                    height: 70%;
-                    filter: $invert;
-                }
-            }
-            > button {
-                border: none;
-                border-bottom: 1px solid $white;
-                border-radius: 0;
-                box-shadow: none;
-                height: 35px;
-                width: 100%;
-                padding: 0;
-                &:hover {
-                    background: transparent;
-                }
-                img {
-                    height: 100%;
-                }
-            }
-        }
-    }
-
-    .page {
-    }
-
-    .mediaPoolWrapper {
-        grid-area: 2 / 1 / 3 / 2;
-        margin: 5px;
-    }
-    #categoryWrapper {
-        grid-area: 2 / 2 / 3 / 4;
-        margin: 5px;
-        max-width: 1000px;
-        .EditorCategory {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-direction: column;
-            border-radius: 20px;
-            border: 1px solid $white;
-            max-height: 99%;
-            padding: 10px;
-
-            .field {
-                $gap: 5px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 7px;
-                border-radius: 10px;
-                height: calc(100% / 5 - $gap);
-                width: 100%;
-
-                h3 {
-                    rotate: -90deg;
-                }
-                .content {
-                    height: 100%;
-                    width: 100%;
-                    gap: 7px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    .question,
-                    .answer {
-                        $mediaPadding: 5px;
-                        width: 50%;
-                        height: 100%;
-                        display: inline-block;
-                        border: 1px solid $lighterDark;
-                        border-radius: 10px;
-                        padding: $mediaPadding;
-                        position: relative;
-
-                        &:not(:has(.addMedia)) {
-                            background: $dark;
-                        }
-
-                        > .choose {
-                            position: absolute;
-                            height: 100%;
-                            width: 100%;
-                            z-index: 1;
-                            top: 0;
-                            left: 0;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            backdrop-filter: blur(3px) brightness(0.7);
-                            cursor: pointer;
-                            outline: 2px solid $darkBlue;
-                            border-radius: 10px;
-                        }
-
-                        .mediaElement {
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            height: 100%;
-
-                            > div {
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                position: relative;
-                            }
-
-                            .text,
-                            .video,
-                            .audio,
-                            .image {
-                            }
-
-                            > button.addMedia {
-                                border: none;
-                                height: 100%;
-                                width: 100%;
-                                background: none;
-                                color: $white;
-                                cursor: pointer;
-                                opacity: 0.3;
-                            }
-
-                            > div:not(.text) {
-                                height: calc(100% - $mediaPadding);
-                                max-height: 100%;
-                                max-width: 100%;
-                                width: 100%;
-
-                                img,
-                                video,
-                                audio {
-                                    max-height: 100%;
-                                    max-width: 100%;
-                                    border-radius: 5px;
-                                }
-                            }
-
-                            .diashow {
-                                > .edit {
-                                    display: flex;
-                                    height: 100%;
-                                    width: 100%;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                    > button {
-                                        margin-right: 20px;
-                                        margin-left: 10px;
-                                        background-color: transparent;
-                                        border: none;
-                                        width: 30px;
-                                        aspect-ratio: 1;
-                                        cursor: pointer;
-
-                                        img {
-                                            height: 80%;
-                                            filter: $invert;
-                                            border-radius: 0px;
-                                        }
-                                    }
-                                    .images {
-                                        width: 80%;
-                                        position: relative;
-                                        overflow: hidden;
-                                        .image {
-                                            height: 100%;
-                                            max-height: 100%;
-                                            position: absolute;
-                                            border-radius: 5px;
-                                            overflow: hidden;
-                                            &:not(:first-child) {
-                                                box-shadow: -10px 0 50px 0px
-                                                    $lighterDark;
-                                            }
-                                            img {
-                                                height: 100%;
-                                                width: auto;
-                                                max-width: unset;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            .text {
-                                width: 95%;
-                                height: 95%;
-
-                                textarea {
-                                    resize: none;
-                                    width: 100%;
-                                    height: 100%;
-                                    background-color: transparent;
-                                    border: 1px solid $white;
-                                    border-radius: 10px;
-                                    color: $white;
-                                    padding: 10px;
-                                    border: none;
-
-                                    white-space: normal;
-                                    text-align: justify;
-                                    -moz-text-align-last: center; /* Firefox 12+ */
-                                    text-align-last: center;
-                                }
-                            }
-
-                            > button.remove {
-                                height: 30px;
-                                aspect-ratio: 1;
-                                position: absolute;
-                                top: 5px;
-                                right: 5px;
-                                background-color: transparent;
-                                border: none;
-                                cursor: pointer;
-                                border-radius: 100%;
-                                backdrop-filter: blur(14px) brightness(75%);
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-
-                                img {
-                                    height: 50%;
-                                    aspect-ratio: 1;
-                                    filter: $invert;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    .exportPopupContainer {
+      }
+      label.image {
         position: absolute;
-        height: 100svh;
-        width: 100svw;
+        right: 0;
         top: 0;
-        left: 0;
+        border: none;
+        padding: 0;
+        height: 40px;
+        aspect-ratio: 1;
+        box-shadow: none;
+        cursor: pointer;
+
         display: flex;
         align-items: center;
         justify-content: center;
 
-        .progressBar {
-            width: 30vw;
-            background-color: $lighterDark;
-            height: 4px;
-            margin: 10px 0;
-            border-radius: 30px;
-            overflow: hidden;
-            .progress {
-                height: 4px;
-                background-color: $white;
-            }
+        img {
+          transition: filter 0.2s ease-out;
+          height: 70%;
+          filter: $invert;
         }
-
-        .currentFile {
-            color: $white;
+      }
+      > button {
+        border: none;
+        border-bottom: 1px solid $white;
+        border-radius: 0;
+        box-shadow: none;
+        height: 35px;
+        width: 100%;
+        padding: 0;
+        &:hover {
+          background: transparent;
         }
-
-        &.hidden {
-            opacity: 0;
-            z-index: -2;
-            backdrop-filter: blur(0px) brightness(1);
+        img {
+          height: 100%;
         }
-        &.visible {
-            opacity: 1;
-            z-index: 2;
-            backdrop-filter: blur(10px) brightness(0.7);
-        }
+      }
     }
+  }
+
+  .page {
+  }
+
+  .mediaPoolWrapper {
+    grid-area: 2 / 1 / 3 / 2;
+    margin: 5px;
+  }
+  #categoryWrapper {
+    grid-area: 2 / 2 / 3 / 4;
+    margin: 5px;
+    max-width: 1000px;
+    .EditorCategory {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      border-radius: 20px;
+      border: 1px solid $white;
+      max-height: 99%;
+      padding: 10px;
+
+      .field {
+        $gap: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border-radius: 10px;
+        height: calc(100% / 5 - $gap);
+        width: 100%;
+
+        h3 {
+          rotate: -90deg;
+        }
+        .content {
+          height: 100%;
+          width: 100%;
+          gap: 7px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .question,
+          .answer {
+            $mediaPadding: 5px;
+            width: 50%;
+            height: 100%;
+            display: inline-block;
+            border: 1px solid $lighterDark;
+            border-radius: 10px;
+            padding: $mediaPadding;
+            position: relative;
+
+            &:not(:has(.addMedia)) {
+              background: $dark;
+            }
+
+            > .choose {
+              position: absolute;
+              height: 100%;
+              width: 100%;
+              z-index: 1;
+              top: 0;
+              left: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              backdrop-filter: blur(3px) brightness(0.7);
+              cursor: pointer;
+              outline: 2px solid $darkBlue;
+              border-radius: 10px;
+            }
+
+            .mediaElement {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 100%;
+
+              > div {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+              }
+
+              .text,
+              .video,
+              .audio,
+              .image {
+              }
+
+              > button.addMedia {
+                border: none;
+                height: 100%;
+                width: 100%;
+                background: none;
+                color: $white;
+                cursor: pointer;
+                opacity: 0.3;
+              }
+
+              > div:not(.text) {
+                height: calc(100% - $mediaPadding);
+                max-height: 100%;
+                max-width: 100%;
+                width: 100%;
+
+                img,
+                video,
+                audio {
+                  max-height: 100%;
+                  max-width: 100%;
+                  border-radius: 5px;
+                }
+              }
+
+              .diashow {
+                > .edit {
+                  display: flex;
+                  height: 100%;
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  > button {
+                    margin-right: 20px;
+                    margin-left: 10px;
+                    background-color: transparent;
+                    border: none;
+                    width: 30px;
+                    aspect-ratio: 1;
+                    cursor: pointer;
+
+                    img {
+                      height: 80%;
+                      filter: $invert;
+                      border-radius: 0px;
+                    }
+                  }
+                  .images {
+                    width: 80%;
+                    position: relative;
+                    overflow: hidden;
+                    .image {
+                      height: 100%;
+                      max-height: 100%;
+                      position: absolute;
+                      border-radius: 5px;
+                      overflow: hidden;
+                      &:not(:first-child) {
+                        box-shadow: -10px 0 50px 0px $lighterDark;
+                      }
+                      img {
+                        height: 100%;
+                        width: auto;
+                        max-width: unset;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .text {
+                width: 95%;
+                height: 95%;
+
+                textarea {
+                  resize: none;
+                  width: 100%;
+                  height: 100%;
+                  background-color: transparent;
+                  border: 1px solid $white;
+                  border-radius: 10px;
+                  color: $white;
+                  padding: 10px;
+                  border: none;
+
+                  white-space: normal;
+                  text-align: justify;
+                  -moz-text-align-last: center; /* Firefox 12+ */
+                  text-align-last: center;
+                }
+              }
+
+              > button.remove {
+                height: 30px;
+                aspect-ratio: 1;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                border-radius: 100%;
+                backdrop-filter: blur(14px) brightness(75%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                  height: 50%;
+                  aspect-ratio: 1;
+                  filter: $invert;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .exportPopupContainer {
+    position: absolute;
+    height: 100svh;
+    width: 100svw;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .progressBar {
+      width: 30vw;
+      background-color: $lighterDark;
+      height: 4px;
+      margin: 10px 0;
+      border-radius: 30px;
+      overflow: hidden;
+      .progress {
+        height: 4px;
+        background-color: $white;
+      }
+    }
+
+    .currentFile {
+      color: $white;
+    }
+
+    &.hidden {
+      opacity: 0;
+      z-index: -2;
+      backdrop-filter: blur(0px) brightness(1);
+    }
+    &.visible {
+      opacity: 1;
+      z-index: 2;
+      backdrop-filter: blur(10px) brightness(0.7);
+    }
+  }
 }

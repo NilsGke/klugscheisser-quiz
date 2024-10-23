@@ -2,20 +2,20 @@ import { ReactNode, useEffect } from "react";
 import { IDBClient, IDBClientContext } from "./IDBClient";
 
 export const IDBClientProvider = ({
-    client,
-    children,
+  client,
+  children,
 }: {
-    client: IDBClient;
-    children: ReactNode;
+  client: IDBClient;
+  children: ReactNode;
 }) => {
-    useEffect(() => {
-        client.mount();
-        return () => client.unmount();
-    }, [client]);
+  useEffect(() => {
+    client.mount();
+    return () => client.unmount();
+  }, [client]);
 
-    return (
-        <IDBClientContext.Provider value={client}>
-            {children}
-        </IDBClientContext.Provider>
-    );
+  return (
+    <IDBClientContext.Provider value={client}>
+      {children}
+    </IDBClientContext.Provider>
+  );
 };

@@ -1,305 +1,305 @@
 @import "../../../colors.scss";
 
 .mediaPool {
-    $hSize: 50px;
-    height: 100%;
+  $hSize: 50px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+  border-radius: 20px;
+  border: 1px solid $white;
+  overflow-y: scroll;
+  max-height: 99%;
+
+  .header {
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: start;
-    flex-direction: column;
-    border-radius: 20px;
-    border: 1px solid $white;
-    overflow-y: scroll;
-    max-height: 99%;
+    justify-content: space-evenly;
+    gap: 10px;
+    flex-wrap: wrap;
 
-    .header {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        gap: 10px;
-        flex-wrap: wrap;
+    .toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
 
-        .toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-
-            button {
-                background-color: transparent;
-                border: 1px solid $white;
-                border-radius: 5px;
-                color: $white;
-                padding: 5px;
-                cursor: pointer;
-                &.selected {
-                    background-color: $white;
-                    color: $dark;
-                }
-            }
+      button {
+        background-color: transparent;
+        border: 1px solid $white;
+        border-radius: 5px;
+        color: $white;
+        padding: 5px;
+        cursor: pointer;
+        &.selected {
+          background-color: $white;
+          color: $dark;
         }
-        .storage {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            width: 100px;
-            * {
-                color: $grey;
-                font-size: 12px;
-            }
-            .info {
-            }
-            button {
-                background-color: transparent;
-                border: 1px solid $grey;
-                border-radius: 5px;
-                padding: 3px;
-                cursor: pointer;
-                transition: color 0.2s ease-out;
-                &:hover {
-                    color: $red;
-                }
-            }
-        }
+      }
     }
-
-    h2 {
-        $fontSize: 24px;
-        font-size: $fontSize;
-        padding: calc(($hSize - $fontSize) / 2) 0;
+    .storage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100px;
+      * {
+        color: $grey;
+        font-size: 12px;
+      }
+      .info {
+      }
+      button {
+        background-color: transparent;
+        border: 1px solid $grey;
+        border-radius: 5px;
+        padding: 3px;
+        cursor: pointer;
+        transition: color 0.2s ease-out;
+        &:hover {
+          color: $red;
+        }
+      }
     }
+  }
 
-    $fileSize: 150px;
-    .media {
-        display: grid;
-        place-items: center;
-        gap: 10px;
-        padding: 10px;
+  h2 {
+    $fontSize: 24px;
+    font-size: $fontSize;
+    padding: calc(($hSize - $fontSize) / 2) 0;
+  }
 
-        grid-template-columns: $fileSize;
-        @media only screen and (min-width: 1200px) {
-            grid-template-columns: $fileSize $fileSize;
-        }
-        @media only screen and (min-width: 1660px) {
-            grid-template-columns: $fileSize $fileSize $fileSize;
-        }
-        @media only screen and (min-width: 2140px) {
-            grid-template-columns: $fileSize $fileSize $fileSize $fileSize;
-        }
-        // @media only screen and (min-width: 2340px) {
-        //     grid-template-columns: $fileSize $fileSize $fileSize $fileSize $fileSize;
-        // }
+  $fileSize: 150px;
+  .media {
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    padding: 10px;
 
-        .file {
-            background-color: $dark;
-            padding: 5px;
-            border-radius: 10px;
-            position: relative;
-
-            height: $fileSize;
-            width: $fileSize;
-
-            border: 1px solid $grey;
-
-            aspect-ratio: 1;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            cursor: grab;
-
-            box-shadow: 0 0 0px transparent;
-            transition: box-shadow 0.2s ease-out;
-            &:hover {
-                box-shadow: 0 0 50px $lighterDark;
-            }
-
-            img,
-            video,
-            audio {
-                border-radius: 5px;
-                max-width: 100%;
-                max-height: 100%;
-            }
-
-            &.addMedia {
-                padding: 0;
-                outline: 1px solid transparent;
-                transition: border-color 0.2s ease-in-out;
-                background-color: transparent;
-                border: 3px solid $grey;
-                &:hover {
-                    border-color: $white;
-                }
-                img {
-                    filter: $invert;
-                    width: 100%;
-                    opacity: 0.2;
-                }
-                label {
-                    cursor: pointer;
-                    height: $fileSize;
-                    width: $fileSize;
-                    padding: 30px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-direction: column;
-                    font-size: 20px;
-
-                    input {
-                        position: absolute;
-                        height: 100%;
-                        width: 100%;
-                        opacity: 0;
-                        cursor: pointer;
-                    }
-                    sub {
-                        white-space: nowrap;
-                        font-size: 15px;
-                    }
-                }
-            }
-            button.dots {
-                background-color: transparent;
-                border: none;
-                position: absolute;
-                top: 0;
-                right: 0;
-                height: 30px;
-                width: 27px;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                img {
-                    height: 70%;
-                    width: 70%;
-                    filter: $invert;
-                }
-            }
-
-            .popover {
-                background: $lighterDark;
-                box-shadow: 0 0 20px -5px $white;
-                position: absolute;
-                top: 7px;
-                right: 24px;
-                padding: 10px;
-                border-radius: 10px;
-                width: 120px;
-
-                button {
-                    background-color: transparent;
-                    border: 1px solid $white;
-                    color: $white;
-                    border-radius: 10px;
-                    padding: 10px;
-                    white-space: nowrap;
-                    width: 100%;
-
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    cursor: pointer;
-
-                    &:not(:last-child) {
-                        margin-bottom: 5px;
-                    }
-
-                    transition: background 0.2s ease-out;
-                    &:hover {
-                        background-color: $grey;
-                    }
-
-                    img {
-                        filter: $invert;
-                    }
-                    &.rename img {
-                        height: 15px;
-                    }
-                    &.add img {
-                        rotate: -90deg;
-                    }
-                }
-            }
-        }
-        .bottom {
-            justify-self: end;
-            flex-direction: column;
-        }
+    grid-template-columns: $fileSize;
+    @media only screen and (min-width: 1200px) {
+      grid-template-columns: $fileSize $fileSize;
     }
-}
+    @media only screen and (min-width: 1660px) {
+      grid-template-columns: $fileSize $fileSize $fileSize;
+    }
+    @media only screen and (min-width: 2140px) {
+      grid-template-columns: $fileSize $fileSize $fileSize $fileSize;
+    }
+    // @media only screen and (min-width: 2340px) {
+    //     grid-template-columns: $fileSize $fileSize $fileSize $fileSize $fileSize;
+    // }
 
-#react-confirm-alert-firm-svg {
-    display: none;
-}
+    .file {
+      background-color: $dark;
+      padding: 5px;
+      border-radius: 10px;
+      position: relative;
 
-#react-confirm-alert {
-    .react-confirm-alert-overlay.popupOverlay {
+      height: $fileSize;
+      width: $fileSize;
+
+      border: 1px solid $grey;
+
+      aspect-ratio: 1;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      cursor: grab;
+
+      box-shadow: 0 0 0px transparent;
+      transition: box-shadow 0.2s ease-out;
+      &:hover {
+        box-shadow: 0 0 50px $lighterDark;
+      }
+
+      img,
+      video,
+      audio {
+        border-radius: 5px;
+        max-width: 100%;
+        max-height: 100%;
+      }
+
+      &.addMedia {
+        padding: 0;
+        outline: 1px solid transparent;
+        transition: border-color 0.2s ease-in-out;
+        background-color: transparent;
+        border: 3px solid $grey;
+        &:hover {
+          border-color: $white;
+        }
+        img {
+          filter: $invert;
+          width: 100%;
+          opacity: 0.2;
+        }
+        label {
+          cursor: pointer;
+          height: $fileSize;
+          width: $fileSize;
+          padding: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          font-size: 20px;
+
+          input {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            opacity: 0;
+            cursor: pointer;
+          }
+          sub {
+            white-space: nowrap;
+            font-size: 15px;
+          }
+        }
+      }
+      button.dots {
+        background-color: transparent;
+        border: none;
         position: absolute;
         top: 0;
-        left: 0;
-        height: 100svh;
-        width: 100svw;
-        backdrop-filter: blur(10px) brightness(0.5);
+        right: 0;
+        height: 30px;
+        width: 27px;
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-
-        .react-confirm-alert {
-            background-color: $dark;
-            border-radius: 30px;
-            padding: 30px;
-            .react-confirm-alert-body {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: column;
-                img,
-                video,
-                audio {
-                    border-radius: 5px;
-                    margin-top: 20px;
-                    max-height: 60vh;
-                    max-width: 60vw;
-                }
-                .react-confirm-alert-button-group {
-                    margin-top: 20px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 10px;
-                    button {
-                        font-size: 20px;
-                        cursor: pointer;
-                        background: transparent;
-                        color: $white;
-                        padding: 10px;
-                        border-radius: 10px;
-                        border: none;
-                        &:first-child {
-                            color: $white;
-                            background: $red;
-                            box-shadow: 0 0 30px -5px $red;
-                        }
-                        &:last-child {
-                            background-color: $lighterDark;
-                            border: 1px solid $grey;
-                        }
-                        transition: transform 0.2s ease-in;
-                        &:hover {
-                            transform: scale(1.03);
-                        }
-                    }
-                    background-color: transparent;
-                }
-            }
+        img {
+          height: 70%;
+          width: 70%;
+          filter: $invert;
         }
+      }
+
+      .popover {
+        background: $lighterDark;
+        box-shadow: 0 0 20px -5px $white;
+        position: absolute;
+        top: 7px;
+        right: 24px;
+        padding: 10px;
+        border-radius: 10px;
+        width: 120px;
+
+        button {
+          background-color: transparent;
+          border: 1px solid $white;
+          color: $white;
+          border-radius: 10px;
+          padding: 10px;
+          white-space: nowrap;
+          width: 100%;
+
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          cursor: pointer;
+
+          &:not(:last-child) {
+            margin-bottom: 5px;
+          }
+
+          transition: background 0.2s ease-out;
+          &:hover {
+            background-color: $grey;
+          }
+
+          img {
+            filter: $invert;
+          }
+          &.rename img {
+            height: 15px;
+          }
+          &.add img {
+            rotate: -90deg;
+          }
+        }
+      }
     }
+    .bottom {
+      justify-self: end;
+      flex-direction: column;
+    }
+  }
+}
+
+#react-confirm-alert-firm-svg {
+  display: none;
+}
+
+#react-confirm-alert {
+  .react-confirm-alert-overlay.popupOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100svh;
+    width: 100svw;
+    backdrop-filter: blur(10px) brightness(0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .react-confirm-alert {
+      background-color: $dark;
+      border-radius: 30px;
+      padding: 30px;
+      .react-confirm-alert-body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        img,
+        video,
+        audio {
+          border-radius: 5px;
+          margin-top: 20px;
+          max-height: 60vh;
+          max-width: 60vw;
+        }
+        .react-confirm-alert-button-group {
+          margin-top: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          button {
+            font-size: 20px;
+            cursor: pointer;
+            background: transparent;
+            color: $white;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            &:first-child {
+              color: $white;
+              background: $red;
+              box-shadow: 0 0 30px -5px $red;
+            }
+            &:last-child {
+              background-color: $lighterDark;
+              border: 1px solid $grey;
+            }
+            transition: transform 0.2s ease-in;
+            &:hover {
+              transform: scale(1.03);
+            }
+          }
+          background-color: transparent;
+        }
+      }
+    }
+  }
 }

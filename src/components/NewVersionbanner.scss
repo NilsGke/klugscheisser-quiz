@@ -1,32 +1,32 @@
 @import "../colors.scss";
 
 div#newVersionBanner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
-    height: 40px;
-    position: fixed;
-    background-color: $dark;
+  height: 40px;
+  position: fixed;
+  background-color: $dark;
+  color: $white;
+  width: 100svw;
+  font-size: 18px;
+  padding: 4px 0;
+  button {
+    font-size: 16px;
+    background-color: transparent;
+    border: 1px solid $white;
     color: $white;
-    width: 100svw;
-    font-size: 18px;
-    padding: 4px 0;
-    button {
-        font-size: 16px;
-        background-color: transparent;
-        border: 1px solid $white;
-        color: $white;
-        padding: 3px;
-        border-radius: 5px;
-        cursor: pointer;
-        box-shadow: 0 0 5px $grey;
-        transition: all 0.2s ease-out;
-        &:hover {
-            background: $white;
-            color: $dark;
-            box-shadow: 0 0 10px $white;
-        }
+    padding: 3px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 5px $grey;
+    transition: all 0.2s ease-out;
+    &:hover {
+      background: $white;
+      color: $dark;
+      box-shadow: 0 0 10px $white;
     }
+  }
 }

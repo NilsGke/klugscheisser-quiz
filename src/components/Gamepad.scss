@@ -1,110 +1,110 @@
 @import "../colors.scss";
 
 #gamepadButton {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 
-    img {
-        filter: $invert;
-    }
+  img {
+    filter: $invert;
+  }
 }
 
 .gamepadOverlayWrapper {
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    height: 100svh;
-    width: 100svw;
-    backdrop-filter: blur(10px) brightness(0.8);
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  height: 100svh;
+  width: 100svw;
+  backdrop-filter: blur(10px) brightness(0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .gamepadOverlay {
+    padding: 50px;
+    min-width: 40vw;
+    min-height: 40vh;
+    background-color: $dark;
+    border-radius: 30px;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    gap: 40px;
 
-    .gamepadOverlay {
-        padding: 50px;
-        min-width: 40vw;
-        min-height: 40vh;
-        background-color: $dark;
-        border-radius: 30px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        gap: 40px;
-
-        button.close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            height: 30px;
-            width: 30px;
-            border: none;
-            background-color: transparent;
-            cursor: pointer;
-            img {
-                height: 80%;
-                aspect-ratio: 1;
-                filter: $invert;
-            }
-        }
-
-        h2 {
-            margin-bottom: 30px;
-        }
-
-        .mapping {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            gap: 10px;
-            .mappingTable {
-                // height: 50px;
-                display: grid;
-                grid-template-columns: auto auto auto;
-                align-items: center;
-                gap: 10px;
-                > * {
-                    // flex: 1;
-                }
-
-                .name {
-                    white-space: nowrap;
-                }
-
-                .buttons {
-                    min-width: 300px;
-
-                    button {
-                        cursor: pointer;
-                        border: 1px solid $grey;
-                        background-color: transparent;
-                        color: $white;
-                        border-radius: 5px;
-                        height: 30px;
-                        width: 50px;
-                        margin: 0;
-                        &:not(:last-child) {
-                            margin-right: 5px;
-                        }
-
-                        transition: all 0.2s ease-in-out;
-                        &:hover {
-                            background-color: $lighterDark;
-                            &:not(:is(.add, .stop)) {
-                                color: $red;
-                            }
-                        }
-
-                        &.add {
-                            opacity: 0.5;
-                        }
-                    }
-                }
-            }
-        }
+    button.close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      height: 30px;
+      width: 30px;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      img {
+        height: 80%;
+        aspect-ratio: 1;
+        filter: $invert;
+      }
     }
+
+    h2 {
+      margin-bottom: 30px;
+    }
+
+    .mapping {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      .mappingTable {
+        // height: 50px;
+        display: grid;
+        grid-template-columns: auto auto auto;
+        align-items: center;
+        gap: 10px;
+        > * {
+          // flex: 1;
+        }
+
+        .name {
+          white-space: nowrap;
+        }
+
+        .buttons {
+          min-width: 300px;
+
+          button {
+            cursor: pointer;
+            border: 1px solid $grey;
+            background-color: transparent;
+            color: $white;
+            border-radius: 5px;
+            height: 30px;
+            width: 50px;
+            margin: 0;
+            &:not(:last-child) {
+              margin-right: 5px;
+            }
+
+            transition: all 0.2s ease-in-out;
+            &:hover {
+              background-color: $lighterDark;
+              &:not(:is(.add, .stop)) {
+                color: $red;
+              }
+            }
+
+            &.add {
+              opacity: 0.5;
+            }
+          }
+        }
+      }
+    }
+  }
 }

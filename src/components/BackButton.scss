@@ -1,23 +1,23 @@
 @import "../colors.scss";
 
 a.backButton {
-    $marg: 30px;
-    position: absolute;
-    top: $marg;
-    left: $marg;
-    height: 60px;
-    aspect-ratio: 1;
-    background: $lighterDark;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100%;
-    padding: 10px;
-    box-shadow: 0 0 40px -10px $grey;
-    img {
-        height: 70%;
-        width: 70%;
-        filter: $invert;
-        rotate: 90deg;
-    }
+  $marg: 30px;
+  position: absolute;
+  top: $marg;
+  left: $marg;
+  height: 60px;
+  aspect-ratio: 1;
+  background: $lighterDark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  padding: 10px;
+  box-shadow: 0 0 40px -10px $grey;
+  img {
+    height: 70%;
+    width: 70%;
+    filter: $invert;
+    rotate: 90deg;
+  }
 }

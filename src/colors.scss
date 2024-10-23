@@ -1,45 +1,45 @@
 :root {
-    --invert: invert(0);
+  --invert: invert(0);
 }
 
 body {
-    background: var(--dark);
-    color: var(--white);
+  background: var(--dark);
+  color: var(--white);
 
-    &.dark {
-        --dark: #151516;
-        --lighterDark: #262626;
-        --grey: #939393;
-        --white: #fefbf5;
-        --pink: #f96ad2;
-        --red: #ff6464;
-        --orange: #ff8b65;
-        --yellow: #fedc5c;
-        --lightBlue: #00dce1;
-        --darkBlue: #5a41ff;
-        --green: #7bff9c;
-        --invert: invert(1);
-        --oneIfDark: 1;
-        --oneIfLight: 0;
-    }
+  &.dark {
+    --dark: #151516;
+    --lighterDark: #262626;
+    --grey: #939393;
+    --white: #fefbf5;
+    --pink: #f96ad2;
+    --red: #ff6464;
+    --orange: #ff8b65;
+    --yellow: #fedc5c;
+    --lightBlue: #00dce1;
+    --darkBlue: #5a41ff;
+    --green: #7bff9c;
+    --invert: invert(1);
+    --oneIfDark: 1;
+    --oneIfLight: 0;
+  }
 
-    &.light,
-    &.senior {
-        --dark: #ededed;
-        --lighterDark: #dadada;
-        --grey: #7e7e7e;
-        --white: #000000;
-        --pink: #ff81dd;
-        --red: #ff6464;
-        --orange: #ff8d67;
-        --yellow: #fedc5c;
-        --lightBlue: #00d2d5;
-        --darkBlue: #5a41ff;
-        --green: #7bff9c;
-        --invert: invert(0);
-        --oneIfDark: 0;
-        --oneIfLight: 1;
-    }
+  &.light,
+  &.senior {
+    --dark: #ededed;
+    --lighterDark: #dadada;
+    --grey: #7e7e7e;
+    --white: #000000;
+    --pink: #ff81dd;
+    --red: #ff6464;
+    --orange: #ff8d67;
+    --yellow: #fedc5c;
+    --lightBlue: #00d2d5;
+    --darkBlue: #5a41ff;
+    --green: #7bff9c;
+    --invert: invert(0);
+    --oneIfDark: 0;
+    --oneIfLight: 1;
+  }
 }
 
 $dark: var(--dark);
@@ -58,15 +58,15 @@ $oneIfDark: var(--oneIfDark);
 $oneIfLight: var(--oneIfLight);
 
 @property --gradient-angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
 }
 @keyframes rotation {
-    0% {
-        --gradient-angle: 0deg;
-    }
-    100% {
-        --gradient-angle: 360deg;
-    }
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
 }

@@ -1,11 +1,11 @@
 body.light,
 body.senior {
-    .categoryBrowser {
-        > .browser .results,
-        > .selected .categories {
-            .categoryWrapper .category {
-                backdrop-filter: blur(10px) contrast(0.4) brightness(1.4);
-            }
-        }
+  .categoryBrowser {
+    > .browser .results,
+    > .selected .categories {
+      .categoryWrapper .category {
+        backdrop-filter: blur(10px) contrast(0.4) brightness(1.4);
+      }
     }
+  }
 }

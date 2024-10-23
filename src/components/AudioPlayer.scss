@@ -1,96 +1,96 @@
 @import "../colors.scss";
 
 .audioPlayer {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  outline: 1px solid transparent;
+  border-radius: 10px;
+  &.playing {
+    animation: playing 0.6s ease-in alternate-reverse infinite;
+  }
+
+  @keyframes playing {
+    from {
+      border-color: $white;
+    }
+    to {
+      border-color: black;
+    }
+  }
+
+  .top {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    outline: 1px solid transparent;
-    border-radius: 10px;
-    &.playing {
-        animation: playing 0.6s ease-in alternate-reverse infinite;
+    img.speakerIcon {
+      filter: $invert;
+      height: 40vh;
     }
-
-    @keyframes playing {
-        from {
-            border-color: $white;
-        }
-        to {
-            border-color: black;
-        }
+    button.playPause {
+      background-color: transparent;
+      filter: $invert;
+      border: none;
+      height: 40px;
+      aspect-ratio: 1;
+      cursor: pointer;
+      > img {
+        height: 80%;
+        aspect-ratio: 1;
+      }
     }
-
-    .top {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        img.speakerIcon {
-            filter: $invert;
-            height: 40vh;
-        }
-        button.playPause {
-            background-color: transparent;
-            filter: $invert;
-            border: none;
-            height: 40px;
-            aspect-ratio: 1;
-            cursor: pointer;
-            > img {
-                height: 80%;
-                aspect-ratio: 1;
-            }
-        }
-        div.title {
-            font-size: 13px;
-            margin-bottom: 5px;
-            padding: 0 5px;
-        }
+    div.title {
+      font-size: 13px;
+      margin-bottom: 5px;
+      padding: 0 5px;
     }
+  }
 
-    .time,
-    .volume {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 13px;
-        span,
-        button {
-            width: 80px;
-        }
-        button.mute {
-            background-color: transparent;
-            filter: $invert;
-            border: none;
-            height: 30px;
-            aspect-ratio: 1;
-            cursor: pointer;
-            img {
-                height: 80%;
-            }
-        }
-        .seek-slider,
-        .volume-slider {
-            $tracksize: 4px;
-            height: $tracksize;
-            border-radius: 10px;
-            width: 80%;
-            .rc-slider-rail,
-            .rc-slider-track {
-                background-color: $grey;
-            }
-
-            .rc-slider-handle {
-                background-color: $white;
-                cursor: pointer;
-                border: 1px solid $grey;
-                &.rc-slider-handle-dragging {
-                    box-shadow: 0 0 0 5px $grey;
-                }
-            }
-        }
+  .time,
+  .volume {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    span,
+    button {
+      width: 80px;
     }
+    button.mute {
+      background-color: transparent;
+      filter: $invert;
+      border: none;
+      height: 30px;
+      aspect-ratio: 1;
+      cursor: pointer;
+      img {
+        height: 80%;
+      }
+    }
+    .seek-slider,
+    .volume-slider {
+      $tracksize: 4px;
+      height: $tracksize;
+      border-radius: 10px;
+      width: 80%;
+      .rc-slider-rail,
+      .rc-slider-track {
+        background-color: $grey;
+      }
+
+      .rc-slider-handle {
+        background-color: $white;
+        cursor: pointer;
+        border: 1px solid $grey;
+        &.rc-slider-handle-dragging {
+          box-shadow: 0 0 0 5px $grey;
+        }
+      }
+    }
+  }
 }

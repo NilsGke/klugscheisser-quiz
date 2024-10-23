@@ -2,65 +2,65 @@
 @import "./colors.scss";
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Golos Text", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Golos Text", sans-serif;
 }
 
 /* scrollbars */
 /* Firefox */
 * {
-    scrollbar-width: auto;
-    scrollbar-color: #093162 #022249;
+  scrollbar-width: auto;
+  scrollbar-color: #093162 #022249;
 }
 
 /* Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-    width: 15px;
-    border-radius: 15px;
+  width: 15px;
+  border-radius: 15px;
 }
 
 *::-webkit-scrollbar-track {
-    background: $dark;
+  background: $dark;
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: $grey;
-    border-radius: 10px;
-    border: 0px solid #ffffff;
+  background-color: $grey;
+  border-radius: 10px;
+  border: 0px solid #ffffff;
 }
 
 #root > .loading {
-    height: 100svh;
-    width: 100svw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    .loadingSpinner {
-        margin-bottom: 60px;
+  height: 100svh;
+  width: 100svw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  .loadingSpinner {
+    margin-bottom: 60px;
+  }
+  .text {
+    margin-bottom: 10px;
+    &:first-of-type {
+      font-size: 25px;
+      margin-bottom: 20px;
     }
-    .text {
-        margin-bottom: 10px;
-        &:first-of-type {
-            font-size: 25px;
-            margin-bottom: 20px;
-        }
-        &.sub {
-            color: $grey;
-        }
+    &.sub {
+      color: $grey;
     }
-    .info {
-        margin-top: 20px;
-        font-size: 25px;
-    }
+  }
+  .info {
+    margin-top: 20px;
+    font-size: 25px;
+  }
 }
 
 code {
-    background: $grey;
-    padding: 2px 5px;
-    margin: 0 2px;
-    border-radius: 5px;
-    color: $red;
+  background: $grey;
+  padding: 2px 5px;
+  margin: 0 2px;
+  border-radius: 5px;
+  color: $red;
 }
