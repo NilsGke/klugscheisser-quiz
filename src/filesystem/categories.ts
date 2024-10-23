@@ -10,9 +10,9 @@ export type CategoryNew = {
   name: string;
   dirHandle: FileSystemDirectoryHandle;
   mediaDirHandle: FileSystemDirectoryHandle;
+  description: Image | string;
   info: {
     infoHandle: FileSystemFileHandle;
-    description: Image | string;
     thumbnail: Image | null;
     answerTime: number;
   };
@@ -59,7 +59,7 @@ const infoFileSchema = z.object({
     z.object({
       question: z.array(jsonRessourceSchema),
       answer: z.array(jsonRessourceSchema),
-    }),
+    })
   ),
 });
 
@@ -83,13 +83,14 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
   // get category info file
   const results = await Promise.allSettled<CategoryNew>(
     categoryDirectories.map(async (category) => {
-      const infoFileHandle =
-        await category.dirHandle.getFileHandle("info.json");
+      const infoFileHandle = await category.dirHandle.getFileHandle(
+        "info.json"
+      );
       // get info file
       const infoFile = await infoFileHandle.getFile().catch((error) => {
         if (error.name === "NotFoundError")
           throw new InfoFileNotFoundError(
-            `info.json fild missing for category "${category.name}"`,
+            `info.json fild missing for category "${category.name}"`
           );
         else throw new CategoryParseError(error);
       });
@@ -97,7 +98,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
       // read and parse info file
       const fileContents = await infoFile.text();
       const infoObject = infoFileSchema.safeParse(
-        await JSON.parse(fileContents),
+        await JSON.parse(fileContents)
       );
       // handle errors
       if (!infoObject.success) {
@@ -105,7 +106,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
           .map((issue) => `${issue.message} ${issue.path}`)
           .join(", ");
         throw new InfoFieldError(
-          `incorrect info fields in info.json for category "${category.name}": ${errors}`,
+          `incorrect info fields in info.json for category "${category.name}": ${errors}`
         );
       }
 
@@ -117,7 +118,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
         .catch((error) => {
           if (error.name === "NotFoundError")
             throw new MediaDirNotFoundError(
-              `Media directory for category "${category.name}" is missing!`,
+              `Media directory for category "${category.name}" is missing!`
             );
           else throw new CategoryParseError(error);
         });
@@ -132,14 +133,13 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
             .catch((error) => {
               if (error.name === "NotFoundError")
                 throw new MissingMediaError(
-                  `Missing Thumbnail ("${info.thumbnail}") inside media folder from category: "${category.name}"`,
+                  `Missing Thumbnail ("${info.thumbnail}") inside media folder from category: "${category.name}"`
                 );
               else throw new CategoryParseError(error);
             }),
         };
       // get description if it has one
-      let description: CategoryNew["info"]["description"] =
-        info.description.content;
+      let description: CategoryNew["description"] = info.description.content;
       if (info.description.type === "image")
         description = {
           type: "image",
@@ -148,7 +148,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
             .catch((error) => {
               if (error.name === "NotFoundError")
                 throw new MissingMediaError(
-                  `Missing Description image ("${info.description.content}") inside media folder from category: "${category.name}"`,
+                  `Missing Description image ("${info.description.content}") inside media folder from category: "${category.name}"`
                 );
               else throw new CategoryParseError(error);
             }),
@@ -158,7 +158,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
       const fields = (await Promise.all(
         info.fields.map(async (field) => {
           const getRessourceContent = async (
-            media: z.infer<typeof jsonRessourceSchema>,
+            media: z.infer<typeof jsonRessourceSchema>
           ): Promise<Ressource> => {
             if (media.type === "text")
               return {
@@ -171,7 +171,7 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
                 .catch((error) => {
                   if (error.name === "NotFoundError")
                     throw new MissingMediaError(
-                      `Missing Media of type "${media.type}" inside media folder from category: "${category.name}.\nName of Media stored as: "${media.content}"`,
+                      `Missing Media of type "${media.type}" inside media folder from category: "${category.name}.\nName of Media stored as: "${media.content}"`
                     );
                   else throw new CategoryParseError(error);
                 });
@@ -184,14 +184,14 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
           };
 
           const question: Ressource[] = await Promise.all(
-            field.question.map(getRessourceContent),
+            field.question.map(getRessourceContent)
           );
           const answer: Ressource[] = await Promise.all(
-            field.answer.map(getRessourceContent),
+            field.answer.map(getRessourceContent)
           );
 
           return { question, answer };
-        }),
+        })
       )) satisfies CategoryNew["fields"];
 
       const result = {
@@ -199,16 +199,16 @@ export const getAllCategories = async (fsdh: FileSystemDirectoryHandle) => {
         dirHandle: fsdh,
         mediaDirHandle,
         fields,
+        description,
         info: {
           thumbnail,
-          description,
           answerTime: info.answerTime,
           infoHandle: infoFileHandle,
         },
       } satisfies CategoryNew;
 
       return result;
-    }),
+    })
   );
 
   const usable: CategoryNew[] = [];
