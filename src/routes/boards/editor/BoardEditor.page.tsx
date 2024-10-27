@@ -75,9 +75,9 @@ const BoardEditor = () => {
   console.log(board);
 
   const save = () => {
-    if (board.name.trim() === "") return toast("please enter a name");
+    if (board.name.trim() === "") return toast.info("please enter a name");
     if (board.categories.length === 0)
-      return toast("add at least one category");
+      return toast.info("add at least one category");
 
     let promise: Promise<number>;
 
@@ -88,10 +88,10 @@ const BoardEditor = () => {
       .then((promisedDbIndex) => {
         if (dbIndex === undefined)
           navigate(`/boards/editor/${promisedDbIndex}`);
-        toast("✅ board saved!");
+        toast.success("Board saved!");
       })
       .catch((error) => {
-        toast(error);
+        toast.error(error);
         throw new Error(error);
       });
   };
@@ -175,7 +175,7 @@ const BoardEditor = () => {
                   ) : null}
                 </div>
               </div>
-            ),
+            )
           )}
           <div className="category add">
             <button onClick={() => setAddCategoryOpen(true)}>

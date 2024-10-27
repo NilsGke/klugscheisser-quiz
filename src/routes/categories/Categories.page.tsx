@@ -79,8 +79,8 @@ const Categories = ({ fsdh }: { fsdh: FileSystemDirectoryHandle }) => {
     if (files === undefined) return;
     files.forEach((file) =>
       importCategoryFromZip(file).then((category) =>
-        storeCategoryInDB(category).then((dbIndex) => setUpdate(Date.now())),
-      ),
+        storeCategoryInDB(category).then((dbIndex) => setUpdate(Date.now()))
+      )
     );
   }, [files]);
 
@@ -147,14 +147,17 @@ const Categories = ({ fsdh }: { fsdh: FileSystemDirectoryHandle }) => {
                         exportAllCategories(setExportInfo)
                           .then((file) => {
                             setExportInfo(null);
-                            toast("🟩 Export successful!");
+                            toast.success("Export successful!");
                           })
                           .catch((error) => {
                             console.error(error);
-                            toast(`🟥 Error while exporting! \n\n ${error}`, {
-                              autoClose: false,
-                              onClose: () => setExportInfo(null),
-                            });
+                            toast.error(
+                              `Error while exporting! \n\n ${error}`,
+                              {
+                                autoClose: false,
+                                onClose: () => setExportInfo(null),
+                              }
+                            );
                           }),
                     },
                   ],
@@ -180,7 +183,7 @@ const Categories = ({ fsdh }: { fsdh: FileSystemDirectoryHandle }) => {
                   style={{
                     width: `${Math.ceil(
                       (100 / exportInfo.categoriesTotal) *
-                        exportInfo.categoriesDone,
+                        exportInfo.categoriesDone
                     )}%`,
                   }}
                 ></div>
@@ -209,7 +212,7 @@ const Categories = ({ fsdh }: { fsdh: FileSystemDirectoryHandle }) => {
 
 const PopupChildren = () => {
   const [maxExportSize, setMaxExportSize] = useState(
-    getSettings().maxExportSize,
+    getSettings().maxExportSize
   );
 
   const updateMaxExportSize = (num: number) => {

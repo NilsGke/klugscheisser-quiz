@@ -238,7 +238,7 @@ const dbClient = new IDBClient({ name: "fsdh", migrations });
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <IDBClientProvider client={dbClient}>
     <QueryClientProvider client={queryClient}>
-      <ToastContainer />
+      <ToastContainer theme="colored" />
       <App />
     </QueryClientProvider>
   </IDBClientProvider>
