@@ -1,17 +1,16 @@
-import { Indexed } from "$db/indexeddb";
-import { Category, Field } from "./categoryTypes";
+import { CategoryNew, FieldNew } from "filesystem/categories";
 
 export interface Game {
   teams: GameTeam[];
   categories: GameCategory[];
 }
 
-export interface GameCategory extends Omit<Indexed<Category>, "fields"> {
-  fields: [GameField, GameField, GameField, GameField, GameField];
+export interface GameCategory extends Omit<CategoryNew, "fields"> {
+  fields: GameFieldNew[];
 }
-
-export interface GameField extends Omit<Field, "answered"> {
-  answered: false | GameTeam["name"];
+export interface GameFieldNew extends FieldNew {
+  answered: false | string;
+  highlighted: boolean;
 }
 
 export interface GameTeam {
@@ -31,18 +30,14 @@ export const TeamColors = [
   "#f0f",
 ] as const;
 
-export const categoryToGameCategory = (
-  category: Indexed<Category>,
-): GameCategory => {
+export const categoryToGameCategory = (category: CategoryNew): GameCategory => {
   const gameCategory: GameCategory = {
     ...category,
-    fields: [
-      { ...category.fields[0], answered: false },
-      { ...category.fields[1], answered: false },
-      { ...category.fields[2], answered: false },
-      { ...category.fields[3], answered: false },
-      { ...category.fields[4], answered: false },
-    ],
+    fields: category.fields.map((field) => ({
+      ...field,
+      answered: false,
+      highlighted: false,
+    })),
   };
 
   return gameCategory;

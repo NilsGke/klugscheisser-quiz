@@ -1,7 +1,8 @@
-import { CSSProperties, useRef } from "react";
-import { Resource } from "$types/categoryTypes";
+import { CSSProperties, useRef, useState } from "react";
 import AudioPlayer from "./AudioPlayer";
 import VideoPlayer from "./VideoPlayer";
+import { Resource } from "filesystem/categories";
+import { useQuery } from "@tanstack/react-query";
 
 const ResourceRenderer = ({
   resource,
@@ -16,28 +17,42 @@ const ResourceRenderer = ({
   onVolumeChange?: (value: number) => void;
   style?: CSSProperties;
 }) => {
-  if (resource.type === "image") {
-    const url = useRef(URL.createObjectURL(resource.content));
+  const {
+    data: file,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [resource],
+    queryFn: async () => {
+      if (resource.type === "text") return null;
+      return resource.handle.getFile();
+    },
+  });
+
+  if (resource.type === "text")
+    return <div className="text">{resource.content}</div>;
+
+  if (error !== null)
     return (
-      <div className="image" style={style}>
-        <img
-          loading="lazy"
-          src={url.current}
-          alt=""
-          onDragStart={(e) => {
-            url.current = URL.createObjectURL(resource.content);
-            e.dataTransfer.setData("text/uri-list", url.current);
-          }}
-          onLoad={() => URL.revokeObjectURL(url.current)}
-          onDragEnd={() => URL.revokeObjectURL(url.current)}
-        />
+      <div>
+        {error.name}: {error.message}
+      </div>
+    );
+  if (isLoading || file === undefined) return <div>loading resource</div>;
+  if (file === null) return <div>error: no file found</div>;
+
+  if (resource.type === "image") {
+    const url = URL.createObjectURL(file);
+    return (
+      <div className="image">
+        <img src={url} alt="" onLoad={() => URL.revokeObjectURL(url)} />
       </div>
     );
   } else if (resource.type === "audio")
     return (
-      <div className="audio" style={style}>
+      <div className="audio">
         <AudioPlayer
-          file={resource.content}
+          file={file}
           initialVolume={resource.volume}
           autoplay={autoplay}
         />
@@ -46,7 +61,7 @@ const ResourceRenderer = ({
   else if (resource.type === "video")
     return (
       <VideoPlayer
-        file={resource.content}
+        file={file}
         initialVolume={resource.volume}
         autoplay={autoplay}
         small={small}
@@ -54,19 +69,8 @@ const ResourceRenderer = ({
         style={style}
       />
     );
-  else if (resource.type === "text")
-    return (
-      <div className="text" style={style}>
-        {resource.content}
-      </div>
-    );
-  else if (resource.type === "imageCollection")
-    <p>
-      Resource Renderer is not supposed to render an ImageCollection. Use the{" "}
-      <code>&lt;Diashow /&gt; component instead!</code>
-    </p>;
 
-  return <div className="resource">unknwon content type?</div>;
+  return <div className="resource">unknown content type</div>;
 };
 
 export default ResourceRenderer;

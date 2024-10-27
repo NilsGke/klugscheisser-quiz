@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -14,13 +15,13 @@ import { confirmAlert } from "react-confirm-alert";
 // types
 import {
   type Game,
-  GameField,
+  GameFieldNew,
   GameTeam,
   TeamColors,
   GameTeam as TeamType,
   categoryToGameCategory,
 } from "$types/gameTypes";
-import { Audio, Category, Resource } from "$types/categoryTypes";
+import { Audio, Resource } from "filesystem/categories";
 // helpers
 import { getStoredCategory, removeCategoryFromDb } from "$db/categories";
 import { deleteGameFromDb, getGameFromDb, saveGameInDb } from "$db/games";
@@ -54,6 +55,12 @@ import { getThing } from "$db/things";
 import HomeButton from "$components/HomeButton";
 import Gamepad from "$components/Gamepad";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import {
+  CategoryNew,
+  deleteCategory,
+  getCategoryByDirectoryName,
+} from "filesystem/categories";
+import { useQuery } from "@tanstack/react-query";
 
 enum State {
   intro = "intro",
@@ -71,9 +78,11 @@ const jsConfetti = new JSConfetti();
 const Game = ({
   theme,
   themeChange,
+  fsdh,
 }: {
   theme: Theme;
   themeChange: () => void;
+  fsdh: FileSystemDirectoryHandle;
 }) => {
   const [gameData, setGameData] = useState<Game | null>(null);
 
@@ -83,7 +92,7 @@ const Game = ({
   }>(null);
 
   const [buzzeredTeamIndex, setBuzzeredTeamIndex] = useState<null | number>(
-    null,
+    null
   );
 
   const categoriesRef = useRef<HTMLDivElement>(null);
@@ -92,16 +101,16 @@ const Game = ({
   const { pathname } = useLocation();
 
   // load testgame if specified in url
-  const { dbIndex: urlDbIndex } = useParams();
-  const dbIndex = parseInt(urlDbIndex || "");
-  const testMode = !isNaN(dbIndex);
+  const { dbIndex: urlCategoryName } = useParams();
+
+  const testMode = urlCategoryName !== undefined;
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
     if (!testMode) return;
     setLoading(true);
-    getStoredCategory(dbIndex)
+    getCategoryByDirectoryName(fsdh, urlCategoryName)
       .then((category) => {
         setGameData({
           teams: [
@@ -128,7 +137,8 @@ const Game = ({
         });
 
         // remove category from db if url is .../test/:dbIndex/destroy
-        if (pathname.includes("/destroy")) removeCategoryFromDb(dbIndex);
+        if (pathname.includes("/destroy"))
+          deleteCategory(fsdh, urlCategoryName);
         setLoading(false);
       })
       .catch((error) => {
@@ -166,7 +176,7 @@ const Game = ({
         });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    []
   );
 
   useLayoutEffect(() => {
@@ -196,12 +206,12 @@ const Game = ({
     setGameState(State.goingBig);
 
     activeTimers.current.push(
-      setTimeout(() => setGameState(State.showDescription), 500),
+      setTimeout(() => setGameState(State.showDescription), 500)
     );
 
     if (settings.descriptionNext === "auto")
       activeTimers.current.push(
-        setTimeout(() => setGameState(State.showQuestion), 4500),
+        setTimeout(() => setGameState(State.showQuestion), 4500)
       );
   };
 
@@ -228,10 +238,10 @@ const Game = ({
         {
           duration: 3000,
           easing: "ease-out",
-        },
+        }
       );
     },
-    [gameData, gameState, buzzeredTeamIndex],
+    [gameData, gameState, buzzeredTeamIndex]
   );
 
   const keyboardCallback = useCallback(
@@ -239,7 +249,7 @@ const Game = ({
       if (
         e.target &&
         Array.from((e.target as HTMLInputElement).classList).includes(
-          "dontBuzzer",
+          "dontBuzzer"
         )
       )
         return;
@@ -252,7 +262,7 @@ const Game = ({
       if (team === undefined) return;
       buzzer(index);
     },
-    [gameData, buzzer],
+    [gameData, buzzer]
   );
 
   useKeyboard(keyboardCallback);
@@ -262,7 +272,7 @@ const Game = ({
   const grantPoints = (points: number) => {
     if (buzzeredTeamIndex === null)
       throw new Error(
-        "buzzeredTeamIndex is null while trying to grant points to team",
+        "buzzeredTeamIndex is null while trying to grant points to team"
       );
 
     setGameData((prev) => {
@@ -270,7 +280,7 @@ const Game = ({
         throw new Error("game is null while trying to set score");
       if (selected === null)
         throw new Error(
-          "selected team is null while trying to set score and disable field",
+          "selected team is null while trying to set score and disable field"
         );
 
       const newTeams = prev.teams;
@@ -295,7 +305,7 @@ const Game = ({
 
       if (
         newCategories.every((cat) =>
-          cat.fields.every((field) => typeof field.answered === "string"),
+          cat.fields.every((field) => typeof field.answered === "string")
         )
       ) {
         setTimeout(() => setGameState(State.done), 650);
@@ -314,7 +324,7 @@ const Game = ({
   const endGame = () => {
     if (
       !confirm(
-        "Do you really want to reset the game? This action cannot be undone!",
+        "Do you really want to reset the game? This action cannot be undone!"
       )
     )
       return;
@@ -353,7 +363,7 @@ const Game = ({
                 jsConfetti.addConfetti({
                   confettiColors: winners.map((t) => t.color),
                 });
-              }, 500),
+              }, 500)
             );
           };
           const intverval = setInterval(confetti, 1300);
@@ -395,7 +405,7 @@ const Game = ({
   const sortedTeams = gameData.teams.slice().sort((a, b) => b.score - a.score);
 
   const winners = sortedTeams.filter(
-    (team) => team.score === sortedTeams[0].score,
+    (team) => team.score === sortedTeams[0].score
   );
 
   return (
@@ -417,7 +427,7 @@ const Game = ({
                     : {
                         categories: prev?.categories,
                         teams: newTeams,
-                      },
+                      }
                 );
               }}
               buzzered={teamIndex === buzzeredTeamIndex}
@@ -583,8 +593,8 @@ const Game = ({
                     const answeredFields = [
                       ...gameData.categories.map((category) =>
                         category.fields.filter(
-                          (field) => field.answered === team.name,
-                        ),
+                          (field) => field.answered === team.name
+                        )
                       ),
                     ].flat();
 
@@ -616,13 +626,13 @@ const Game = ({
                                           <div className="question">
                                             <ResourceDisplay
                                               settings={settings}
-                                              resource={field.question}
+                                              resources={field.question}
                                             />
                                           </div>
                                           <div className="answer">
                                             <ResourceDisplay
                                               settings={settings}
-                                              resource={field.answer}
+                                              resources={field.answer}
                                             />
                                           </div>
                                         </div>
@@ -698,7 +708,7 @@ const Field = ({
   settings,
   theme,
 }: {
-  field: GameField;
+  field: GameFieldNew;
   points: number;
   grantPoints: (points: number) => void;
   selected: boolean;
@@ -707,7 +717,7 @@ const Field = ({
   setGameState: (newState: State) => void;
   containerRef: RefObject<HTMLDivElement>;
   gameState: State;
-  category: Category;
+  category: CategoryNew;
   buzzeredTeamIndex: number | null;
   testMode: boolean;
   settings: SettingsType;
@@ -736,7 +746,7 @@ const Field = ({
     ) {
       const timer = setTimeout(
         () => setTimeUp(true),
-        category.answerTime * 1000,
+        category.answerTime * 1000
       );
       return () => {
         setTimeUp(false);
@@ -776,7 +786,7 @@ const Field = ({
           top: "0px",
         },
       ],
-      { duration: 500, easing: "ease-out" },
+      { duration: 500, easing: "ease-out" }
     );
     activeTimer.current = setTimeout(() => {
       if (fieldRef.current !== null)
@@ -819,7 +829,7 @@ const Field = ({
           top: offsetTop + "px",
         },
       ],
-      { duration: 500, easing: "ease-out" },
+      { duration: 500, easing: "ease-out" }
     );
 
     setTimeout(() => {
@@ -891,7 +901,7 @@ const Field = ({
                   ) : (
                     <ResourceDisplay
                       settings={settings}
-                      resource={{
+                      resources={{
                         type: "image",
                         content: category.description,
                       }}
@@ -922,7 +932,7 @@ const Field = ({
                     ) : (
                       <ResourceDisplay
                         settings={settings}
-                        resource={field.question}
+                        resources={field.question}
                         stop={buzzeredTeamIndex !== null}
                       />
                     )}
@@ -955,7 +965,7 @@ const Field = ({
                   >
                     <ResourceDisplay
                       settings={settings}
-                      resource={field.answer}
+                      resources={field.answer}
                     />
                     {buzzeredTeamIndex !== null ? (
                       <div className="points">
@@ -1005,7 +1015,7 @@ const Field = ({
                               setCustomPoints(
                                 isNaN(parseInt(e.target.value))
                                   ? ""
-                                  : parseInt(e.target.value),
+                                  : parseInt(e.target.value)
                               )
                             }
                             className="custom dontBuzzer"
@@ -1042,55 +1052,77 @@ const Field = ({
 };
 
 const ResourceDisplay = ({
-  resource,
+  resources,
   stop = false,
   settings,
 }: {
-  resource: Resource;
+  resources: Resource[];
   stop?: boolean;
   settings: SettingsType;
 }) => {
-  if (resource.type === "image") {
-    const url = URL.createObjectURL(resource.content);
+  const [index, setIndex] = useState(0);
+
+  const currentResource = resources.at(index) || resources.at(-1)!;
+
+  useEffect(() => {
+    if (index === resources.length - 1) return;
+    const timer = setTimeout(() => setIndex((current) => current));
+  }, [resources]);
+
+  const {
+    data: file,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: [currentResource],
+    queryFn: async () => {
+      if (currentResource.type === "text") return null;
+      return currentResource.handle.getFile();
+    },
+  });
+
+  if (currentResource.type === "text")
+    return <div className="text">{currentResource.content}</div>;
+
+  if (error !== null)
     return (
-      <div className="image">
-        <img src={url} alt="" />
+      <div>
+        {error.name}: {error.message}
       </div>
     );
-  } else if (resource.type === "audio")
+  if (isLoading || file === undefined) return <div>loading resource</div>;
+  if (file === null) return <div>error: no file found</div>;
+
+  if (currentResource.type === "image") {
+    const url = URL.createObjectURL(file);
+    return (
+      <div className="image">
+        <img src={url} alt="" onLoad={() => URL.revokeObjectURL(url)} />
+      </div>
+    );
+  } else if (currentResource.type === "audio")
     return (
       <div className="audio">
         <AudioPlayer
-          file={resource.content}
-          initialVolume={resource.volume}
+          file={file}
+          initialVolume={currentResource.volume}
           stop={stop}
           autoplay
           show
         />
       </div>
     );
-  else if (resource.type === "video")
+  else if (currentResource.type === "video")
     return (
       <VideoPlayer
-        file={resource.content}
-        initialVolume={resource.volume}
+        file={file}
+        initialVolume={currentResource.volume}
         stop={stop}
         autoplay
       />
     );
-  else if (resource.type === "text")
-    return <div className="text">{resource.content}</div>;
-  else if (resource.type === "imageCollection")
-    return (
-      <Diashow
-        images={resource.content}
-        autoSkip={settings.diashowNext === "auto"}
-        stop={stop}
-        show
-      />
-    );
 
-  return <div className="resource">unknown content type?</div>;
+  return <div className="resource">unknown content type</div>;
 };
 
 const Team = ({
@@ -1117,23 +1149,24 @@ const Team = ({
       [
         {
           boxShadow: `
-                                 inset 0 0 30px 0px ${team.color},
-                                 0 0 100px 10px ${team.color}
-                            `,
+            inset 0 0 30px 0px ${team.color},
+            0 0 100px 10px ${team.color}
+          `,
         },
         {
           boxShadow: `
-                        inset 0 0 10px ${team.color}, 
-                        0 0 30px ${team.color}`,
+            inset 0 0 10px ${team.color}, 
+            0 0 30px ${team.color}
+          `,
         },
         {
           boxShadow: `
-                                 inset 0 0 30px 0px ${team.color},
-                                 0 0 100px 10px ${team.color}
-                            `,
+            inset 0 0 30px 0px ${team.color},
+            0 0 100px 10px ${team.color}
+          `,
         },
       ],
-      { duration: 600, easing: "ease-in-out", iterations: Infinity },
+      { duration: 600, easing: "ease-in-out", iterations: Infinity }
     );
   }, []);
 

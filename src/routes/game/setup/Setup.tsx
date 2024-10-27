@@ -1,7 +1,6 @@
 import { FC, useEffect, useRef, useState, useCallback } from "react";
 import { Game, TeamColors, categoryToGameCategory } from "$types/gameTypes";
 import autoAnimate from "@formkit/auto-animate";
-import { Category } from "$types/categoryTypes";
 import useKeyboard from "$hooks/keyboard";
 import { toast } from "react-toastify";
 import useClick from "$hooks/useClick";
@@ -24,6 +23,7 @@ import closeIcon from "$assets/close.svg";
 // styles
 import "./Setup.scss";
 import ResourceRenderer from "$components/ResourceRenderer";
+import { CategoryNew } from "filesystem/categories";
 
 enum Step {
   CREATE_TEAMS,
@@ -45,7 +45,7 @@ const Setup: FC<props> = ({ setGameData }) => {
       return toast("please add at least one category");
 
     teams.forEach((team, index) =>
-      team.name.trim() === "" ? (team.name = `Team #${index + 1}`) : null,
+      team.name.trim() === "" ? (team.name = `Team #${index + 1}`) : null
     );
 
     setGameData({
@@ -129,7 +129,7 @@ const CreateTeams = ({
                 members: [],
                 score: 0,
                 color: TeamColors.filter(
-                  (color) => !teams.map((t) => t.color).includes(color),
+                  (color) => !teams.map((t) => t.color).includes(color)
                 )[0],
               },
             ])
@@ -181,10 +181,10 @@ const Team = ({
             boxShadow: "inset 0 0 0 transparent, 0 0 0 transparent",
           },
         ],
-        { duration: 1500, easing: "ease-out" },
+        { duration: 1500, easing: "ease-out" }
       );
     },
-    [memberList],
+    [memberList]
   );
 
   useKeyboard(keyCallback);
@@ -194,7 +194,7 @@ const Team = ({
     if (e.target === null) throw new Error("event target is null");
     if (
       !Array.from((e.target as HTMLElement).classList).includes(
-        "dontCloseOnClick",
+        "dontCloseOnClick"
       )
     )
       setShowColors(false);
@@ -203,7 +203,7 @@ const Team = ({
   const team = teams[teamIndex];
 
   const avalibleColors = TeamColors.filter(
-    (c) => !teams.map((t) => t.color).includes(c),
+    (c) => !teams.map((t) => t.color).includes(c)
   );
 
   return (
@@ -332,7 +332,7 @@ const SelectCategories = ({
   setCategories: (categories: Game["categories"]) => void;
 }) => {
   const [loadBoardOpen, setLoadBoardOpen] = useState(false);
-  const [selected, setSelected] = useState<Indexed<Category>[]>([]);
+  const [selected, setSelected] = useState<CategoryNew[]>([]);
 
   useEffect(() => {
     setCategories(selected.map(categoryToGameCategory));
@@ -379,7 +379,7 @@ const SelectCategories = ({
           <BoardBrowser
             select={(board) => {
               const categories = board.categories.filter(
-                (c) => !categoryIsDeleted(c),
+                (c) => !categoryIsDeleted(c)
               ) as Indexed<Category>[];
 
               setSelected((prev) => [
