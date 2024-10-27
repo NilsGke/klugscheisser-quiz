@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import useTitle from "$hooks/useTitle";
 import { removeThing, setThing } from "$db/things";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategories } from "filesystem/categories";
 // assets
 import playIcon from "$assets/playOutline.svg";
 import helpIcon from "$assets/help.svg";
@@ -18,18 +20,26 @@ import lightIcon from "$assets/sun.svg";
 import darkIcon from "$assets/moon.svg";
 import elderlyIcon from "$assets/elderly.svg";
 import changeDirIcon from "$assets/editDirectory.svg";
+import errorIcon from "$assets/error.svg";
 
 const Root = ({
   theme,
+  fsdh,
   themeChange,
   changeDirectory,
 }: {
   theme: Theme;
+  fsdh: FileSystemDirectoryHandle;
   themeChange: () => void;
   changeDirectory: () => void;
 }) => {
   useTitle("Klugscheißer-Quiz");
   const [rootContainerRef] = useAutoAnimate();
+
+  const { data: errors } = useQuery({
+    queryKey: [fsdh],
+    queryFn: async () => (await getAllCategories(fsdh)).errors,
+  });
 
   return (
     <div className="root" ref={rootContainerRef}>
@@ -105,6 +115,14 @@ const Root = ({
         <img src={changeDirIcon} alt="change directory" />
       </button>
 
+      {/* TODO: continue here */}
+
+      {!!errors?.length && (
+        <Link className="errorLink" to={"/errors"}>
+          <img src={errorIcon} alt="error con" /> {errors.length} Errors
+        </Link>
+      )}
+
       {theme === "senior" ? (
         <div className="extraOptions">
           <div className="audioImage">
@@ -135,10 +153,10 @@ const Root = ({
                 const base64 = await fileToBase64(file);
                 try {
                   localStorage.setItem("audioImage", base64);
-                  toast("✅image saved");
+                  toast.success("image saved");
                 } catch (error) {
                   console.error(error);
-                  toast("❌failed, File might be too big!");
+                  toast.error("failed, File might be too big!");
                 }
               }}
             />
@@ -151,8 +169,11 @@ const Root = ({
             <button
               onClick={() => {
                 removeThing("introMusic")
-                  .then(() => toast("🚮intro music removed"))
-                  .catch((e) => toast("❌removing failed"));
+                  .then(() => toast.success("🚮intro music removed"))
+                  .catch((error) => {
+                    console.error(error);
+                    toast.error("removing failed");
+                  });
               }}
             >
               delete intro music
@@ -162,10 +183,10 @@ const Root = ({
               onChange={async (file) => {
                 try {
                   setThing("introMusic", file);
-                  toast("✅music saved 🎵");
+                  toast.success("music saved 🎵");
                 } catch (error) {
                   console.error(error);
-                  toast("❌failed, File might be too big!");
+                  toast.error("failed, File might be too big!");
                 }
               }}
             />
@@ -182,8 +203,11 @@ const Root = ({
                   className="remove"
                   onClick={() =>
                     removeThing("buzzerSound" + i)
-                      .then(() => toast("🚮Buzzer sound removed"))
-                      .catch(() => toast("❌removing failed"))
+                      .then(() => toast.success("🚮Buzzer sound removed"))
+                      .catch((error) => {
+                        console.error(error);
+                        toast.error("removing failed");
+                      })
                   }
                 >
                   <img src={removeIcon} alt="remove" />
@@ -192,10 +216,10 @@ const Root = ({
                   id={"buzzerSound" + i}
                   onChange={async (file) => {
                     setThing("buzzerSound" + i, file)
-                      .then(() => toast("✅sound saved"))
-                      .catch((e) => {
-                        console.error(e);
-                        toast("❌something went wrong");
+                      .then(() => toast.success("sound saved"))
+                      .catch((error) => {
+                        console.error(error);
+                        toast.error("something went wrong");
                       });
                   }}
                 />
@@ -229,7 +253,7 @@ const AudioInput = ({
         const file = files[0];
         if (file === undefined) return;
         if (!file.type.startsWith("audio/"))
-          return toast("❌File is not a standard audio file");
+          return toast.error("File is not a standard audio file");
 
         onChange(file);
       }}

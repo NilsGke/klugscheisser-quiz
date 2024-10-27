@@ -23,9 +23,10 @@ import { migrations } from "./indexedDB/db";
 import { IDBClientProvider } from "./indexedDB/lib/IDBClientProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import useIDBStatus from "indexedDB/lib/hooks/useIDBStatus";
-import useIDB from "indexedDB/lib/hooks/useIDB";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getAllCategories } from "filesystem/categories";
+import Errors from "routes/errors/Errors.page";
 
 enum NetworkStatus {
   ONLINE = "online",
@@ -46,7 +47,6 @@ const App = () => {
 
   // new IDB Status
   const dbStatus = useIDBStatus();
-  const db = useIDB();
 
   useEffect(() => {
     initIndexedDB(setMigrationsTotal, setMigrationsLeft).then(() =>
@@ -118,6 +118,13 @@ const App = () => {
           setFSDH={(fsdh) => {
             setFileSystemDirectoryHandle(fsdh);
             toast(`Verzeichnis "${fsdh.name}" gewählt`);
+            // toast errors on initial load
+            getAllCategories(fsdh).then(({ usable, errors }) => {
+              toast.info(`successfully parsed ${usable.length} categories`);
+              if (errors.length > 0)
+                toast.error(`${errors.length} errors while parsing categories`);
+              return errors;
+            });
           }}
         />
       </div>
@@ -129,6 +136,7 @@ const App = () => {
       element: (
         <Root
           theme={theme}
+          fsdh={fileSystemDirectoryHandle}
           themeChange={() => setTheme(getSettings().theme)}
           changeDirectory={() => setFileSystemDirectoryHandle("choose")}
         />
@@ -138,18 +146,14 @@ const App = () => {
       path: "/help",
       element: <Help />,
     },
+    {
+      path: "/errors",
+      element: <Errors fsdh={fileSystemDirectoryHandle} />,
+    },
     // categories
     {
       path: "/categories",
       element: <Categories fsdh={fileSystemDirectoryHandle} />,
-      loader: async ({ request }) => {
-        // getAllCategoryNames(fileSystemDirectoryHandle);
-        const perms = await fileSystemDirectoryHandle.queryPermission({
-          mode: "readwrite",
-        });
-        console.log(perms);
-        return perms;
-      },
     },
     {
       path: "/categories/editor",
@@ -162,13 +166,21 @@ const App = () => {
     {
       path: "/categories/test/:dbIndex",
       element: (
-        <Game theme={theme} themeChange={() => setTheme(getSettings().theme)} />
+        <Game
+          theme={theme}
+          themeChange={() => setTheme(getSettings().theme)}
+          fsdh={fileSystemDirectoryHandle}
+        />
       ),
     },
     {
       path: "/categories/test/:dbIndex/destroy",
       element: (
-        <Game theme={theme} themeChange={() => setTheme(getSettings().theme)} />
+        <Game
+          theme={theme}
+          themeChange={() => setTheme(getSettings().theme)}
+          fsdh={fileSystemDirectoryHandle}
+        />
       ),
     },
     // boards
@@ -187,7 +199,11 @@ const App = () => {
     {
       path: "/game",
       element: (
-        <Game theme={theme} themeChange={() => setTheme(getSettings().theme)} />
+        <Game
+          theme={theme}
+          fsdh={fileSystemDirectoryHandle}
+          themeChange={() => setTheme(getSettings().theme)}
+        />
       ),
     },
   ]);
