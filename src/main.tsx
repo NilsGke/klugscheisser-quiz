@@ -17,6 +17,7 @@ import BoardEditor from "./routes/boards/editor/BoardEditor.page";
 import { getSettings } from "$helpers/settings";
 import "light.scss";
 import "./confirm-alert.scss";
+import useFavicon from "$hooks/useFavicon";
 
 enum NetworkStatus {
     ONLINE = "online",
@@ -28,7 +29,7 @@ export type Theme = (typeof themes)[number];
 
 const App = () => {
     const [network, setNetwork] = useState<NetworkStatus>(
-        navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE
+        navigator.onLine ? NetworkStatus.ONLINE : NetworkStatus.OFFLINE,
     );
 
     const [indexedDbIsReady, setIndexedDbIsReady] = useState(false);
@@ -37,7 +38,7 @@ const App = () => {
 
     useEffect(() => {
         initIndexedDB(setMigrationsTotal, setMigrationsLeft).then(() =>
-            setIndexedDbIsReady(true)
+            setIndexedDbIsReady(true),
         );
     }, []);
 
@@ -53,10 +54,16 @@ const App = () => {
                 .querySelector('meta[name="theme-color"]')
                 ?.setAttribute(
                     "content",
-                    theme === "dark" ? "#262626" : "#dadada"
+                    theme === "dark" ? "#262626" : "#dadada",
                 );
         }, 100);
     }, [theme]);
+
+    useFavicon(
+        theme === "senior"
+            ? "/icons/custom-logo.svg"
+            : "/icons/maskable_icon.png",
+    );
 
     // offline detection
     useEffect(() => {
@@ -190,5 +197,5 @@ const App = () => {
 };
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <App />
+    <App />,
 );
