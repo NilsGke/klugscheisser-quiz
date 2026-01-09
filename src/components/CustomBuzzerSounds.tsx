@@ -9,6 +9,16 @@ const CustomBuzzerSounds = () => {
     const [buzzerSounds, setBuzzerSounds] = useState<string[]>([]);
     const buzzerSoundsRef = useRef<HTMLDivElement>(null);
 
+    // Helper function to extract index from buzzer sound key
+    const extractIndexFromKey = (key: string): number | null => {
+        const match = key.match(/buzzerSound-(\d+)/);
+        if (match) {
+            const index = parseInt(match[1], 10);
+            return isNaN(index) ? null : index;
+        }
+        return null;
+    };
+
     // Initialize auto-animate
     useEffect(() => {
         if (buzzerSoundsRef.current) {
@@ -27,23 +37,25 @@ const CustomBuzzerSounds = () => {
                 const sortedKeys = sounds
                     .map((s) => s.key)
                     .sort((a, b) => {
-                        const numA = parseInt(a.replace("buzzerSound-", ""), 10);
-                        const numB = parseInt(b.replace("buzzerSound-", ""), 10);
-                        const aIsNaN = isNaN(numA);
-                        const bIsNaN = isNaN(numB);
+                        const numA = extractIndexFromKey(a);
+                        const numB = extractIndexFromKey(b);
+                        const aIsNaN = numA === null;
+                        const bIsNaN = numB === null;
                         if (aIsNaN && bIsNaN) {
                             // Fallback to lexicographic order for malformed keys
                             return a.localeCompare(b);
                         }
                         if (aIsNaN) {
                             // Place malformed keys after well-formed ones
+                            console.warn(`Malformed buzzer sound key detected: ${a}`);
                             return 1;
                         }
                         if (bIsNaN) {
                             // Place malformed keys after well-formed ones
+                            console.warn(`Malformed buzzer sound key detected: ${b}`);
                             return -1;
                         }
-                        return numA - numB;
+                        return (numA || 0) - (numB || 0);
                     });
                 setBuzzerSounds(sortedKeys);
             })
@@ -67,8 +79,12 @@ const CustomBuzzerSounds = () => {
         <div className="buzzerSounds" ref={buzzerSoundsRef}>
             {buzzerSounds.map((soundKey) => {
                 // Extract the actual index from the key for display
-                const indexMatch = soundKey.match(/buzzerSound-(\d+)/);
-                const displayNumber = indexMatch ? parseInt(indexMatch[1], 10) + 1 : "?";
+                const keyIndex = extractIndexFromKey(soundKey);
+                const displayNumber = keyIndex !== null ? keyIndex + 1 : "?";
+                
+                if (keyIndex === null) {
+                    console.warn(`Unable to parse index from buzzer sound key: ${soundKey}`);
+                }
                 
                 return (
                     <div className="sound" key={soundKey}>
