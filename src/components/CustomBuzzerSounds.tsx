@@ -10,6 +10,8 @@ const CustomBuzzerSounds = () => {
     const buzzerSoundsRef = useRef<HTMLDivElement>(null);
 
     // Helper function to extract index from buzzer sound key
+    // Note: Only supports new format 'buzzerSound-{index}'
+    // Legacy format 'buzzerSound{index}' will return null
     const extractIndexFromKey = (key: string): number | null => {
         const match = key.match(/buzzerSound-(\d+)/);
         if (match) {
@@ -42,17 +44,18 @@ const CustomBuzzerSounds = () => {
                         const aIsInvalid = numA === null;
                         const bIsInvalid = numB === null;
                         if (aIsInvalid && bIsInvalid) {
-                            // Fallback to lexicographic order for malformed keys
+                            // Fallback to lexicographic order for keys without valid indices
+                            // (could be legacy format or truly malformed)
                             return a.localeCompare(b);
                         }
                         if (aIsInvalid) {
-                            // Place malformed keys after well-formed ones
-                            console.warn(`Malformed buzzer sound key detected: ${a}`);
+                            // Place keys without valid indices after well-formed ones
+                            console.warn(`Buzzer sound key with unrecognized format: ${a}`);
                             return 1;
                         }
                         if (bIsInvalid) {
-                            // Place malformed keys after well-formed ones
-                            console.warn(`Malformed buzzer sound key detected: ${b}`);
+                            // Place keys without valid indices after well-formed ones
+                            console.warn(`Buzzer sound key with unrecognized format: ${b}`);
                             return -1;
                         }
                         return numA - numB;
