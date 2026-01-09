@@ -14,14 +14,25 @@ const AudioInput = ({
             id={id}
             accept="audio/*"
             onChange={(e) => {
-                const files = (e.target as HTMLInputElement).files;
-                if (files === null) return;
+                const input = e.target as HTMLInputElement;
+                const files = input.files;
+                if (files === null) {
+                    input.value = "";
+                    return;
+                }
                 const file = files[0];
-                if (file === undefined) return;
-                if (!file.type.startsWith("audio/"))
-                    return toast("❌File is not a standard audio file");
+                if (file === undefined) {
+                    input.value = "";
+                    return;
+                }
+                if (!file.type.startsWith("audio/")) {
+                    toast("❌File is not a standard audio file");
+                    input.value = "";
+                    return;
+                }
 
                 onChange(file);
+                input.value = "";
             }}
         />
     );
