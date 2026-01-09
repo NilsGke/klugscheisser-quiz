@@ -16,23 +16,23 @@ export interface GameField extends Omit<Field, "answered"> {
 
 export interface GameTeam {
     name: string;
-    color: typeof TeamColors[number];
+    color: (typeof TeamColors)[number];
     members: string[];
     score: number;
 }
 
 export const TeamColors = [
-    "#ff6464",
-    "#fa0",
-    "#fe5",
-    "#0f7",
-    "#0ff",
-    "#05f",
-    "#f0f",
+    "#ff6464", // red
+    "#05f", // blue
+    "#fe5", // yelow
+    "#0f7", // green
+    "#fa0", // orange
+    "#f0f", // pink
+    "#0ff", // cyan
 ] as const;
 
 export const categoryToGameCategory = (
-    category: Indexed<Category>
+    category: Indexed<Category>,
 ): GameCategory => {
     const gameCategory: GameCategory = {
         ...category,
