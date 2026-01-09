@@ -42,8 +42,9 @@ const Root = ({
                 const sortedKeys = sounds
                     .map((s) => s.key)
                     .sort((a, b) => {
-                        const numA = parseInt(a.replace("buzzerSound-", ""));
-                        const numB = parseInt(b.replace("buzzerSound-", ""));
+                        const numA = parseInt(a.replace("buzzerSound-", ""), 10);
+                        const numB = parseInt(b.replace("buzzerSound-", ""), 10);
+                        if (isNaN(numA) || isNaN(numB)) return 0;
                         return numA - numB;
                     });
                 setBuzzerSounds(sortedKeys);
@@ -57,7 +58,8 @@ const Root = ({
     const getNextBuzzerSoundKey = () => {
         if (buzzerSounds.length === 0) return "buzzerSound-0";
         const maxIndex = buzzerSounds.reduce((max, key) => {
-            const num = parseInt(key.replace("buzzerSound-", ""));
+            const num = parseInt(key.replace("buzzerSound-", ""), 10);
+            if (isNaN(num)) return max;
             return Math.max(max, num);
         }, -1);
         return `buzzerSound-${maxIndex + 1}`;
