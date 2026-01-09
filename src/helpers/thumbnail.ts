@@ -11,7 +11,7 @@ export const generateThumbnail = (image: CategoryImage) =>
                 maxSize,
                 maxSize,
                 1,
-                image.name
+                image.name,
             );
             resolve(resizedImage);
         };
@@ -23,7 +23,7 @@ const resizeImageToBlob = (
     maxWidth: number,
     maxHeight: number,
     quality: number,
-    fileName: string
+    fileName: string,
 ) =>
     new Promise<CategoryImage>((resolve, reject) => {
         const canvas = document.createElement("canvas");
@@ -52,6 +52,6 @@ const resizeImageToBlob = (
                 resolve(new File([blob], fileName));
             },
             "image/jpeg",
-            quality
+            quality,
         );
     });

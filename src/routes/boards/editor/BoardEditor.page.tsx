@@ -121,7 +121,7 @@ const BoardEditor = () => {
                     className="categories"
                     style={{
                         gridTemplateColumns: "1fr ".repeat(
-                            board.categories.length + 1
+                            board.categories.length + 1,
                         ),
                     }}
                     ref={categoriesContainerRef}
@@ -206,7 +206,7 @@ const BoardEditor = () => {
                                     ) : null}
                                 </div>
                             </div>
-                        )
+                        ),
                     )}
                     <div className="category add">
                         <button onClick={() => setAddCategoryOpen(true)}>

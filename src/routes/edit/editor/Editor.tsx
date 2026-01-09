@@ -53,7 +53,7 @@ const Edit = ({
         () => (
             <MediaPool addToCateogry={(resource) => setAddResource(resource)} />
         ),
-        []
+        [],
     ); // memo render so media does not have to reload on every render (dont acutally know if this is the case)
 
     const unloadHandler = useCallback(
@@ -66,7 +66,7 @@ const Edit = ({
                 return (e.returnValue = "");
             }
         },
-        [unsavedChanges]
+        [unsavedChanges],
     );
 
     // ask user to confirm unload
@@ -83,7 +83,7 @@ const Edit = ({
         if (
             !category.fields.every(
                 (field) =>
-                    field.question !== undefined && field.answer !== undefined
+                    field.question !== undefined && field.answer !== undefined,
             )
         )
             return toast("❌please fill out every field");
@@ -103,7 +103,7 @@ const Edit = ({
         let promiseDbIndex: Promise<Indexed<Category>["dbIndex"]>;
         if (dbIndex)
             promiseDbIndex = updateCategoryInDB(
-                indexCategory(category, dbIndex)
+                indexCategory(category, dbIndex),
             );
         else promiseDbIndex = storeCategoryInDB(category);
 
@@ -224,7 +224,7 @@ const Edit = ({
                                             label: "Remove",
                                             onClick: () => {
                                                 URL.revokeObjectURL(
-                                                    descriptionImageUrl
+                                                    descriptionImageUrl,
                                                 );
                                                 setDescription("");
                                             },
@@ -279,7 +279,7 @@ const Edit = ({
                             ? (index, fieldType) => {
                                   const newCategory = Object.assign(
                                       {},
-                                      category
+                                      category,
                                   );
 
                                   if (addResource.type === "image") {
@@ -312,7 +312,7 @@ const Edit = ({
                                           ).find(
                                               (img) =>
                                                   img.name ===
-                                                  addResource.content.name
+                                                  addResource.content.name,
                                           ) === undefined
                                       )
                                           newCategory.fields[index][fieldType] =

@@ -55,7 +55,7 @@ const AudioPlayer: FC<props> = ({
         } else {
             audioElementRef.current.addEventListener(
                 "loadedmetadata",
-                handleMetadata
+                handleMetadata,
             );
         }
 
@@ -68,11 +68,11 @@ const AudioPlayer: FC<props> = ({
         return () => {
             audioElementRef.current?.removeEventListener(
                 "loadedmetadata",
-                handleMetadata
+                handleMetadata,
             );
             audioElementRef.current?.removeEventListener(
                 "timeupdate",
-                timeUpdate
+                timeUpdate,
             );
         };
     }, [audioElementRef]);
@@ -116,7 +116,7 @@ const AudioPlayer: FC<props> = ({
     const changeTime = (currentTime: number) => {
         if (audioElementRef.current === null)
             throw new Error(
-                "audio element ref is null -> could not change time"
+                "audio element ref is null -> could not change time",
             );
 
         audioElementRef.current.currentTime = currentTime;

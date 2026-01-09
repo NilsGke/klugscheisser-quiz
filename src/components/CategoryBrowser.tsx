@@ -100,7 +100,7 @@ const CategoryBrowser: FC<props> = ({
                 (typeof category.description === "string" &&
                     category.description
                         .toLowerCase()
-                        .includes(search.toLowerCase()))
+                        .includes(search.toLowerCase())),
         );
 
     const submitFun = () => {
@@ -111,7 +111,7 @@ const CategoryBrowser: FC<props> = ({
 
     // sorting
     const [sortingMethod, setSortingMethod] = useState(
-        SortingMethod.creationDate
+        SortingMethod.creationDate,
     );
     const sorted = filtered.toSorted((a, b) => {
         switch (sortingMethod) {
@@ -128,7 +128,7 @@ const CategoryBrowser: FC<props> = ({
     });
 
     const [smallCategories, setSmallCategories] = useState(
-        defaultSmall ?? getSettings().smallCategories
+        defaultSmall ?? getSettings().smallCategories,
     );
 
     return (
@@ -164,11 +164,11 @@ const CategoryBrowser: FC<props> = ({
                                 sortingMethod === SortingMethod.abcNormal
                                     ? sortAZIcon
                                     : sortingMethod === SortingMethod.abcReverse
-                                    ? sortZAIcon
-                                    : sortingMethod ===
-                                      SortingMethod.creationDate
-                                    ? clockIcon
-                                    : "error"
+                                      ? sortZAIcon
+                                      : sortingMethod ===
+                                          SortingMethod.creationDate
+                                        ? clockIcon
+                                        : "error"
                             }
                             alt={sortingMethod}
                         />
@@ -205,7 +205,7 @@ const CategoryBrowser: FC<props> = ({
                                     setSelected([...selected, category]);
                                 else
                                     setSelected(
-                                        selected.filter((i) => i !== category)
+                                        selected.filter((i) => i !== category),
                                     );
                             }}
                             selected={selected
@@ -222,9 +222,9 @@ const CategoryBrowser: FC<props> = ({
                                             prev.filter(
                                                 (prevCategory) =>
                                                     prevCategory.dbIndex !==
-                                                    category.dbIndex
-                                            )
-                                        )
+                                                    category.dbIndex,
+                                            ),
+                                        ),
                                 )
                             }
                         />
@@ -253,8 +253,8 @@ const CategoryBrowser: FC<props> = ({
                                                 selected.filter(
                                                     (c) =>
                                                         c.dbIndex !==
-                                                        category.dbIndex
-                                                )
+                                                        category.dbIndex,
+                                                ),
                                             );
                                     }}
                                     small={smallCategories}
@@ -400,7 +400,7 @@ const CategoryElement = ({
                             onClick={() =>
                                 window.open(
                                     `/categories/test/${category.dbIndex}`,
-                                    "_blank"
+                                    "_blank",
                                 )
                             }
                         >
@@ -418,7 +418,7 @@ const CategoryElement = ({
                                     .then((file) => {
                                         downloadFile(
                                             file,
-                                            category.name + ".ksq.zip"
+                                            category.name + ".ksq.zip",
                                         );
                                         toast("✔️export successful");
                                     })

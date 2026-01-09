@@ -18,7 +18,7 @@ export const storeCategoryInDB = (category: Category) =>
         request.onsuccess = (e) =>
             resolve(
                 (e.target as IDBRequest)
-                    .result as Indexed<StoredBoard>["dbIndex"]
+                    .result as Indexed<StoredBoard>["dbIndex"],
             );
         request.onerror = reject;
     });

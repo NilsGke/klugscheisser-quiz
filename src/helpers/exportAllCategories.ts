@@ -19,7 +19,7 @@ const exportAllCategories = (
         categoriesTotal: number;
         currentPercent: number;
         currentAction: string;
-    }) => void
+    }) => void,
 ) =>
     new Promise<void>(async (resolve, reject) => {
         const categoriesCount = await countCategories();
@@ -78,7 +78,7 @@ const exportAllCategories = (
                         currentPercent: info.percent,
                         categoriesDone: categoriesDone,
                         categoriesTotal: categoriesCount,
-                    })
+                    }),
                 )
                 .then((file) =>
                     downloadFile(
@@ -89,9 +89,9 @@ const exportAllCategories = (
                                 year: "numeric",
                                 month: "numeric",
                                 day: "numeric",
-                            }
-                        )}_${count}.ksq.zip`
-                    )
+                            },
+                        )}_${count}.ksq.zip`,
+                    ),
                 );
 
         for (let i = 0; i < zippedNames.length; i++) {
@@ -117,7 +117,7 @@ const exportAllCategories = (
 
             zip.file(
                 `${zipped.categoryName}_${zipped.dbIndex}.ksq.zip`,
-                zipped.file
+                zipped.file,
             );
             await removeThing(name);
         }

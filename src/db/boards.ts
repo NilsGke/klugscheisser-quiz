@@ -36,10 +36,10 @@ export const getStoredBoard = (dbIndex: Indexed<Board>["dbIndex"]) =>
                                             resolve({
                                                 dbIndex: index,
                                                 deleted: true,
-                                            } as DeletedCategory)
-                                        )
-                            )
-                    )
+                                            } as DeletedCategory),
+                                        ),
+                            ),
+                    ),
                 ),
             };
             resolve(board);

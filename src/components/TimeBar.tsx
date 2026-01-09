@@ -11,7 +11,7 @@ const TimeBar: FC<props> = ({ time, stop, reverse }) => {
     const progressRef = useRef<HTMLDivElement>(null);
 
     const [animation, setAnimation] = useState<Animation | undefined>(
-        undefined
+        undefined,
     );
 
     useEffect(() => {
@@ -32,8 +32,8 @@ const TimeBar: FC<props> = ({ time, stop, reverse }) => {
                     duration: time,
                     easing: "ease-out",
                     fill: "forwards",
-                }
-            )
+                },
+            ),
         );
     }, []);
 

@@ -23,14 +23,14 @@ interface GamepadEvents {
     //adds definition to Document, but you can do the same with HTMLElement
     addEventListener<K extends keyof CustomGamepadEventMap>(
         type: K,
-        listener: (this: Document, ev: CustomGamepadEventMap[K]) => void
+        listener: (this: Document, ev: CustomGamepadEventMap[K]) => void,
     ): void;
     removeEventListener<K extends keyof CustomGamepadEventMap>(
         type: K,
-        listener: (this: Document, ev: CustomGamepadEventMap[K]) => void
+        listener: (this: Document, ev: CustomGamepadEventMap[K]) => void,
     ): void;
     dispatchEvent<K extends keyof CustomGamepadEventMap>(
-        ev: CustomGamepadEventMap[K]
+        ev: CustomGamepadEventMap[K],
     ): void;
 }
 
@@ -60,7 +60,7 @@ const update = () => {
                                 button: i,
                                 gamepad: gamepadId,
                             },
-                        })
+                        }),
                     );
 
                     pressed.push({ button: i, gamepad: gamepadId });
@@ -68,7 +68,7 @@ const update = () => {
             } else if (pressed.map((b) => b.button).includes(i))
                 pressed.splice(
                     pressed.findIndex((b) => b.button === i),
-                    1
+                    1,
                 );
         });
     });

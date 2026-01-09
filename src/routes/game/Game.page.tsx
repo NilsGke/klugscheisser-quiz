@@ -83,7 +83,7 @@ const Game = ({
     }>(null);
 
     const [buzzeredTeamIndex, setBuzzeredTeamIndex] = useState<null | number>(
-        null
+        null,
     );
 
     const categoriesRef = useRef<HTMLDivElement>(null);
@@ -167,7 +167,7 @@ const Game = ({
                 });
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        [],
     );
 
     useLayoutEffect(() => {
@@ -197,12 +197,12 @@ const Game = ({
         setGameState(State.goingBig);
 
         activeTimers.current.push(
-            setTimeout(() => setGameState(State.showDescription), 500)
+            setTimeout(() => setGameState(State.showDescription), 500),
         );
 
         if (settings.descriptionNext === "auto")
             activeTimers.current.push(
-                setTimeout(() => setGameState(State.showQuestion), 4500)
+                setTimeout(() => setGameState(State.showQuestion), 4500),
             );
     };
 
@@ -229,10 +229,10 @@ const Game = ({
                 {
                     duration: 3000,
                     easing: "ease-out",
-                }
+                },
             );
         },
-        [gameData, gameState, buzzeredTeamIndex]
+        [gameData, gameState, buzzeredTeamIndex],
     );
 
     const keyboardCallback = useCallback(
@@ -240,7 +240,7 @@ const Game = ({
             if (
                 e.target &&
                 Array.from((e.target as HTMLInputElement).classList).includes(
-                    "dontBuzzer"
+                    "dontBuzzer",
                 )
             )
                 return;
@@ -254,7 +254,7 @@ const Game = ({
             if (team === undefined) return;
             buzzer(index);
         },
-        [gameData, buzzer]
+        [gameData, buzzer],
     );
 
     useKeyboard(keyboardCallback);
@@ -264,7 +264,7 @@ const Game = ({
     const grantPoints = (points: number) => {
         if (buzzeredTeamIndex === null)
             throw new Error(
-                "buzzeredTeamIndex is null while trying to grant points to team"
+                "buzzeredTeamIndex is null while trying to grant points to team",
             );
 
         setGameData((prev) => {
@@ -272,7 +272,7 @@ const Game = ({
                 throw new Error("game is null while trying to set score");
             if (selected === null)
                 throw new Error(
-                    "selected team is null while trying to set score and disable field"
+                    "selected team is null while trying to set score and disable field",
                 );
 
             const newTeams = prev.teams;
@@ -300,8 +300,8 @@ const Game = ({
             if (
                 newCategories.every((cat) =>
                     cat.fields.every(
-                        (field) => typeof field.answered === "string"
-                    )
+                        (field) => typeof field.answered === "string",
+                    ),
                 )
             ) {
                 setTimeout(() => setGameState(State.done), 650);
@@ -320,7 +320,7 @@ const Game = ({
     const endGame = () => {
         if (
             !confirm(
-                "Do you really want to reset the game? This action cannot be undone!"
+                "Do you really want to reset the game? This action cannot be undone!",
             )
         )
             return;
@@ -359,7 +359,7 @@ const Game = ({
                                 jsConfetti.addConfetti({
                                     confettiColors: winners.map((t) => t.color),
                                 });
-                            }, 500)
+                            }, 500),
                         );
                     };
                     const intverval = setInterval(confetti, 1300);
@@ -404,7 +404,7 @@ const Game = ({
         .sort((a, b) => b.score - a.score);
 
     const winners = sortedTeams.filter(
-        (team) => team.score === sortedTeams[0].score
+        (team) => team.score === sortedTeams[0].score,
     );
 
     return (
@@ -427,7 +427,7 @@ const Game = ({
                                         : {
                                               categories: prev?.categories,
                                               teams: newTeams,
-                                          }
+                                          },
                                 );
                             }}
                             buzzered={teamIndex === buzzeredTeamIndex}
@@ -531,7 +531,7 @@ const Game = ({
                                         abortTimers();
                                         startGameSequence(
                                             categoryIndex,
-                                            fieldIndex
+                                            fieldIndex,
                                         );
                                     }}
                                     setGameState={(newState: State) =>
@@ -624,8 +624,8 @@ const Game = ({
                                                     category.fields.filter(
                                                         (field) =>
                                                             field.answered ===
-                                                            team.name
-                                                    )
+                                                            team.name,
+                                                    ),
                                             ),
                                         ].flat();
 
@@ -651,7 +651,7 @@ const Game = ({
                                                                         answeredFields.map(
                                                                             (
                                                                                 field,
-                                                                                fieldIndex
+                                                                                fieldIndex,
                                                                             ) => {
                                                                                 return (
                                                                                     <>
@@ -689,7 +689,7 @@ const Game = ({
                                                                                         ) : null}
                                                                                     </>
                                                                                 );
-                                                                            }
+                                                                            },
                                                                         ),
                                                                 buttons: [
                                                                     {
@@ -698,10 +698,8 @@ const Game = ({
                                                                 ],
                                                                 overlayClassName:
                                                                     "answeredQuestions",
-                                                                closeOnEscape:
-                                                                    true,
-                                                                closeOnClickOutside:
-                                                                    true,
+                                                                closeOnEscape: true,
+                                                                closeOnClickOutside: true,
                                                             })
                                                         }
                                                     >
@@ -801,7 +799,7 @@ const Field = ({
         ) {
             const timer = setTimeout(
                 () => setTimeUp(true),
-                category.answerTime * 1000
+                category.answerTime * 1000,
             );
             return () => {
                 setTimeUp(false);
@@ -842,7 +840,7 @@ const Field = ({
                     top: "0px",
                 },
             ],
-            { duration: 500, easing: "ease-out" }
+            { duration: 500, easing: "ease-out" },
         );
         activeTimer.current = setTimeout(() => {
             if (fieldRef.current !== null)
@@ -886,7 +884,7 @@ const Field = ({
                     top: offsetTop + "px",
                 },
             ],
-            { duration: 500, easing: "ease-out" }
+            { duration: 500, easing: "ease-out" },
         );
 
         setTimeout(() => {
@@ -1033,7 +1031,7 @@ const Field = ({
                                                 }}
                                                 onClick={() =>
                                                     setGameState(
-                                                        State.showAnswer
+                                                        State.showAnswer,
                                                     )
                                                 }
                                             >
@@ -1063,7 +1061,7 @@ const Field = ({
                                                     <button
                                                         onClick={() => {
                                                             grantPoints(
-                                                                -points
+                                                                -points,
                                                             );
                                                             close();
                                                         }}
@@ -1073,7 +1071,7 @@ const Field = ({
                                                     <button
                                                         onClick={() =>
                                                             setShowCustomPoints(
-                                                                (prev) => !prev
+                                                                (prev) => !prev,
                                                             )
                                                         }
                                                     >
@@ -1104,8 +1102,8 @@ const Field = ({
                                                         onClick={() => {
                                                             grantPoints(
                                                                 Math.round(
-                                                                    points / 2
-                                                                ) * -1
+                                                                    points / 2,
+                                                                ) * -1,
                                                             );
                                                             close();
                                                         }}
@@ -1116,7 +1114,7 @@ const Field = ({
                                                     <input
                                                         type="number"
                                                         placeholder={Math.round(
-                                                            points / 3
+                                                            points / 3,
                                                         ).toString()}
                                                         value={customPoints}
                                                         onChange={(e) =>
@@ -1124,15 +1122,15 @@ const Field = ({
                                                                 isNaN(
                                                                     parseInt(
                                                                         e.target
-                                                                            .value
-                                                                    )
+                                                                            .value,
+                                                                    ),
                                                                 )
                                                                     ? ""
                                                                     : parseInt(
                                                                           e
                                                                               .target
-                                                                              .value
-                                                                      )
+                                                                              .value,
+                                                                      ),
                                                             )
                                                         }
                                                         className="custom dontBuzzer"
@@ -1142,7 +1140,7 @@ const Field = ({
                                                         onClick={() => {
                                                             grantPoints(
                                                                 customPoints ||
-                                                                    0
+                                                                    0,
                                                             );
                                                             close();
                                                         }}
@@ -1156,8 +1154,8 @@ const Field = ({
                                                         onClick={() => {
                                                             grantPoints(
                                                                 Math.round(
-                                                                    points / 2
-                                                                )
+                                                                    points / 2,
+                                                                ),
                                                             );
                                                             close();
                                                         }}
@@ -1270,7 +1268,7 @@ const Team = ({
                             `,
                 },
             ],
-            { duration: 600, easing: "ease-in-out", iterations: Infinity }
+            { duration: 600, easing: "ease-in-out", iterations: Infinity },
         );
     }, []);
 
@@ -1288,7 +1286,7 @@ const Team = ({
                         .catch((error) => {
                             console.log(
                                 `No Buzzer sound for Team: ${index}`,
-                                error
+                                error,
                             );
                         });
                 });

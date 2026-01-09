@@ -16,4 +16,4 @@ A game platform inspired by the american game show [jeopardy!](https://www.jeopa
 
 ## Future Ideas
 
-* add multiple languages
+- add multiple languages

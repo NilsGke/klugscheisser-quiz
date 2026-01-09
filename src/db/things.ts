@@ -25,7 +25,7 @@ export const getThing = <T = any>(thingKey: string) =>
 export const setThing = <T = any>(thingKey: string, value: T) =>
     new Promise<void>(async (resolve, reject) => {
         const primaryKey = await getThingPrimaryKey(thingKey).catch(
-            () => undefined
+            () => undefined,
         );
 
         const thing: Thing = {

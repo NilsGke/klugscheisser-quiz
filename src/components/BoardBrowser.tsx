@@ -33,8 +33,8 @@ const BoardBrowser = ({ select }: props) => {
                     ? false
                     : category.name
                           .toLowerCase()
-                          .includes(searchTerm.toLowerCase())
-            )
+                          .includes(searchTerm.toLowerCase()),
+            ),
     );
 
     const listRef = useRef<HTMLDivElement>(null);
@@ -44,7 +44,7 @@ const BoardBrowser = ({ select }: props) => {
 
     // sorting
     const [sortingMethod, setSortingMethod] = useState(
-        SortingMethod.creationDate
+        SortingMethod.creationDate,
     );
     const sorted = filtered.toSorted((a, b) => {
         switch (sortingMethod) {
@@ -94,10 +94,10 @@ const BoardBrowser = ({ select }: props) => {
                             sortingMethod === SortingMethod.abcNormal
                                 ? sortAZIcon
                                 : sortingMethod === SortingMethod.abcReverse
-                                ? sortZAIcon
-                                : sortingMethod === SortingMethod.creationDate
-                                ? clockIcon
-                                : "error"
+                                  ? sortZAIcon
+                                  : sortingMethod === SortingMethod.creationDate
+                                    ? clockIcon
+                                    : "error"
                         }
                         alt={sortingMethod}
                     />
@@ -146,7 +146,7 @@ const BoardElement = ({
                             <div className="category" key={category.dbIndex}>
                                 <h3>{category.name}</h3>
                             </div>
-                        )
+                        ),
                     )}
                 </div>
             </div>

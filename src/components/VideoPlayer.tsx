@@ -53,7 +53,7 @@ const VideoPlayer: FC<props> = ({
         } else {
             videoElementRef.current.addEventListener(
                 "loadedmetadata",
-                handleMetadata
+                handleMetadata,
             );
         }
 
@@ -66,11 +66,11 @@ const VideoPlayer: FC<props> = ({
         return () => {
             videoElementRef.current?.removeEventListener(
                 "loadedmetadata",
-                handleMetadata
+                handleMetadata,
             );
             videoElementRef.current?.removeEventListener(
                 "timeupdate",
-                timeUpdate
+                timeUpdate,
             );
         };
     }, [videoElementRef]);
@@ -114,7 +114,7 @@ const VideoPlayer: FC<props> = ({
     const changeTime = (currentTime: number) => {
         if (videoElementRef.current === null)
             throw new Error(
-                "audio element ref is null -> could not change time"
+                "audio element ref is null -> could not change time",
             );
 
         videoElementRef.current.currentTime = currentTime;
@@ -138,7 +138,7 @@ const VideoPlayer: FC<props> = ({
                     onChange={
                         (value) =>
                             setVolume(
-                                typeof value === "object" ? value[0] : value
+                                typeof value === "object" ? value[0] : value,
                             ) // not pretty and technically unecessery but true typesafety
                     }
                     vertical={!small}
@@ -189,7 +189,7 @@ const VideoPlayer: FC<props> = ({
                         max={Math.floor(duration)}
                         onChange={(value) =>
                             changeTime(
-                                typeof value === "object" ? value[0] : value
+                                typeof value === "object" ? value[0] : value,
                             )
                         }
                     />

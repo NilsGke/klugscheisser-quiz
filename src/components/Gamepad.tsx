@@ -33,14 +33,14 @@ const Gamepad = ({
 
                 if (mapping.length < teams.length)
                     mapping.push(
-                        ...new Array(teams.length - mapping.length).fill([])
+                        ...new Array(teams.length - mapping.length).fill([]),
                     );
 
                 setMapping(mapping);
                 setThing("gamepadMapping", mapping);
             })
             .catch(() =>
-                setThing("gamepadMapping", new Array(teams.length).fill([]))
+                setThing("gamepadMapping", new Array(teams.length).fill([])),
             );
     }, []);
 
@@ -54,7 +54,7 @@ const Gamepad = ({
     }) => {
         const teamIndex = mapping.findIndex(
             (keyIdArray) =>
-                !!keyIdArray.find((keyId) => keyId === gamepad + "." + button)
+                !!keyIdArray.find((keyId) => keyId === gamepad + "." + button),
         );
 
         if (teamIndex >= 0) {
@@ -108,7 +108,7 @@ const Mapping = ({
     update: (newMapping: typeof mapping) => void;
 }) => {
     const [addingButton, setAddingButton] = useState<false | { team: number }>(
-        false
+        false,
     );
 
     const { connected } = useGamepad((pressed) => {
@@ -169,7 +169,7 @@ const Mapping = ({
 
                                         setThing(
                                             "gamepadMapping",
-                                            newMapping
+                                            newMapping,
                                         ).then(() => {
                                             update(newMapping);
                                         });

@@ -45,7 +45,7 @@ const Setup: FC<props> = ({ setGameData }) => {
             return toast("please add at least one category");
 
         teams.forEach((team, index) =>
-            team.name.trim() === "" ? (team.name = `Team #${index + 1}`) : null
+            team.name.trim() === "" ? (team.name = `Team #${index + 1}`) : null,
         );
 
         setGameData({
@@ -134,7 +134,7 @@ const CreateTeams = ({
                                     (color) =>
                                         !teams
                                             .map((t) => t.color)
-                                            .includes(color)
+                                            .includes(color),
                                 )[0],
                             },
                         ])
@@ -186,10 +186,10 @@ const Team = ({
                         boxShadow: "inset 0 0 0 transparent, 0 0 0 transparent",
                     },
                 ],
-                { duration: 1500, easing: "ease-out" }
+                { duration: 1500, easing: "ease-out" },
             );
         },
-        [memberList]
+        [memberList],
     );
 
     useKeyboard(keyCallback);
@@ -199,7 +199,7 @@ const Team = ({
         if (e.target === null) throw new Error("event target is null");
         if (
             !Array.from((e.target as HTMLElement).classList).includes(
-                "dontCloseOnClick"
+                "dontCloseOnClick",
             )
         )
             setShowColors(false);
@@ -208,7 +208,7 @@ const Team = ({
     const team = teams[teamIndex];
 
     const avalibleColors = TeamColors.filter(
-        (c) => !teams.map((t) => t.color).includes(c)
+        (c) => !teams.map((t) => t.color).includes(c),
     );
 
     return (
@@ -306,7 +306,7 @@ const Team = ({
                                 const newTeams = teams.slice();
                                 newTeams[teamIndex].members.splice(
                                     memberIndex,
-                                    1
+                                    1,
                                 );
                                 setTeams(newTeams);
                             }}
@@ -399,13 +399,13 @@ const SelectCategories = ({
                     <BoardBrowser
                         select={(board) => {
                             const categories = board.categories.filter(
-                                (c) => !categoryIsDeleted(c)
+                                (c) => !categoryIsDeleted(c),
                             ) as Indexed<Category>[];
 
                             setSelected((prev) => [
                                 ...prev,
                                 ...categories.filter(
-                                    (category) => !prev.includes(category)
+                                    (category) => !prev.includes(category),
                                 ),
                             ]);
                             setLoadBoardOpen(false);
@@ -474,7 +474,7 @@ const SelectCategories = ({
                                                     }}
                                                 ></button>
                                             </div>
-                                        )
+                                        ),
                                     )}
                                 </div>
                             ))}

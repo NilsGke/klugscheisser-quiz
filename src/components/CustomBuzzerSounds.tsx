@@ -50,12 +50,16 @@ const CustomBuzzerSounds = () => {
                         }
                         if (aIsInvalid) {
                             // Place keys without valid indices after well-formed ones
-                            console.warn(`Buzzer sound key with unrecognized format: ${a}`);
+                            console.warn(
+                                `Buzzer sound key with unrecognized format: ${a}`,
+                            );
                             return 1;
                         }
                         if (bIsInvalid) {
                             // Place keys without valid indices after well-formed ones
-                            console.warn(`Buzzer sound key with unrecognized format: ${b}`);
+                            console.warn(
+                                `Buzzer sound key with unrecognized format: ${b}`,
+                            );
                             return -1;
                         }
                         return numA - numB;
@@ -80,42 +84,47 @@ const CustomBuzzerSounds = () => {
             toast("⏳Please wait for previous operation to complete");
             return;
         }
-        
+
         setIsReordering(true);
-        
+
         try {
             // Get all sounds with their values
             const allSounds = await getAllThingsWithPrefix("buzzerSound-");
-            
+
             // Sort by index and filter out the one to remove
             const sortedSounds = allSounds
-                .map(s => ({ key: s.key, value: s.value, index: extractIndexFromKey(s.key) }))
-                .filter(s => s.index !== null && s.key !== soundKeyToRemove)
+                .map((s) => ({
+                    key: s.key,
+                    value: s.value,
+                    index: extractIndexFromKey(s.key),
+                }))
+                .filter((s) => s.index !== null && s.key !== soundKeyToRemove)
                 .sort((a, b) => a.index! - b.index!);
-            
+
             // Store backup in case we need to rollback
             const backup = allSounds;
-            
+
             try {
                 // Delete all existing buzzer sounds
-                await Promise.all(
-                    allSounds.map(s => removeThing(s.key))
-                );
-                
+                await Promise.all(allSounds.map((s) => removeThing(s.key)));
+
                 // Re-add them with sequential indices
                 await Promise.all(
-                    sortedSounds.map((sound, newIndex) => 
-                        setThing(`buzzerSound-${newIndex}`, sound.value)
-                    )
+                    sortedSounds.map((sound, newIndex) =>
+                        setThing(`buzzerSound-${newIndex}`, sound.value),
+                    ),
                 );
-                
+
                 toast("🚮Buzzer sound removed");
             } catch (error) {
                 // Attempt to restore from backup
-                console.error("Error during reordering, attempting rollback:", error);
+                console.error(
+                    "Error during reordering, attempting rollback:",
+                    error,
+                );
                 try {
                     await Promise.all(
-                        backup.map(s => setThing(s.key, s.value))
+                        backup.map((s) => setThing(s.key, s.value)),
                     );
                     toast("❌Operation failed, but data was recovered");
                 } catch (rollbackError) {
@@ -124,7 +133,7 @@ const CustomBuzzerSounds = () => {
                 }
                 throw error;
             }
-            
+
             loadBuzzerSounds();
         } catch (error) {
             console.error("Error reordering buzzer sounds:", error);
@@ -138,7 +147,7 @@ const CustomBuzzerSounds = () => {
             {buzzerSounds.map((soundKey, index) => {
                 // Display uses array index since keys are always sequential
                 const displayNumber = index + 1;
-                
+
                 return (
                     <div className="sound" key={soundKey}>
                         <span className="soundLabel">
@@ -156,9 +165,7 @@ const CustomBuzzerSounds = () => {
             })}
             <div className="sound addSound">
                 <button>
-                    <label htmlFor="addBuzzerSound">
-                        + Add Buzzer Sound
-                    </label>
+                    <label htmlFor="addBuzzerSound">+ Add Buzzer Sound</label>
                 </button>
                 <AudioInput
                     id="addBuzzerSound"

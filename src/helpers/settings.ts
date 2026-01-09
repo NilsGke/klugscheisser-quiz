@@ -36,7 +36,7 @@ export const getSettings = () => {
         return options;
     } catch (error) {
         console.error(
-            "options threw error, code is continueing though. Error: " + error
+            "options threw error, code is continueing though. Error: " + error,
         );
         localStorage.clear();
         storeSettings(defaultSettings);

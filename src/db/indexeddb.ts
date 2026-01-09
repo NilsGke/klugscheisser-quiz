@@ -30,7 +30,7 @@ const DB_NAME = "LocalFileDatabase";
 
 export const initIndexedDB = (
     migrationsNeededCallback: (amount: number) => void,
-    infoUpdate: (migrationsLeft: number) => void
+    infoUpdate: (migrationsLeft: number) => void,
 ) =>
     new Promise<void>((resolve, reject) => {
         getCurrentVersion().then(async (currentVersion) => {
@@ -42,7 +42,7 @@ export const initIndexedDB = (
             request.onsuccess = (event) => {
                 if (event.target === null)
                     throw new Error(
-                        "indexeddb: event.target on succsess is null"
+                        "indexeddb: event.target on succsess is null",
                     );
 
                 db = (event.target as IDBOpenDBRequest).result;
@@ -54,7 +54,7 @@ export const initIndexedDB = (
                         throw new Error("in db.onerror: event.target is null");
 
                     console.error(
-                        `Database error: ${(event.target as any).errorCode}`
+                        `Database error: ${(event.target as any).errorCode}`,
                     );
                 };
 
@@ -65,7 +65,7 @@ export const initIndexedDB = (
 
 const upgrade = async (
     currentVersion: number,
-    infoUpdate: (migrationsLeft: number) => void
+    infoUpdate: (migrationsLeft: number) => void,
 ) => {
     if (DB_VERSION > currentVersion) {
         infoUpdate(DB_VERSION - currentVersion);
@@ -84,7 +84,7 @@ const migrate = async (newVersion: number) =>
             const migrationFunction = migrations.at(newVersion);
             if (migrationFunction === undefined)
                 throw new Error(
-                    `migration function is undefined for version: ${newVersion}`
+                    `migration function is undefined for version: ${newVersion}`,
                 );
 
             migrationFunction(db, event).then(async (asyncMutationFunction) => {
@@ -110,7 +110,7 @@ const migrate = async (newVersion: number) =>
 
 type MigrationFunction = (
     db: IDBDatabase,
-    event: IDBVersionChangeEvent
+    event: IDBVersionChangeEvent,
 ) => Promise<mutationFunction | void>;
 type mutationFunction = (db: IDBDatabase) => Promise<void>;
 
@@ -132,10 +132,10 @@ const migrations: MigrationFunction[] = [
                         });
                         objectStore.transaction.addEventListener(
                             "complete",
-                            () => resolve()
+                            () => resolve(),
                         );
                         objectStore.transaction.onerror = reject;
-                    })
+                    }),
             );
 
             Promise.all(proms).then(() => resolve());
@@ -171,15 +171,15 @@ const migrations: MigrationFunction[] = [
                         field.question.type === "audio"
                             ? addVolumeToAudioResource(field.question)
                             : field.question.type === "video"
-                            ? addVolumeToVideoResource(field.question)
-                            : field.question,
+                              ? addVolumeToVideoResource(field.question)
+                              : field.question,
 
                     answer:
                         field.answer.type === "audio"
                             ? addVolumeToAudioResource(field.answer)
                             : field.answer.type === "video"
-                            ? addVolumeToVideoResource(field.answer)
-                            : field.answer,
+                              ? addVolumeToVideoResource(field.answer)
+                              : field.answer,
                 }));
 
                 cursor.update({
@@ -295,7 +295,7 @@ const migrations: MigrationFunction[] = [
                                         typeof category.description === "string"
                                             ? null
                                             : await generateThumbnail(
-                                                  category.description
+                                                  category.description,
                                               );
 
                                     const request = db
@@ -306,7 +306,7 @@ const migrations: MigrationFunction[] = [
                                                 ...category,
                                                 thumbnail,
                                             } as Category,
-                                            key
+                                            key,
                                         );
 
                                     request.onsuccess = () => resolve();
@@ -314,12 +314,12 @@ const migrations: MigrationFunction[] = [
                                         console.error(request.error);
                                         reject(request.error);
                                     };
-                                })
+                                }),
                             );
                         };
                         transaction.onerror = reject;
-                    })
-            )
+                    }),
+            ),
         ),
 ];
 
@@ -329,7 +329,7 @@ const getCurrentVersion = () =>
         request.addEventListener("success", (event) => {
             if (event.target === null)
                 throw new Error(
-                    "indexeddb: event.target on succsess is null. (trying to look up version)"
+                    "indexeddb: event.target on succsess is null. (trying to look up version)",
                 );
             const db = (event.target as IDBOpenDBRequest).result;
             const version = db.version;

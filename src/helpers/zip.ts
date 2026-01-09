@@ -38,7 +38,7 @@ interface FileName extends String {}
 
 export const generateZipFromCategory = async (
     category: Category,
-    onUpdate: (data: JSZip.JSZipMetadata) => void
+    onUpdate: (data: JSZip.JSZipMetadata) => void,
 ) => {
     const zip = new JSZip();
 
@@ -145,7 +145,7 @@ export const importCategoryFromZip = (file: File) =>
             if (configFile === null) return reject("config file not found");
 
             const config = JSON.parse(
-                await configFile.async("string")
+                await configFile.async("string"),
             ) as CategoryConfig;
 
             console.log(config);
@@ -167,7 +167,7 @@ export const importCategoryFromZip = (file: File) =>
                     {
                         type: mediaBlob.type,
                         lastModified: new Date().getTime(),
-                    }
+                    },
                 );
             }
 
@@ -197,14 +197,14 @@ export const importCategoryFromZip = (file: File) =>
                         "question",
                         configField["question"],
                         category,
-                        index
+                        index,
                     ),
                     applyMediaFromZipFile(
                         zip,
                         "answer",
                         configField["answer"],
                         category,
-                        index
+                        index,
                     ),
                 ])
                 .flat();
@@ -219,7 +219,7 @@ const applyMediaFromZipFile = (
     fieldType: "question" | "answer",
     configResource: ConfigResource,
     category: PartialCategory,
-    fieldIndex: number
+    fieldIndex: number,
 ) =>
     new Promise<void>(async (resolve, reject) => {
         if (configResource.type === "text")
@@ -249,14 +249,14 @@ const applyMediaFromZipFile = (
                             {
                                 type: mediaBlob.type,
                                 lastModified: new Date().getTime(),
-                            }
+                            },
                         );
 
                         (
                             category.fields[fieldIndex][fieldType]
                                 ?.content as Image[]
                         ).push(file as Image);
-                    })
+                    }),
                 );
 
                 // every other media type (image, audio, video)
@@ -273,7 +273,7 @@ const applyMediaFromZipFile = (
                     {
                         type: mediaBlob.type,
                         lastModified: new Date().getTime(),
-                    }
+                    },
                 );
 
                 if (configResource.type === "audio")

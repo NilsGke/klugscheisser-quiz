@@ -7,7 +7,7 @@ export type DeletedCategory = {
 };
 
 export const categoryIsDeleted = (
-    category: DeletedCategory | Category
+    category: DeletedCategory | Category,
 ): category is DeletedCategory => category.hasOwnProperty("deleted");
 
 export interface Board {

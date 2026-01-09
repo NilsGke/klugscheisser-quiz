@@ -118,7 +118,7 @@ export interface PartialCategory extends Omit<Category, "fields"> {
         PartialField,
         PartialField,
         PartialField,
-        PartialField
+        PartialField,
     ];
 }
 
@@ -134,23 +134,23 @@ export const isField = (partialField: PartialField): partialField is Field =>
     partialField.question !== undefined && partialField.answer !== undefined;
 
 export const isCategory = (
-    partialCategory: PartialCategory
+    partialCategory: PartialCategory,
 ): partialCategory is Category => partialCategory.fields.every(isField);
 
 export const indexCategory = (
     category: Category,
-    index: number
+    index: number,
 ): Indexed<Category> =>
     Object.assign(category, {
         dbIndex: index,
     });
 
 export const addVolumeToVideoResource = (
-    resource: Omit<VideoResource, "volume"> | VideoResource
+    resource: Omit<VideoResource, "volume"> | VideoResource,
 ): VideoResource => Object.assign(resource, { volume: 50 });
 
 export const addVolumeToAudioResource = (
-    resource: Omit<AudioResource, "volume"> | AudioResource
+    resource: Omit<AudioResource, "volume"> | AudioResource,
 ): AudioResource => Object.assign(resource, { volume: 50 });
 
 const convertDataUrlToBlob = (dataUrl: string): Blob => {

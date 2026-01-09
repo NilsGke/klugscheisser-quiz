@@ -18,7 +18,7 @@ export const storeFileInIndexedDB = (file: File, mediaType: MediaType) => {
 export const getStoredFiles = (
     mediaType: MediaType,
     startIndex: number,
-    length: number = 5
+    length: number = 5,
 ) =>
     new Promise<IndexedFile[]>(async (resolve, reject) => {
         const request = db

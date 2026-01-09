@@ -6,13 +6,13 @@ import {
 import { useState, useEffect, useCallback } from "react";
 
 const useGamepad = (
-    callback: (id: { button: number; gamepad: number }) => void
+    callback: (id: { button: number; gamepad: number }) => void,
 ) => {
     const [connected, setConnected] = useState(
         !(
             Object.keys(gamepads).length === 0 &&
             Object.getPrototypeOf(gamepads) === Object.prototype
-        )
+        ),
     );
 
     const refresh = () => {
@@ -20,7 +20,7 @@ const useGamepad = (
             !(
                 Object.keys(gamepads).length === 0 &&
                 Object.getPrototypeOf(gamepads) === Object.prototype
-            )
+            ),
         );
     };
 
@@ -37,7 +37,7 @@ const useGamepad = (
 
     const handleButtonpress = useCallback(
         (event: CustomGamepadEventMap["buttonpress"]) => callback(event.detail),
-        [callback]
+        [callback],
     );
 
     // listen to buttonpresses

@@ -108,7 +108,7 @@ const MediaElement = ({
 
     // handle text input
     const [text, setText] = useState(
-        resource ? (resource.type === "text" ? resource.content : "") : ""
+        resource ? (resource.type === "text" ? resource.content : "") : "",
     );
 
     const blurHandler = () => {
@@ -159,20 +159,20 @@ const MediaElement = ({
 
             const [newResourceType, dbIndexString] = id.split("_") as [
                 MediaType,
-                string
+                string,
             ];
             const dbIndex = parseInt(dbIndexString);
 
             if (!MediaTypes.includes(newResourceType))
                 throw new Error(
-                    `new media type (${newResourceType}) is not in MediaTypes`
+                    `new media type (${newResourceType}) is not in MediaTypes`,
                 );
             if (isNaN(dbIndex))
                 throw new Error("db index is not a number: " + dbIndexString);
 
             const newFile = (await getStoredFile(
                 newResourceType,
-                dbIndex
+                dbIndex,
             )) as AnyIndexedMedia;
 
             newFile.dbIndex = dbIndex;
@@ -200,7 +200,7 @@ const MediaElement = ({
                     oldResource.content.some(
                         (file) =>
                             file.size === newFile.size &&
-                            file.name === newFile.name
+                            file.name === newFile.name,
                     )
                 )
                     return;
@@ -226,7 +226,7 @@ const MediaElement = ({
             if (mediaElementRef.current === null) return;
             mediaElementRef.current.removeEventListener(
                 "dragover",
-                dragOverHandler
+                dragOverHandler,
             );
             mediaElementRef.current.removeEventListener("drop", dropHandler);
         };
@@ -311,7 +311,7 @@ const MediaElement = ({
                             resource,
                             {
                                 volume: value,
-                            }
+                            },
                         );
                         setCategory(newCategory);
                     }}

@@ -161,7 +161,9 @@
             aspect-ratio: 1;
         }
 
-        transition: all 0.2s ease-out, outline 0.2s ease-in;
+        transition:
+            all 0.2s ease-out,
+            outline 0.2s ease-in;
         &:hover {
             scale: 1.07;
         }

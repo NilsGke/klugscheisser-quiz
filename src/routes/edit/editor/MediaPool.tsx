@@ -53,7 +53,7 @@ const MediaPool = ({
             getStoredFiles(
                 mediaType,
                 (files.at(-1)?.dbIndex || 999999999999) - 1,
-                10
+                10,
             )
                 .then((newFiles) => setFiles((prev) => [...prev, ...newFiles]))
                 .then(() => setLoadMore(false));
@@ -141,7 +141,7 @@ const MediaPool = ({
                         className="clear"
                         onClick={() =>
                             confirm(
-                                `are you sure you want to remove all ${mediaType}s from the editor?`
+                                `are you sure you want to remove all ${mediaType}s from the editor?`,
                             ) &&
                             clearMediaStore(mediaType).then(() => {
                                 toast(`${mediaType}s cleared`);
@@ -163,12 +163,12 @@ const MediaPool = ({
                                 mediaType === "audio"
                                     ? audioIcon
                                     : mediaType === "image"
-                                    ? imageIcon
-                                    : mediaType === "text"
-                                    ? ""
-                                    : mediaType === "video"
-                                    ? videoIcon
-                                    : ""
+                                      ? imageIcon
+                                      : mediaType === "text"
+                                        ? ""
+                                        : mediaType === "video"
+                                          ? videoIcon
+                                          : ""
                             }
                             alt={mediaType + "icon"}
                         />
@@ -180,10 +180,10 @@ const MediaPool = ({
                                 mediaType === "audio"
                                     ? "audio/*"
                                     : mediaType === "image"
-                                    ? "image/*"
-                                    : mediaType === "video"
-                                    ? "video/*"
-                                    : ""
+                                      ? "image/*"
+                                      : mediaType === "video"
+                                        ? "video/*"
+                                        : ""
                             }
                             multiple
                             onChange={async (e) => {
@@ -193,7 +193,7 @@ const MediaPool = ({
                                         const file = files[i];
                                         await storeFileInIndexedDB(
                                             file,
-                                            mediaType
+                                            mediaType,
                                         ).then(async (dbIndex) => {
                                             const indexedFile =
                                                 file as IndexedFile;
@@ -205,7 +205,7 @@ const MediaPool = ({
                                             setLength((prev) => prev + 1);
 
                                             getMediaStoreSize(mediaType).then(
-                                                setStorageSize
+                                                setStorageSize,
                                             );
 
                                             toast(`added ${mediaType}`);
@@ -234,12 +234,12 @@ const MediaPool = ({
                                 () => {
                                     setFiles((prev) =>
                                         prev.filter(
-                                            (f) => f.dbIndex !== file.dbIndex
-                                        )
+                                            (f) => f.dbIndex !== file.dbIndex,
+                                        ),
                                     );
                                     setLength((prev) => prev - 1);
                                     checkScroll();
-                                }
+                                },
                             )
                         }
                     />
@@ -281,7 +281,7 @@ const File = ({
     const dragStart = (event: DragEvent<HTMLDivElement>) => {
         event.dataTransfer.setData(
             "text/plain",
-            (event.target as HTMLElement).id
+            (event.target as HTMLElement).id,
         );
 
         const objectUrl = URL.createObjectURL(file);

@@ -122,7 +122,7 @@ const Root = ({
                                 if (file === undefined) return;
                                 if (!file.type.startsWith("image/"))
                                     return toast(
-                                        "❌File is not a standard image file"
+                                        "❌File is not a standard image file",
                                     );
 
                                 const base64 = await fileToBase64(file);

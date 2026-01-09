@@ -42,7 +42,7 @@ const Categories = () => {
             if (fileInputLabelRef.current === null) return;
             fileInputLabelRef.current.addEventListener(
                 "drop",
-                fileDropCallback
+                fileDropCallback,
             );
         };
     }, []);
@@ -75,7 +75,7 @@ const Categories = () => {
             fileInputLabelRef.current.removeEventListener("drop", drop);
             fileInputLabelRef.current.removeEventListener(
                 "dragleave",
-                dragLeave
+                dragLeave,
             );
         };
     }, []);
@@ -86,9 +86,9 @@ const Categories = () => {
         files.forEach((file) =>
             importCategoryFromZip(file).then((category) =>
                 storeCategoryInDB(category).then((dbIndex) =>
-                    setUpdate(Date.now())
-                )
-            )
+                    setUpdate(Date.now()),
+                ),
+            ),
         );
     }, [files]);
 
@@ -159,12 +159,12 @@ const Categories = () => {
                                             label: "export",
                                             onClick: () =>
                                                 exportAllCategories(
-                                                    setExportInfo
+                                                    setExportInfo,
                                                 )
                                                     .then((file) => {
                                                         setExportInfo(null);
                                                         toast(
-                                                            "🟩 Export successful!"
+                                                            "🟩 Export successful!",
                                                         );
                                                     })
                                                     .catch((error) => {
@@ -172,13 +172,12 @@ const Categories = () => {
                                                         toast(
                                                             `🟥 Error while exporting! \n\n ${error}`,
                                                             {
-                                                                clickClosable:
-                                                                    true,
+                                                                clickClosable: true,
                                                                 onClick: () =>
                                                                     setExportInfo(
-                                                                        null
+                                                                        null,
                                                                     ),
-                                                            }
+                                                            },
                                                         );
                                                     }),
                                         },
@@ -205,7 +204,7 @@ const Categories = () => {
                                     style={{
                                         width: `${Math.ceil(
                                             (100 / exportInfo.categoriesTotal) *
-                                                exportInfo.categoriesDone
+                                                exportInfo.categoriesDone,
                                         )}%`,
                                     }}
                                 ></div>
@@ -222,7 +221,7 @@ const Categories = () => {
                                     className="progress"
                                     style={{
                                         width: `${Math.ceil(
-                                            exportInfo.currentPercent
+                                            exportInfo.currentPercent,
                                         )}%`,
                                     }}
                                 ></div>
@@ -237,7 +236,7 @@ const Categories = () => {
 
 const PopupChildren = () => {
     const [maxExportSize, setMaxExportSize] = useState(
-        getSettings().maxExportSize
+        getSettings().maxExportSize,
     );
 
     const updateMaxExportSize = (num: number) => {

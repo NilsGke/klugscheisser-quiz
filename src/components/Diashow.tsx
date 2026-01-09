@@ -56,7 +56,7 @@ const Diashow = ({
     const prevImage = () => setCurrent((prev) => (prev === 0 ? 0 : prev - 1));
     const nextImage = () =>
         setCurrent((prev) =>
-            current < images.length - 1 ? prev + 1 : images.length - 1
+            current < images.length - 1 ? prev + 1 : images.length - 1,
         );
     if (show && !autoSkip) {
         useKeyboard((key) => {

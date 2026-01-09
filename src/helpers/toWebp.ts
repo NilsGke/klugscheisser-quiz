@@ -33,7 +33,7 @@ const toWebp = (file: File, size?: size) =>
                 0,
                 0,
                 size?.h || image.naturalHeight,
-                size?.w || image.naturalWidth
+                size?.w || image.naturalWidth,
             );
 
             canvas.toBlob((blob) => {
