@@ -69,21 +69,46 @@ const CustomBuzzerSounds = () => {
     };
 
     const getNextBuzzerSoundKey = () => {
-        if (buzzerSounds.length === 0) return "buzzerSound-0";
-        const maxIndex = buzzerSounds.reduce((max, key) => {
-            const num = extractIndexFromKey(key);
-            if (num === null) return max;
-            return Math.max(max, num);
-        }, -1);
-        return `buzzerSound-${maxIndex + 1}`;
+        // Keys are always sequential, so next key is just the length
+        return `buzzerSound-${buzzerSounds.length}`;
+    };
+
+    const reorderBuzzerSounds = async (soundKeyToRemove: string) => {
+        try {
+            // Get all sounds with their values
+            const allSounds = await getAllThingsWithPrefix("buzzerSound-");
+            
+            // Sort by index
+            const sortedSounds = allSounds
+                .map(s => ({ key: s.key, value: s.value, index: extractIndexFromKey(s.key) }))
+                .filter(s => s.index !== null && s.key !== soundKeyToRemove)
+                .sort((a, b) => a.index! - b.index!);
+            
+            // Delete all existing buzzer sounds
+            await Promise.all(
+                allSounds.map(s => removeThing(s.key))
+            );
+            
+            // Re-add them with sequential indices
+            await Promise.all(
+                sortedSounds.map((sound, newIndex) => 
+                    setThing(`buzzerSound-${newIndex}`, sound.value)
+                )
+            );
+            
+            toast("🚮Buzzer sound removed");
+            loadBuzzerSounds();
+        } catch (error) {
+            console.error("Error reordering buzzer sounds:", error);
+            toast("❌removing failed");
+        }
     };
 
     return (
         <div className="buzzerSounds" ref={buzzerSoundsRef}>
-            {buzzerSounds.map((soundKey) => {
-                // Extract the actual index from the key for display
-                const keyIndex = extractIndexFromKey(soundKey);
-                const displayNumber = keyIndex !== null ? keyIndex + 1 : "?";
+            {buzzerSounds.map((soundKey, index) => {
+                // Display uses array index since keys are always sequential
+                const displayNumber = index + 1;
                 
                 return (
                     <div className="sound" key={soundKey}>
@@ -93,16 +118,7 @@ const CustomBuzzerSounds = () => {
                         <button
                             className="remove"
                             aria-label={`Remove Buzzer-Sound #${displayNumber}`}
-                            onClick={() =>
-                                removeThing(soundKey)
-                                    .then(() => {
-                                        toast("🚮Buzzer sound removed");
-                                        loadBuzzerSounds();
-                                    })
-                                    .catch(() =>
-                                        toast("❌removing failed")
-                                    )
-                            }
+                            onClick={() => reorderBuzzerSounds(soundKey)}
                         >
                             <img src={removeIcon} alt="remove" />
                         </button>
