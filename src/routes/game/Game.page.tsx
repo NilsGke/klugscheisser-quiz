@@ -1281,18 +1281,14 @@ const Team = ({
             // Try new key format first: "buzzerSound-{index}"
             getThing<Audio>("buzzerSound-" + index)
                 .then(setSound)
-                .catch((errorNewKey) => {
+                .catch(() => {
                     // Fallback to legacy key format: "buzzerSound{index}"
-                    console.log(
-                        `No buzzer sound with new key format for Team: ${index}, trying legacy key.`,
-                        errorNewKey
-                    );
                     getThing<Audio>("buzzerSound" + index)
                         .then(setSound)
-                        .catch((errorLegacyKey) => {
+                        .catch((error) => {
                             console.log(
-                                `No Buzzer sound for Team: ${index} with either new or legacy key format.`,
-                                errorLegacyKey
+                                `No Buzzer sound for Team: ${index}`,
+                                error
                             );
                         });
                 });

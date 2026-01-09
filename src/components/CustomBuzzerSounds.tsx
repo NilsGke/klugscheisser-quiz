@@ -39,18 +39,18 @@ const CustomBuzzerSounds = () => {
                     .sort((a, b) => {
                         const numA = extractIndexFromKey(a);
                         const numB = extractIndexFromKey(b);
-                        const aIsNaN = numA === null;
-                        const bIsNaN = numB === null;
-                        if (aIsNaN && bIsNaN) {
+                        const aIsInvalid = numA === null;
+                        const bIsInvalid = numB === null;
+                        if (aIsInvalid && bIsInvalid) {
                             // Fallback to lexicographic order for malformed keys
                             return a.localeCompare(b);
                         }
-                        if (aIsNaN) {
+                        if (aIsInvalid) {
                             // Place malformed keys after well-formed ones
                             console.warn(`Malformed buzzer sound key detected: ${a}`);
                             return 1;
                         }
-                        if (bIsNaN) {
+                        if (bIsInvalid) {
                             // Place malformed keys after well-formed ones
                             console.warn(`Malformed buzzer sound key detected: ${b}`);
                             return -1;
@@ -81,10 +81,6 @@ const CustomBuzzerSounds = () => {
                 // Extract the actual index from the key for display
                 const keyIndex = extractIndexFromKey(soundKey);
                 const displayNumber = keyIndex !== null ? keyIndex + 1 : "?";
-                
-                if (keyIndex === null) {
-                    console.warn(`Unable to parse index from buzzer sound key: ${soundKey}`);
-                }
                 
                 return (
                     <div className="sound" key={soundKey}>
