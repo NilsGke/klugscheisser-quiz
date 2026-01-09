@@ -16,8 +16,8 @@ import fileToBase64 from "$helpers/fileToBase64";
 import toast from "react-simple-toasts";
 import useTitle from "$hooks/useTitle";
 import { removeThing, setThing } from "$db/things";
-import removeIcon from "$assets/trash.svg";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import CustomBuzzerSounds from "$components/CustomBuzzerSounds";
+import AudioInput from "$components/AudioInput";
 
 const Root = ({
     theme,
@@ -27,10 +27,9 @@ const Root = ({
     themeChange: () => void;
 }) => {
     useTitle("Klugscheißer-Quiz");
-    const [rootContainerRef] = useAutoAnimate();
 
     return (
-        <div className="root" ref={rootContainerRef}>
+        <div className="root">
             <div
                 id="background"
                 style={{
@@ -166,42 +165,7 @@ const Root = ({
                             }}
                         />
                     </div>
-                    <div className="buzzerSounds">
-                        {new Array(4).fill("").map((a, i) => (
-                            <div className="sound" key={i}>
-                                <button>
-                                    <label htmlFor={"buzzerSound" + i}>
-                                        Buzzer-Sound #{i + 1}
-                                    </label>
-                                </button>
-                                <button
-                                    className="remove"
-                                    onClick={() =>
-                                        removeThing("buzzerSound" + i)
-                                            .then(() =>
-                                                toast("🚮Buzzer sound removed")
-                                            )
-                                            .catch(() =>
-                                                toast("❌removing failed")
-                                            )
-                                    }
-                                >
-                                    <img src={removeIcon} alt="remove" />
-                                </button>
-                                <AudioInput
-                                    id={"buzzerSound" + i}
-                                    onChange={async (file) => {
-                                        setThing("buzzerSound" + i, file)
-                                            .then(() => toast("✅sound saved"))
-                                            .catch((e) => {
-                                                console.error(e);
-                                                toast("❌something went wrong");
-                                            });
-                                    }}
-                                />
-                            </div>
-                        ))}
-                    </div>
+                    {theme === "senior" && <CustomBuzzerSounds />}
                 </div>
             ) : null}
         </div>
@@ -209,30 +173,3 @@ const Root = ({
 };
 
 export default Root;
-
-const AudioInput = ({
-    onChange,
-    id,
-}: {
-    onChange: (file: File) => void;
-    id: string;
-}) => {
-    return (
-        <input
-            type="file"
-            name={id}
-            id={id}
-            accept="audio/*"
-            onChange={(e) => {
-                const files = (e.target as HTMLInputElement).files;
-                if (files === null) return;
-                const file = files[0];
-                if (file === undefined) return;
-                if (!file.type.startsWith("audio/"))
-                    return toast("❌File is not a standard audio file");
-
-                onChange(file);
-            }}
-        />
-    );
-};
