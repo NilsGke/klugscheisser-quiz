@@ -55,7 +55,7 @@ const CustomBuzzerSounds = () => {
                             console.warn(`Malformed buzzer sound key detected: ${b}`);
                             return -1;
                         }
-                        return (numA || 0) - (numB || 0);
+                        return numA - numB;
                     });
                 setBuzzerSounds(sortedKeys);
             })
@@ -68,8 +68,8 @@ const CustomBuzzerSounds = () => {
     const getNextBuzzerSoundKey = () => {
         if (buzzerSounds.length === 0) return "buzzerSound-0";
         const maxIndex = buzzerSounds.reduce((max, key) => {
-            const num = parseInt(key.replace("buzzerSound-", ""), 10);
-            if (isNaN(num)) return max;
+            const num = extractIndexFromKey(key);
+            if (num === null) return max;
             return Math.max(max, num);
         }, -1);
         return `buzzerSound-${maxIndex + 1}`;
