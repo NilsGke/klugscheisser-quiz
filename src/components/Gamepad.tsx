@@ -19,7 +19,9 @@ const Gamepad = ({
 }) => {
     const [overlayVisible, setOverlayVisible] = useState(false);
 
-    const [mapping, setMapping] = useState<string[][]>([[], [], [], [], []]);
+    const [mapping, setMapping] = useState<string[][]>([
+        ...teams.map((_team) => []),
+    ]);
 
     // get mapping
     useEffect(() => {

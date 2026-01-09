@@ -91,7 +91,11 @@
                             margin-right: 5px;
                         }
 
-                        transition: all 0.2s ease-in-out;
+                        &.stop {
+                            font-size: 10px;
+                        }
+
+                        transition: background 0.2s ease-in-out;
                         &:hover {
                             background-color: $lighterDark;
                             &:not(:is(.add, .stop)) {
