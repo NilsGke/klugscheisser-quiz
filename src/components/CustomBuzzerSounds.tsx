@@ -29,7 +29,20 @@ const CustomBuzzerSounds = () => {
                     .sort((a, b) => {
                         const numA = parseInt(a.replace("buzzerSound-", ""), 10);
                         const numB = parseInt(b.replace("buzzerSound-", ""), 10);
-                        if (isNaN(numA) || isNaN(numB)) return 0;
+                        const aIsNaN = isNaN(numA);
+                        const bIsNaN = isNaN(numB);
+                        if (aIsNaN && bIsNaN) {
+                            // Fallback to lexicographic order for malformed keys
+                            return a.localeCompare(b);
+                        }
+                        if (aIsNaN) {
+                            // Place malformed keys after well-formed ones
+                            return 1;
+                        }
+                        if (bIsNaN) {
+                            // Place malformed keys after well-formed ones
+                            return -1;
+                        }
                         return numA - numB;
                     });
                 setBuzzerSounds(sortedKeys);
@@ -52,28 +65,35 @@ const CustomBuzzerSounds = () => {
 
     return (
         <div className="buzzerSounds" ref={buzzerSoundsRef}>
-            {buzzerSounds.map((soundKey, i) => (
-                <div className="sound" key={soundKey}>
-                    <span className="soundLabel">
-                        Buzzer-Sound #{i + 1}
-                    </span>
-                    <button
-                        className="remove"
-                        onClick={() =>
-                            removeThing(soundKey)
-                                .then(() => {
-                                    toast("🚮Buzzer sound removed");
-                                    loadBuzzerSounds();
-                                })
-                                .catch(() =>
-                                    toast("❌removing failed")
-                                )
-                        }
-                    >
-                        <img src={removeIcon} alt="remove" />
-                    </button>
-                </div>
-            ))}
+            {buzzerSounds.map((soundKey) => {
+                // Extract the actual index from the key for display
+                const indexMatch = soundKey.match(/buzzerSound-(\d+)/);
+                const displayNumber = indexMatch ? parseInt(indexMatch[1], 10) + 1 : "?";
+                
+                return (
+                    <div className="sound" key={soundKey}>
+                        <span className="soundLabel">
+                            Buzzer-Sound #{displayNumber}
+                        </span>
+                        <button
+                            className="remove"
+                            aria-label={`Remove Buzzer-Sound #${displayNumber}`}
+                            onClick={() =>
+                                removeThing(soundKey)
+                                    .then(() => {
+                                        toast("🚮Buzzer sound removed");
+                                        loadBuzzerSounds();
+                                    })
+                                    .catch(() =>
+                                        toast("❌removing failed")
+                                    )
+                            }
+                        >
+                            <img src={removeIcon} alt="remove" />
+                        </button>
+                    </div>
+                );
+            })}
             <div className="sound addSound">
                 <button>
                     <label htmlFor="addBuzzerSound">
