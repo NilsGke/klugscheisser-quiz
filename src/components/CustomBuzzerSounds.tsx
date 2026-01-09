@@ -68,39 +68,68 @@ const CustomBuzzerSounds = () => {
             });
     };
 
+    const [isReordering, setIsReordering] = useState(false);
+
     const getNextBuzzerSoundKey = () => {
         // Keys are always sequential, so next key is just the length
         return `buzzerSound-${buzzerSounds.length}`;
     };
 
     const reorderBuzzerSounds = async (soundKeyToRemove: string) => {
+        if (isReordering) {
+            toast("⏳Please wait for previous operation to complete");
+            return;
+        }
+        
+        setIsReordering(true);
+        
         try {
             // Get all sounds with their values
             const allSounds = await getAllThingsWithPrefix("buzzerSound-");
             
-            // Sort by index
+            // Sort by index and filter out the one to remove
             const sortedSounds = allSounds
                 .map(s => ({ key: s.key, value: s.value, index: extractIndexFromKey(s.key) }))
                 .filter(s => s.index !== null && s.key !== soundKeyToRemove)
                 .sort((a, b) => a.index! - b.index!);
             
-            // Delete all existing buzzer sounds
-            await Promise.all(
-                allSounds.map(s => removeThing(s.key))
-            );
+            // Store backup in case we need to rollback
+            const backup = allSounds;
             
-            // Re-add them with sequential indices
-            await Promise.all(
-                sortedSounds.map((sound, newIndex) => 
-                    setThing(`buzzerSound-${newIndex}`, sound.value)
-                )
-            );
+            try {
+                // Delete all existing buzzer sounds
+                await Promise.all(
+                    allSounds.map(s => removeThing(s.key))
+                );
+                
+                // Re-add them with sequential indices
+                await Promise.all(
+                    sortedSounds.map((sound, newIndex) => 
+                        setThing(`buzzerSound-${newIndex}`, sound.value)
+                    )
+                );
+                
+                toast("🚮Buzzer sound removed");
+            } catch (error) {
+                // Attempt to restore from backup
+                console.error("Error during reordering, attempting rollback:", error);
+                try {
+                    await Promise.all(
+                        backup.map(s => setThing(s.key, s.value))
+                    );
+                    toast("❌Operation failed, but data was recovered");
+                } catch (rollbackError) {
+                    console.error("Rollback failed:", rollbackError);
+                    toast("❌Critical error: data may be lost");
+                }
+                throw error;
+            }
             
-            toast("🚮Buzzer sound removed");
             loadBuzzerSounds();
         } catch (error) {
             console.error("Error reordering buzzer sounds:", error);
-            toast("❌removing failed");
+        } finally {
+            setIsReordering(false);
         }
     };
 
@@ -134,6 +163,10 @@ const CustomBuzzerSounds = () => {
                 <AudioInput
                     id="addBuzzerSound"
                     onChange={(file) => {
+                        if (isReordering) {
+                            toast("⏳Please wait for reordering to complete");
+                            return;
+                        }
                         const newKey = getNextBuzzerSoundKey();
                         setThing(newKey, file)
                             .then(() => {
