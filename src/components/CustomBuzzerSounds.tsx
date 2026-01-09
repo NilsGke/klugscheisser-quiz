@@ -82,7 +82,7 @@ const CustomBuzzerSounds = () => {
                 </button>
                 <AudioInput
                     id="addBuzzerSound"
-                    onChange={async (file) => {
+                    onChange={(file) => {
                         const newKey = getNextBuzzerSoundKey();
                         setThing(newKey, file)
                             .then(() => {
