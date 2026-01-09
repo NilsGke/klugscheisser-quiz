@@ -73,3 +73,30 @@ export const removeThing = (thingKey: string) =>
             })
             .catch(reject);
     });
+
+export const getAllThingsWithPrefix = <T = any>(prefix: string) =>
+    new Promise<Array<{ key: string; value: T }>>((resolve, reject) => {
+        const request = db
+            .transaction("things", "readonly")
+            .objectStore("things")
+            .index("thingKey")
+            .openCursor();
+
+        const results: Array<{ key: string; value: T }> = [];
+
+        request.onsuccess = (event) => {
+            const cursor = (event.target as IDBRequest).result;
+            if (cursor) {
+                const thing = cursor.value as Thing<T>;
+                if (thing.thingKey.startsWith(prefix)) {
+                    results.push({ key: thing.thingKey, value: thing.value });
+                }
+                cursor.continue();
+            } else {
+                // No more results
+                resolve(results);
+            }
+        };
+
+        request.onerror = () => reject(request.error);
+    });

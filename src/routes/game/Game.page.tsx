@@ -1278,7 +1278,7 @@ const Team = ({
     const [sound, setSound] = useState<Audio | null>(null);
     if (theme === "senior") {
         useEffect(() => {
-            getThing<Audio>("buzzerSound" + index)
+            getThing<Audio>("buzzerSound-" + index)
                 .then(setSound)
                 .catch((error) => {
                     console.log(`No Buzzer sound for Team: ${index}`, error);
