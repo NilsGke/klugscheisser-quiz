@@ -897,8 +897,30 @@ const Field = ({
     const [showCustomPoints, setShowCustomPoints] = useState(false);
     const [customPoints, setCustomPoints] = useState<number | "">("");
 
+    // play time up sound
+    const [timeUpSound, setTimeUpSound] = useState<Audio | null>(null);
+    if (theme === "senior")
+        useEffect(() => {
+            // Try new key format first: "buzzerSound-{index}"
+            getThing<Audio>("timeUpSound")
+                .then(setTimeUpSound)
+                .catch((error) => {
+                    console.warn(`no time up sound found`, error);
+                });
+        }, []);
     return (
         <div className="fieldContainer" ref={fieldContainerRef}>
+            {timeUp && timeUpSound && (
+                <ResourceRenderer
+                    style={{ display: "none" }}
+                    autoplay
+                    resource={{
+                        type: "audio",
+                        content: timeUpSound,
+                        volume: 70,
+                    }}
+                />
+            )}
             <div
                 className={
                     "field" +

@@ -165,6 +165,38 @@ const Root = ({
                             }}
                         />
                     </div>
+
+                    <div className="timeUpSound">
+                        <button>
+                            <label htmlFor="timeUpSoundInput">
+                                change time up sound
+                            </label>
+                        </button>
+                        <button
+                            onClick={() => {
+                                removeThing("timeUpSound")
+                                    .then(() =>
+                                        toast("🚮time up sound removed"),
+                                    )
+                                    .catch((e) => toast("❌removing failed"));
+                            }}
+                        >
+                            delete time up sound
+                        </button>
+                        <AudioInput
+                            id="timeUpSoundInput"
+                            onChange={async (file) => {
+                                try {
+                                    setThing("timeUpSound", file);
+                                    toast("✅time up sound saved 🎵");
+                                } catch (error) {
+                                    console.error(error);
+                                    toast("❌failed, File might be too big!");
+                                }
+                            }}
+                        />
+                    </div>
+
                     {theme === "senior" && <CustomBuzzerSounds />}
                 </div>
             ) : null}
