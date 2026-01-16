@@ -794,7 +794,7 @@ const Field = ({
     useEffect(() => {
         if (
             settings.useAnswerTime &&
-            buzzeredTeamIndex !== undefined &&
+            buzzeredTeamIndex !== null &&
             gameState === State.showQuestion
         ) {
             const timer = setTimeout(
